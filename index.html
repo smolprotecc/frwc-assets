@@ -1,0 +1,241 @@
+<!-- Write comments like this in HTML space -->
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<!-- This script tag imports jQuery which we will use for convenience -->
+<script 
+  src="https://code.jquery.com/jquery-3.6.0.min.js" 
+  integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" 
+  crossorigin="anonymous"></script>
+
+<!-- A Body element to anchor all our interactions with, generally a lot of DOM pieces goes here. -->
+<body>
+  <canvas id="output" width="300px" height="300px">
+  </canvas>
+</body>
+
+<!-- Our main script -->
+<script>
+
+// How to write one-line comments in Javascript
+/*
+   How to write multi-line comments in Javascript
+ */
+
+options = { // This is an options 'object' that will hold information for us
+  wizards: 'https://raw.githubusercontent.com/axejintao/runebot/master/src/wizard-summary.json',
+}
+
+/*
+   Handle Cascading Sheet Rules
+     This isn't the simplest way to handle CSS rules but I prefer it like this
+ */
+cssRules = `
+@import url('https://fonts.googleapis.com/css2?family=Neucha&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700&display=swap');
+body {
+  background : rgba(44,44,44,1);
+}
+#output {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate( -50%, -50% );
+  background: rgba( 1, 1, 1, 1);
+}
+.image {
+  background-size: cover;
+}
+`
+addCSS = function(rule, container, ruleIdentifier) {
+  let rc = ruleIdentifier ? ruleIdentifier : 'FRWC-CSS'
+  let output = '<div class="' + rc + '">&shy;<style>' + rule + '</style></div>'
+  document.querySelectorAll(rc).forEach(e => e.remove())
+  if (container) {
+    document.querySelector(container).insertAdjacentHTML('beforeend', output)
+  } else {
+    document.body.insertAdjacentHTML('beforeend', output)
+  }
+}
+
+// Run this code only when the page has loaded some important things
+document.addEventListener('DOMContentLoaded', function(e) {
+  // Add in Cascading Sheet rules
+  addCSS(cssRules)
+  
+  // We use an asynchronous call so we can wait for information to come back from a distant server like Github
+  // There are more sophisticated approaches now but I like this
+  let p = $.when(1)
+  
+  // Request the wizard meta-data
+  p = p.then(function() {
+    return $.ajax({url: options.wizards})
+  }).then(function(incoming) {
+    // Parse the data into something Javascript can use as an Object
+    data = JSON.parse(incoming)
+    // Check our data in the log
+    console.log(data)
+    
+    /*
+       This object from jintao's website contains three elements: 
+         wizard list with IDs of traits, 
+         a list of trait IDs with trait names,
+         a list of traits with affinities
+         
+       What we want is to cycle through all the available familiars and calculate their distributions
+       To do that, we want to:
+         [A] split out the traits into categories
+         [B] for each category
+               for each item
+               figure out which wizards belongs into each category of item, then
+               add them to the count for that thing
+         [C] then,
+               draw the item
+               draw the distribution
+               present the file
+       
+        But this is a naive way to do it in the sense of code efficiency
+        For example, 
+          we would have to run all 10,000 Wizards multiple times through 
+             Familiar: Sun Cat and Familiar: Forever Bat
+             
+        Well, let's do step [A] first
+     */
+    output = {
+      head: {},
+      prop: {},
+      body: {},
+      familiar: {},
+      background: {},
+      rune: {},
+    }
+    categories  = {}
+    parsedNames = {}
+    categoryMap = {
+      prop: 'props', 
+      head: 'heads', 
+      body: 'bodies', 
+      familiar: 'familiars', 
+      background: 'backgrounds',
+      rune: 'runes'
+    }
+     
+    let re = /(.+?)\: (.+)$/
+    let space = /\s+/g
+    let comma = /,/g
+    let dots  = /\./g
+    for (var traitID in data.traitMap) {
+      let trait = data.traitMap[traitID]
+      console.log(trait + ' is mapped to ' + traitID + '.')
+      let matches = trait.match(re)
+      // console.log(matches)
+      let category = matches[1]
+      let name     = matches[2]
+      let parsed   = '-' + name.trim()
+                       .replace(':','')
+                       .replace("'",'')
+                       .replace(comma,'')
+                       .replace(dots,'')
+                       .replace(space,'-')
+                       .toLowerCase()
+      
+      output[category] = typeof output[category] != 'undefined' ? output[category] : {}
+      output[category][name] = typeof output[category][name] != 'undefined' ? output[category][name] : []
+      
+      categories[name]  = category
+      parsedNames[name] = parsed
+    }
+    // Now, our categories are ready, let's print to check
+    console.log(output)
+    
+    /*
+      Let's solve our previous problem
+      If we check each familiar and then check each wizard, this will take us many times checking each wizard over
+      So, we check each wizard and assign them once
+     */
+    for (var wizardID in data.wizards) {
+      let wizard = data.wizards[wizardID]
+      let traits = wizard.traits
+      for (var index in traits) {
+        let trait    = traits[index]
+        let matches  = trait.match(re)
+        let category = matches[1]
+        let name     = matches[2]
+        
+        output[category] = typeof output[category] != 'undefined' ? output[category] : {}
+        output[category][name] = typeof output[category][name] != 'undefined' ? output[category][name] : []
+        
+        output[category][name].push(wizard.idx)
+      }
+    }
+    console.log(output)
+     
+    // Now we've got the data, we've got to make the presentation for data selection
+    // We'll make a clickable list, accordion'd by category
+    // We're going to use https://www.w3schools.com/howto/tryit.asp?filename=tryhow_js_accordion_animate
+    
+    const selectorPanel = document.createElement('div')
+          selectorPanel.setAttribute('id', 'selectorPanel')
+    for (var category in output) {
+      const categoryButton = document.createElement('button')
+            categoryButton.setAttribute('class', 'accordion')
+            categoryButton.setAttribute('id', category) // from the line "for (var category in output)"
+            categoryButton.innerHTML = category.substring(0,1).toUpperCase() + category.substring(1,category.substring.len)
+      const categoryPanel  = document.createElement('div')
+            categoryPanel.setAttribute('class', 'panel')
+            categoryPanel.setAttribute('id', category + '-panel')
+            
+      // Now we add the individual components
+      for (var item in output[category]) {
+        const categoryItem = document.createElement('div')
+              categoryItem.setAttribute('class', 'item ' + item)
+              categoryItem.setAttribute('id', category + '-' + item.trim().replace(/\s+/g,'-'))
+              categoryItem.innerHTML = item
+              // Build the clickable link
+              var link = parsedNames[item] ? parsedNames[item] : 'null'
+              var head = categories[item] ? categories[item] : 'null'
+              var pre  = categoryMap[head] ? categoryMap[head] : 'null'
+              categoryItem.setAttribute('onclick','render("' + pre + '/' + head + link + '-400.png")')
+        categoryPanel.appendChild(categoryItem)
+      }
+      selectorPanel.appendChild(categoryButton)
+      selectorPanel.appendChild(categoryPanel)
+    }
+    document.body.appendChild(selectorPanel)
+    
+    // set some styles for the accordion
+    addCSS(`#selectorPanel {width: 330px;}`)
+    addCSS(`.accordion {background-color:#eee; color:#444; cursor:pointer; padding:18px; width: 100%;}`)
+    addCSS(`.accordion {border:none; text-align:left; outline:none; font-size:15pt; transition:400ms;}`)
+    addCSS(`.active, .accordion:hover {background-color:#ccc;}`)
+    addCSS(`.panel {position:inherit; padding:0 18px; background-color:white; max-height:0; overflow:hidden; transition: max-height 200ms ease-out;}`)
+    addCSS(`.item {position:inherit; width: 100%; height:27px; line-height:27px; font-size:12pt; cursor:pointer;}`)
+    addCSS(`.item:hover {background-color:rgba(15,15,15,0.05);}`)
+    
+    // accordion behaviour
+    var acc = document.getElementsByClassName("accordion");
+    for (var i = 0; i < acc.length; i++) {
+      acc[i].addEventListener('click', function() {
+        this.classList.toggle('active')
+        var panel = this.nextElementSibling;
+        if (panel.style.maxHeight) {
+          panel.style.maxHeight = null
+        } else {
+          panel.style.maxHeight = panel.scrollHeight + 'px'
+        }
+      })
+    }
+    
+    render = function(url) {
+      var canvas = document.getElementById('output')
+      context = canvas.getContext('2d')
+      image = new Image()
+      image.src = url
+      image.onload = function() {
+        context.drawImage(image, 0, 0)
+      }
+    }
+    
+    
+  })
+})
+</script>
