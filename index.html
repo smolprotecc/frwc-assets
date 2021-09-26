@@ -9,7 +9,7 @@
 
 <!-- A Body element to anchor all our interactions with, generally a lot of DOM pieces goes here. -->
 <body>
-  <canvas id="output" width="300px" height="300px">
+  <canvas id="output" width="400px" height="400px">
   </canvas>
 </body>
 
@@ -228,6 +228,7 @@ document.addEventListener('DOMContentLoaded', function(e) {
     render = function(url) {
       var canvas = document.getElementById('output')
       context = canvas.getContext('2d')
+      context.clearRect(0, 0, canvas.width, canvas.height)
       image = new Image()
       image.src = url
       image.onload = function() {
