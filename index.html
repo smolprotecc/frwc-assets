@@ -186,10 +186,11 @@ document.addEventListener('DOMContentLoaded', function(e) {
             
       // Now we add the individual components
       for (var item in output[category]) {
+        let rate = output[category][item].length / 10000 * 100
         const categoryItem = document.createElement('div')
               categoryItem.setAttribute('class', 'item ' + item)
               categoryItem.setAttribute('id', category + '-' + item.trim().replace(/\s+/g,'-'))
-              categoryItem.innerHTML = item
+              categoryItem.innerHTML = item + ' (' + rate.toFixed(2) + '%)'
               // Build the clickable link
               var link = parsedNames[item] ? parsedNames[item] : 'null'
               var head = categories[item] ? categories[item] : 'null'
