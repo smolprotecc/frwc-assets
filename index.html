@@ -194,6 +194,10 @@ document.addEventListener('DOMContentLoaded', function(e) {
               var link = parsedNames[item] ? parsedNames[item] : 'null'
               var head = categories[item] ? categories[item] : 'null'
               var pre  = categoryMap[head] ? categoryMap[head] : 'null'
+              if (head == 'rune') {
+                link = link.replace('-','')
+                head = ''
+              }
               categoryItem.setAttribute('onclick','render("' + pre + '/' + head + link + '-400.png")')
         categoryPanel.appendChild(categoryItem)
       }
