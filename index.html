@@ -285,6 +285,13 @@ document.addEventListener('DOMContentLoaded', function(e) {
       // Generate the square, place this after the image on Github so you can position it by category
       let x = 50
       let y = 50
+
+      if (category == 'head') {
+        y = 220
+      } else if (category == 'prop') {
+        x = 210
+      }
+
       let radius = 6
       context.closePath()
       context.fillStyle = 'rgba(21, 178, 229, 0.06)'
