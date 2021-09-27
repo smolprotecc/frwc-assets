@@ -321,7 +321,7 @@ document.addEventListener('DOMContentLoaded', function(e) {
       let rate = displayRate
       if (rate == '1 of 1') { } else { rate = rate + ' have this trait' }
       rate = rate.substring(0, 18)
-      if (rate.length > 18) { rate += '...' }
+      if (displayRate.length > 18) { rate += '...' }
       context.beginPath()
       context.fillStyle = 'rgba(138, 147, 155)'
       context.font = '13px Poppins'
