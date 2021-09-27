@@ -1,4 +1,3 @@
-
 <!-- Write comments like this in HTML space -->
 <!-- <meta name="viewport" content="width=device-width, initial-scale=1"> -->
 
@@ -200,11 +199,13 @@ document.addEventListener('DOMContentLoaded', function(e) {
             
       // Now we add the individual components
       for (var item in output[category]) {
-        let rate = output[category][item].length / 10000 * 100
+        let count = output[category][item].length
+        let rate = count / 10000 * 100
+        let displayRate = count == 1 ? "1 of 1" : rate > 1 ? Math.floor(rate) + '%' : rate.toFixed(2) + '%'
         const categoryItem = document.createElement('div')
               categoryItem.setAttribute('class', 'item ' + item)
               categoryItem.setAttribute('id', category + '-' + item.trim().replace(/\s+/g,'-'))
-              categoryItem.innerHTML = item + ' (' + rate.toFixed(2) + '%)'
+              categoryItem.innerHTML = item + ' (' + displayRate + ')'
               // Build the clickable link
               var link = parsedNames[item] ? parsedNames[item] : 'null'
               var head = categories[item] ? categories[item] : 'null'
@@ -213,7 +214,7 @@ document.addEventListener('DOMContentLoaded', function(e) {
                 link = link.replace('-','')
                 head = ''
               }
-              categoryItem.setAttribute('onclick','render("' + pre + '/' + head + link + '-400.png")')
+              categoryItem.setAttribute('onclick','render("' + pre + '/' + head + link + '-400.png","' + category + '", "' + item + '", "' + displayRate + '")')
         categoryPanel.appendChild(categoryItem)
       }
       selectorPanel.appendChild(categoryButton)
@@ -245,16 +246,81 @@ document.addEventListener('DOMContentLoaded', function(e) {
         }
       })
     }
+
+    /* https://stackoverflow.com/a/7838871 */
+    CanvasRenderingContext2D.prototype.roundRect = function (x, y, w, h, r) {
+      if (w < 2 * r) r = w / 2;
+      if (h < 2 * r) r = h / 2;
+      this.beginPath();
+      this.moveTo(x+r, y);
+      this.arcTo(x+w, y,   x+w, y+h, r);
+      this.arcTo(x+w, y+h, x,   y+h, r);
+      this.arcTo(x,   y+h, x,   y,   r);
+      this.arcTo(x,   y,   x+w, y,   r);
+      this.closePath();
+      return this;
+    }
     
-    render = function(url) {
+    addCSS(`@import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');`)
+    render = function(url, category, traitName, displayRate) {
       var canvas = document.getElementById('output')
       context = canvas.getContext('2d')
       context.clearRect(0, 0, canvas.width, canvas.height)
+
+      context.closePath()
+      context.beginPath()
+      context.fillStyle = 'rgba(1,1,1,1)'
+      context.rect(0, 0, canvas.width, canvas.height)
+      context.fill()
+      context.closePath()
+      
+      context.beginPath()
       image = new Image()
       image.src = url
       image.onload = function() {
         context.drawImage(image, 0, 0, 400, 400)
       }
+      context.closePath()
+      
+      // Generate the square, place this after the image on Github so you can position it by category
+      let x = 50
+      let y = 50
+      let radius = 6
+      context.closePath()
+      context.fillStyle = 'rgba(21, 178, 229, 0.06)'
+      context.roundRect(x, y, 150, 82, radius).fill()
+      context.strokeStyle = 'rgba(21, 178, 229, 1)'
+      context.roundRect(x, y, 150, 82, radius).stroke()
+      // Draw the category
+      context.font = '11px Poppins'
+      context.beginPath()
+      context.fillStyle = 'rgba(21, 178, 229, 1)'
+      context.font = '11px Poppins'
+      context.textAlign = 'center'
+      context.fillText(category.toUpperCase(), x + (150)/2, y + 10 + 16/2)
+      context.closePath()
+   
+      // Draw the Name
+      let trait = traitName.substring(0, 14)
+      if (traitName.length > 14) { trait += '...' }
+      context.beginPath()
+      context.fillStyle = 'rgba(229, 232, 235, 1)'
+      context.font = '15px Poppins'
+      context.textAlign = 'center'
+      context.fillText(trait, x + (150)/2, y + 10 + 16 + 30/2)
+      context.closePath()
+      
+      // Draw the displayRate
+      let rate = displayRate
+      if (rate == '1 of 1') { } else { rate = rate + ' have this trait' }
+      rate = rate.substring(0, 18)
+      if (rate.length > 18) { rate += '...' }
+      context.beginPath()
+      context.fillStyle = 'rgba(138, 147, 155)'
+      context.font = '13px Poppins'
+      context.textAlign = 'center'
+      context.fillText(rate, x + (150)/2, y + 10 + 16 + 30 + 16/2)
+      context.closePath()
     }
     
     
