@@ -1,3 +1,4 @@
+
 <!-- Write comments like this in HTML space -->
 <!-- <meta name="viewport" content="width=device-width, initial-scale=1"> -->
 
@@ -32,6 +33,7 @@ options = { // This is an options 'object' that will hold information for us
 cssRules = `
 @import url('https://fonts.googleapis.com/css2?family=Neucha&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Arimo&display=swap');
 body {
   background : rgba(44,44,44,1);
 }
@@ -56,6 +58,10 @@ addCSS = function(rule, container, ruleIdentifier) {
   } else {
     document.body.insertAdjacentHTML('beforeend', output)
   }
+}
+
+sortObject = function(arr) {
+  return Object.fromEntries(Object.entries(arr).sort())
 }
 
 // Run this code only when the page has loaded some important things
@@ -169,11 +175,18 @@ document.addEventListener('DOMContentLoaded', function(e) {
       }
     }
     console.log(output)
+    
+    for (var category in output) {
+      output[category] = sortObject(output[category])
+    }
+    output = sortObject(output)
      
     // Now we've got the data, we've got to make the presentation for data selection
     // We'll make a clickable list, accordion'd by category
     // We're going to use https://www.w3schools.com/howto/tryit.asp?filename=tryhow_js_accordion_animate
     
+    const selectorParent = document.createElement('div')
+          selectorParent.setAttribute('id', 'selectorParent')
     const selectorPanel = document.createElement('div')
           selectorPanel.setAttribute('id', 'selectorPanel')
     for (var category in output) {
@@ -206,10 +219,12 @@ document.addEventListener('DOMContentLoaded', function(e) {
       selectorPanel.appendChild(categoryButton)
       selectorPanel.appendChild(categoryPanel)
     }
-    document.body.appendChild(selectorPanel)
+    selectorParent.appendChild(selectorPanel)
+    document.body.appendChild(selectorParent)
     
     // set some styles for the accordion
-    addCSS(`#selectorPanel {width: 360px;}`)
+    addCSS(`#selectorParent {position:absolute; left:0%; top:0%; width: 360px; font-family:'Arima';}`)
+    addCSS(`#selectorPanel {position:relative;}`)
     addCSS(`.accordion {background-color:#eee; color:#444; cursor:pointer; padding:18px; width: 100%;}`)
     addCSS(`.accordion {border:none; text-align:left; outline:none; font-size:15pt; transition:400ms;}`)
     addCSS(`.active, .accordion:hover {background-color:#ccc;}`)
