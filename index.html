@@ -319,9 +319,12 @@ document.addEventListener('DOMContentLoaded', function(e) {
       
       // Draw the displayRate
       let rate = displayRate
-      if (rate == '1 of 1') { } else { rate = rate + ' have this trait' }
-      rate = rate.substring(0, 5 + 16)
-      if (displayRate.length > 5) { rate += '...' }
+      if (rate == '1 of 1') { 
+      } else { 
+        rate = rate + ' have this trait' 
+        rate = rate.substring(0, 5 + 16)
+        if (displayRate.length > 5) { rate += '...' }
+      }
       context.beginPath()
       context.fillStyle = 'rgba(138, 147, 155)'
       context.font = '13px Poppins'
