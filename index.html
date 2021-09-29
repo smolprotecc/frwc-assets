@@ -189,10 +189,11 @@ document.addEventListener('DOMContentLoaded', function(e) {
     const selectorPanel = document.createElement('div')
           selectorPanel.setAttribute('id', 'selectorPanel')
     for (var category in output) {
+      const n = Object.keys(output[category]).length
       const categoryButton = document.createElement('button')
             categoryButton.setAttribute('class', 'accordion')
             categoryButton.setAttribute('id', category) // from the line "for (var category in output)"
-            categoryButton.innerHTML = category.substring(0,1).toUpperCase() + category.substring(1,category.substring.len)
+            categoryButton.innerHTML = category.substring(0,1).toUpperCase() + category.substring(1,category.substring.len) + ' (' + n + ')'
       const categoryPanel  = document.createElement('div')
             categoryPanel.setAttribute('class', 'panel')
             categoryPanel.setAttribute('id', category + '-panel')
