@@ -90,7 +90,7 @@ parseData = function() {
       // generate the URL
       
       // Allocate Wizards into Affinities that their traits grant them access to
-      let traitAffinities = _traits[n] || null
+      let traitAffinities = retrieveTrait(n) || null
       if (traitAffinities) {
         // Handle the Tag key
         traitAffinities.tags.forEach(function(tag, _) {
