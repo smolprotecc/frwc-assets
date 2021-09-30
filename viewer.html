@@ -1,0 +1,669 @@
+<!DOCTYPE html>
+<html><meta charset="utf-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1.0">
+ <head><title>FRWC Affinities</title>
+  <script
+   src="https://code.jquery.com/jquery-3.3.1.min.js"
+   integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+   crossorigin="anonymous"></script>
+  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+  <!-- Formal data -->
+  <script src='_traits.js'></script>
+  <script src='_wizards.js'></script>
+ </head>
+<body><div id='main'></div></body>
+<script>
+/* Global variables */
+frwc = {}
+
+/* Default Options */
+defaults = {
+  navigatorKey: 'affinities',
+}
+
+/* Load Sequence */
+document.addEventListener("DOMContentLoaded", function(event) {   
+  parseData()
+  addCSS(cssRules)
+  render()
+  addNavigatorElements()
+  
+  var p = $.when(1)
+      p = p.then(function() { 
+      
+      }).then(function() {  
+      
+      })
+})
+
+parseData = function() {
+   console.log(_traits)
+   console.log(_wizards)
+  /* Hash Maps */
+  let hash = {background: 'backgrounds', body: 'bodies', familiar: 'familiars', head: 'heads', prop: 'props', rune: 'runes'}
+   
+  /* Output variables */
+  let mapped = {traits:{}, traitTypes: {}, traitURLs:{}, affinities:{}, tags:{}, emergent:{}}
+  for (var key in hash) { mapped.traits[key] = {} }
+  
+  let names = {}
+      names.wizards    = {}
+      names.traits     = {}
+      names.affinities = {}
+      names.tags       = {}
+      names.emergent   = {}
+
+  let components = {}
+      components.wizards    = {}
+      components.affinities = {}
+      components.tags       = {}
+      components.emergent   = {}
+
+  let tags       = {}
+  let affinities = {}
+
+  for (let wizardID in _wizards) {
+    let wizard = _wizards[wizardID]
+     
+    // Insert names for Wizards
+    names.wizards[wizard.idx] = wizard.name
+    // Generate the components list for a Wizard
+    components.wizards[wizard.idx] = []
+    
+    for (var traitType in hash) {
+      // Separate out the NO head/familiar/prop/rune types
+      var n = wizard[traitType]
+      var s = n == 7777 ? n + '-' + traitType : n
+      
+      components.wizards[wizard.idx].push([traitType, n])
+
+      // Allocate Wizards into traits within trait categories that they belong to
+      mapped.traits[traitType]    = mapped.traits[traitType]    || {}
+      mapped.traits[traitType][s] = mapped.traits[traitType][s] || []
+      if (mapped.traits[traitType][s].indexOf(wizard.idx) == -1) {
+        mapped.traits[traitType][s].push(wizard.idx)
+      }
+      mapped.traitTypes[s] = mapped.traitTypes[n] || traitType
+
+      mapped.traitURLs[traitType] = mapped.traitURLs[traitType]    || {}
+      mapped.traitURLs[traitType][n] = generateTraitURL(n, traitType)
+      // generate the URL
+      
+      // Allocate Wizards into Affinities that their traits grant them access to
+      let traitAffinities = _traits[n] || null
+      if (traitAffinities) {
+        // Handle the Tag key
+        traitAffinities.tags.forEach(function(tag, _) {
+          // Add the list for this Tag to our "mapped" Object
+          if (!mapped.tags[tag.idx]) {
+            if (typeof tags[tag.idx] == 'undefined') { tags[tag.idx] = clone(tag) }
+            mapped.tags[tag.idx] = []
+            // Also map the name of this Affinity to our "names" Object
+            names.tags[tag.idx] = tag.name
+            names.emergent[tag.idx] = tag.name
+          }
+          // Add Wizard this Tag if not included
+          if (mapped.tags[tag.idx].indexOf(wizard.idx) == -1) {
+            mapped.tags[tag.idx].push(wizard.idx)
+          }
+          // Add this Wizard to the Emergent if not included
+          mapped.emergent[tag.idx] = mapped.emergent[tag.idx] || {}
+          mapped.emergent[tag.idx]['tags'] = mapped.emergent[tag.idx]['tags'] || []
+          if (mapped.emergent[tag.idx]['tags'].indexOf(wizard.idx) == -1) {
+            mapped.emergent[tag.idx]['tags'].push(wizard.idx)
+          }
+          // Also add this to the components list and add the ID if not present
+          // Tags
+          components.tags[tag.idx] = components.tags[tag.idx] || []
+          if (components.tags[tag.idx].indexOf(traitAffinities.idx) == -1) {
+            components.tags[tag.idx].push(traitAffinities.idx)
+          }
+          // Emergent:Tags
+          components.emergent[tag.idx] = components.emergent[tag.idx] || {}
+          components.emergent[tag.idx]['tags'] = components.emergent[tag.idx]['tags'] || []
+          if (components.emergent[tag.idx]['tags'].indexOf(traitAffinities.idx) == -1) {
+            components.emergent[tag.idx]['tags'].push(traitAffinities.idx)
+          }
+          // Emergent:Trait Type
+          components.emergent[tag.idx][traitType] = components.emergent[tag.idx][traitType] || {}
+          if (typeof components.emergent[tag.idx][traitType][n] == 'undefined') {
+            components.emergent[tag.idx][traitType][n] = 't'
+          } else if (components.emergent[tag.idx][traitType][n] == 'a') {
+            components.emergent[tag.idx][traitType][n] = 'at'
+          }
+        })
+        // Handle the Affinity key
+        traitAffinities.affinity.forEach(function(affinity, _) {
+          // Add the list for this Affinity to our "mapped" Object
+          if (!mapped.affinities[affinity.idx]) {
+            if (typeof affinities[affinity.idx] == 'undefined') { affinities[affinity.idx] = clone(affinity) }
+            mapped.affinities[affinity.idx] = []
+            // Also map the name of this Affinity to our "names" Object
+            names.affinities[affinity.idx] = affinity.name
+            names.emergent[affinity.idx] = affinity.name
+          }
+          // Add Wizard to this Affinity if not included
+          if (mapped.affinities[affinity.idx].indexOf(wizard.idx) == -1) {
+            mapped.affinities[affinity.idx].push(wizard.idx)
+          }
+          // Add this Wizard to the Emergent if not included
+          mapped.emergent[affinity.idx] = mapped.emergent[affinity.idx] || {}
+          mapped.emergent[affinity.idx]['affinities'] = mapped.emergent[affinity.idx]['affinities'] || []
+          if (mapped.emergent[affinity.idx]['affinities'].indexOf(wizard.idx) == -1) {
+            mapped.emergent[affinity.idx]['affinities'].push(wizard.idx)
+          }
+          // Also add this to the components list and add the ID if not present
+          // Affinities
+          components.affinities[affinity.idx] = components.affinities[affinity.idx] || []
+          if (components.affinities[affinity.idx].indexOf(traitAffinities.idx) == -1) {
+            components.affinities[affinity.idx].push(traitAffinities.idx)
+          }
+          // Emergent:Affinities
+          components.emergent[affinity.idx] = components.emergent[affinity.idx] || {}
+          components.emergent[affinity.idx]['affinities'] = components.emergent[affinity.idx]['affinities'] || []
+          if (components.emergent[affinity.idx]['affinities'].indexOf(traitAffinities.idx) == -1) {
+            components.emergent[affinity.idx]['affinities'].push(traitAffinities.idx)
+          }
+          // Emergent:Trait Type
+          components.emergent[affinity.idx][traitType] = components.emergent[affinity.idx][traitType] || {}
+          if (typeof components.emergent[affinity.idx][traitType][n] == 'undefined') {
+            components.emergent[affinity.idx][traitType][n] = 'a'
+          } else if (components.emergent[affinity.idx][traitType][n] == 't') {
+            components.emergent[affinity.idx][traitType][n] = 'at'
+          }
+        })
+        // Also add in the name
+        names.traits[traitAffinities.idx] = traitAffinities.displayName
+      } else {
+        // console.log(n)
+      }
+    }
+  }
+  // Adding backgrounds
+  
+  frwc = mapped
+  frwc._referenceWizards = _wizards
+  frwc._referenceTraits  = _traits
+  frwc._names   = names
+  frwc._components = components
+
+  console.log(frwc)
+  console.log(tags)
+}
+
+render = function() {
+  addCSS(navigatorCSS)
+  
+  /* Draw navigator element */
+  const navigator = document.createElement('div')
+        navigator.setAttribute('id', 'navigator')
+  document.getElementById('main').appendChild(navigator)
+  
+  let filterCSS = ` /* Filter CSS */
+    #filter {
+      position: fixed;
+      left    : 50%;
+      top     : 50%;
+      min-height: 670px;
+      min-width : 800px;
+      transform : translate(-50%, -50%);
+      background: rgba(255,255,255,0.23);
+      backdrop-filter: blur(9px);
+      border-radius  : 8px;
+    }
+  `
+  addCSS(filterCSS)
+
+  /* Draw Filter window */
+}
+
+
+addAffinitiesToNavigator = function(filter) {
+  let sortBy = ['head','body','prop','familiar','rune']
+  let d = ''
+
+  let sortableAffinities = Object.values(frwc._names.affinities).map((x, i) => [x, Object.keys(frwc._names.affinities)[i]])
+  sortableAffinities.sort()
+  sortableAffinities.forEach(function(item, _) {
+    let affinityName = item[0]
+    let affinityID = item[1]
+    let e = ''
+
+    e += '<div class="panel-item affinity" id="affinity-' + affinityID + '"'
+    e += ' onclick="renderObject(' + affinityID + ', \'affinity\')">'
+    e += affinityName + ' '
+    e += '<span class="mute">('
+
+    let emergent   = frwc._components.emergent[affinityID]
+    sortBy.forEach(function(trait, _) {
+      e += emergent[trait] ? Object.keys(emergent[trait]).length : 0
+      if (_ < sortBy.length - 1) { e += '/' }
+    })
+    e += '/' + (frwc.affinities[affinityID].length) + ')' + '</div>'
+
+    /* Filter check */
+    if (filter) {
+      
+    }
+
+    d += e
+  })
+  $('#navigator-panel').append(d)
+  $('#navigator-head').append('Affinity <span class="mute">(H/B/P/F/R/#)</span>')
+}
+
+renderAffinity = function(id) {
+  console.log('Rendering affinity (' + id + ')')
+  // Highlight it in the Navigator
+  $('.affinity.active').removeClass('active')
+  $('#affinity-' + id).addClass('active')
+  
+  addCSS(scrollerCSS, '#main', 'scrollerCSS')
+
+  let affinityComponents = frwc._components.emergent[id]
+  let componentURLs      = frwc.traitURLs
+  let affinityMembers    = frwc.affinities[id]
+  
+  let sortBy = ['head','body','prop','familiar','rune']
+  let d = ''
+
+  sortBy.forEach(function(component, _) {
+    d += '<div id="scroller-' + component + '" class="scroller-wrapper"><div class="scroller ' + component + '">'
+    // Add in some spacers
+    let n = Math.floor(370 / 94) + 1
+    for (var i = 0; i < n; i++) {
+      d += '<div class="trait empty"></div>'
+    }
+
+    let elements = affinityComponents[component]
+    let urls     = componentURLs[component]
+    for (let componentID in elements) {
+      let e = ''
+      let url = urls[componentID]
+      let isp = elements[componentID]
+      let a = 'a'
+      let t = 't'
+      if (isp == 'a') {
+        t = ''
+      } else if (isp == 't') {
+        a = ''
+      }
+      e += '<div id="trait-' + componentID + '" class="trait" style="background-image:url(\'' + url + '\')">'
+      e += '<div class="is-affinity ' + a + '">A</div><div class="is-tag ' + t + '">T</div></div>'
+      d += e
+    }
+
+    // Add in some spacers
+    for (var i = 0; i < n; i++) {
+      d += '<div class="trait empty"></div>'
+    }
+    d += '</div></div>'
+  })
+  
+  // Grab 7 Random Wizards and render them
+  d += '<div id="wizard-container"><div id="wizard-sampler">'
+  let sample = getRandomWizards(affinityMembers, 7)
+  // Add in some spacers
+  let n = Math.floor(370 / 144) + 1
+  for (var i = 0; i < n; i++) {
+    d += '<div class="wizard-sample empty"></div>'
+  }  
+  
+  sample.forEach(function(wizard, _){
+    d += '<div id="wizard-' + wizard + '" class="wizard-sample">'
+    let components = frwc._components.wizards[wizard]
+    components.forEach(function(component, i) {
+      let url = frwc.traitURLs[component[0]][component[1]]
+      d += '<div class="wizard-sample-component ' + component[0] + '" '
+      if (url) { d += 'style="background-image:url(\'' + url + '\')"' }
+      d += '></div>'
+    })
+    d += '</div>'
+  })
+  // Add in some spacers
+  for (var i = 0; i < n; i++) {
+    d += '<div class="wizard-sample empty"></div>'
+  }  
+  d += '</div></div>'
+  
+  $('#main').append(d)
+  document.getElementById('wizard-sampler').scrollTop = 78
+}
+
+/* Routers */
+addNavigatorElements = function(key) {
+  // Prepare the panel
+  $('#navigator').empty().append('<div id="navigator-head"></div><div id="navigator-panel"></div>')
+
+  var key = key || defaults.navigatorKey
+  switch(key) {
+    case 'affinities':
+      addAffinitiesToNavigator()
+      break;
+  }
+}
+renderObject = function(id, type) {
+  $("#main *:not(#navigator, #navigator *)").remove()
+  switch(type) {
+    case 'affinity':
+      renderAffinity(id)
+      break;
+  }
+}
+
+/* Helper Functions */
+generateTraitURL = function(traitID, traitType) {
+  let trait  = retrieveTrait(traitID)
+  if (!trait) { return false }
+  
+  let commas = /,/g
+  let dots   = /\./g
+  let spaces = /\s+/g
+  let qualified = trait.displayName.trim()
+                       .replace(':','')
+                       .replace("'",'')
+                       .replace(commas,'')
+                       .replace(dots,'')
+                       .replace(spaces,'-')
+                       .toLowerCase()
+  if (qualified == 'jewled-hummingbird') {
+    qualified = 'jewelled-hummingbird'
+  } else if (qualified == 'tengu-preist') {
+    qualified = 'tengu-priest'
+  } else if (qualified == 'vile-of-virgins-blood') {
+    qualified = 'vial-of-virgins-blood'
+  }
+  let traitMap = {head: 'heads', body: 'bodies', prop: 'props', familiar: 'familiars', rune: 'runes', background: 'backgrounds'}
+  return /* 'components/' + */ traitMap[traitType] + '/' + (traitType != 'rune' ? traitType + '-' : '') + qualified + '-400.png'
+}
+getRandomWizards = function(array, count) {
+  let len = array.length, taken = new Array(len);
+  if (count > len) { count = len }
+  let result = new Array(count)
+  while (count--) {
+    let x = Math.floor(Math.random() * len)
+    result[count] = array[x in taken ? taken[x] : x]
+    taken[x] = --len in taken ? taken[len] : len
+  }
+  return result
+}
+raiseEvent = function(eventName, data) { document.body.dispatchEvent(new Event(eventName, {'data': data})) }
+retrieveTrait = function(traitID) {
+  for (var t in _traits) {
+    if (_traits[t].idx == traitID) { return _traits[t] }
+  }
+  return false
+}
+sortObject = function(arr) { return Object.fromEntries(Object.entries(arr).sort()) }
+
+/* Utility Functions */
+clone = function(obj) {
+    var copy;
+    if (null == obj || 'object' != typeof obj) { return obj }
+    if (obj instanceof String) { return (' ' + obj).slice(1) } // https://stackoverflow.com/a/31733628
+    if (obj instanceof Date) { 
+      copy = new Date()
+      copy.setTime(obj.getTime())
+      return copy }
+    if (obj instanceof Array) {
+      copy = []
+      for (var i = 0, len = obj.length; i < len; i++) { copy[i] = clone(obj[i]) }
+      return copy }
+    if (obj instanceof Object) {
+      copy = {}
+      for (var attr in obj) { if (obj.hasOwnProperty(attr)) { copy[attr] = clone(obj[attr]) } }
+      return copy }
+    throw new Error('Unable to copy object! Type not supported.') }
+    
+addCSS = function(rule, container, ruleIdentifier) {
+  let rc = ruleIdentifier ? ruleIdentifier : 'FRWC-CSS'
+  let output = '<div class="' + rc + '">&shy;<style>' + rule + '</style></div>'
+  document.querySelectorAll(rc).forEach(e => e.remove())
+  if (container) {
+    document.querySelector(container).insertAdjacentHTML('beforeend', output)
+  } else {
+    document.body.insertAdjacentHTML('beforeend', output)
+  } }
+
+/* CSS Rules */
+// for scrollerCSS
+traitSize   = 87
+samplerSize = 144
+
+cssRules = `
+@import url('https://fonts.googleapis.com/css2?family=Neucha&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Arimo&display=swap');
+
+.FRWC-CSS { display:none; } /* CSS Rules */
+html, body {
+  padding    : 0px;
+  margin     : 0px;
+  height     : 100%;
+  overflow   : hidden;
+}
+body {
+  display         : flex;
+  flex-direction  : column;
+  background: linear-gradient(-27deg, #0c375c, #311f4d, #3b1f40, #311f4d);
+  background-size: 400% 400%;
+  animation: gradient 15s ease infinite;
+  height: 100vh;
+}
+body::-webkit-scrollbar {
+  display:none;
+  width: 0;
+  background: transparent;
+}
+body::-webkit-scrollbar-thumb {
+  background: #FF0000;
+}
+
+@keyframes gradient {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+#main {
+  flex           : 1;
+  display        : flex;
+  flex-direction : column;
+  align-items    : center;
+  display        : inline-block;
+  white-space    : pre-wrap;
+  font-family    : 'Neucha', cursive;
+  font-size      : 15pt;
+  z-index        : 3;
+}
+`
+navigatorCSS = ` /* Navigator CSS */
+  #navigator {
+    position: absolute;
+    left: 0%;
+    top : 0%;
+    height: 100%;
+    width : 360px;
+    overflow-y : scroll;
+    font-family: 'Arimo';
+    background  : rgba( 188, 188, 188, 0.04 );
+    backdrop-filter: blur(7px);
+    z-index: 5;
+  }
+  #navigator::-webkit-scrollbar {
+    display:none;
+    width: 0;
+    background: transparent;
+  }
+  #navigator::-webkit-scrollbar-thumb {
+    background: #FF0000;
+  }
+  .mobile > #navigator {
+    position: absolute;
+    left : 0%;
+    top  : 0%;
+    height: 210px;
+    width : 100%;
+  }
+  /* For later use */
+  #navigator-panel {
+    position    : relative;
+  }
+  #navigator-head, .panel-item.affinity {
+    width       : calc(100% - 1.9em);
+    height      : 34px;
+    padding-top   : 0.4em;
+    padding-bottom: 0.4em;
+    padding-right : 0.3em;
+    padding-left  : 1.6em;
+    line-height : 34px;
+    font-size   : 13pt;
+    color       : rgba( 211, 211, 211, 0.77 );
+  }
+  #navigator-head {
+    position    : fixed;
+    display     : block;
+    background  : rgba( 1, 1, 1, 0.21 );
+  }
+  .panel-item.affinity {
+    position    : relative;
+    top         : calc(34px + 0.8em);
+    display     : block;
+    cursor      : pointer;
+    user-select : none;
+  }
+  #navigator-head .mute, .panel-item.affinity .mute {
+    color       : rgba( 211, 211, 211, 0.12 );
+  }
+  .panel-item.affinity:hover {
+    background  : rgba( 201, 201, 201, 0.24 );
+  }
+  
+  .affinity.active {
+    background  : rgba( 201, 201, 201, 0.18 );
+  }
+`
+scrollerCSS = ` /* Scroller CSS */
+  .scrollerCSS {display: none;}
+  .scroller-wrapper {
+    position: inherit;
+    height: ${traitSize}px;
+    border: 1px solid rgba(255,255,255,0);
+  }
+  .scroller {
+    position  : inherit;
+    width     : ${traitSize}px;
+    height    : ${window.innerWidth}px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    transform : rotate(-90deg) translateY(-${traitSize}px);
+    transform-origin: right top;
+    border: 1px solid rgba(1,1,1,0);
+  }
+  .scroller::-webkit-scrollbar {
+    display   : none;
+    background: rgba(0,0,0,0);
+  }
+  .trait {
+    position: relative;
+    width : ${traitSize}px;
+    height: ${traitSize}px;
+    margin-top: 3px;
+    margin-bottom : 3px;
+    transform : rotate(90deg) translateX(${traitSize}px);
+    transform-origin: right top;
+    
+    background-size: cover;
+    background-repeat: no-repeat;
+    
+    cursor: pointer;
+    border-radius: 5px;
+  }
+  .trait:not(.empty) {
+    background-color: rgba( 1, 1, 1, 0.067 );
+    transition: all 230ms;
+  }
+  .trait:hover {
+    background-color: rgba( 255, 255, 255, 0.012 );
+  }
+  .trait div {
+    position : relative;
+    font-size: 9pt;
+    color    : rgba( 255, 255, 255, 0.012 );
+  }
+  .trait .is-affinity {
+    position: absolute;
+    top     : 4px;
+    left    : 6px;
+  }
+  .trait .is-tag {
+    position: absolute;
+    bottom  : 4px;
+    right   : 6px;
+  }
+  .trait .is-affinity.a {
+    color   : rgba( 255, 255, 255, 0.23 );
+  }
+  .trait .is-tag.t {
+    color   : rgba( 255, 255, 255, 0.23 );
+  }
+  
+  #wizard-container {
+    position: inherit;
+    margin-top: 15px;
+    height: ${traitSize}px;
+  }
+  #wizard-sampler {
+    position  : inherit;
+    width     : ${samplerSize}px;
+    height    : ${window.innerWidth}px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    transform : rotate(-90deg) translateY(-${samplerSize}px);
+    transform-origin: right top;
+  }
+  .wizard-sample {
+    position: relative;
+    width : ${samplerSize}px;
+    height: ${samplerSize}px;
+    margin-top: 3px;
+    margin-bottom : 3px;
+    transform : rotate(90deg) translateX(${samplerSize}px);
+    transform-origin: right top;
+    cursor: pointer;
+    border-radius: 6px;
+  }
+  .wizard-sample-component {
+    position: absolute;
+    left: 0%;
+    top : 0%;
+    width : ${samplerSize}px;
+    height: ${samplerSize}px;
+    
+    background-size: cover !important;
+    background: transparent;
+    background-repeat: no-repeat;
+    background-position: center;
+    border-radius: 6px;
+    
+  }
+  .wizard-sample-component.background {
+    filter  : alpha(opacity=1);
+    opacity : 0.44;
+  }
+  .wizard-sample.empty {
+    
+  }
+  #wizard-sampler::-webkit-scrollbar {
+    display   : none;
+    background: rgba(0,0,0,0);
+  }
+`
+
+</script>
+</html>
