@@ -231,7 +231,7 @@ addAffinitiesToNavigator = function(filter) {
 
     e += '<div class="panel-item affinity" id="affinity-' + affinityID + '"'
     e += ' onclick="renderObject(' + affinityID + ', \'affinity\')">'
-    e += affinityName + ' '
+    e += affinityName + '<span class="mute">#' + affinityID + '</span> '
     e += '<span class="mute">('
 
     let emergent   = frwc._components.emergent[affinityID]
