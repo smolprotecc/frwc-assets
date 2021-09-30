@@ -1,4 +1,4 @@
-_traits = [
+_traits  = [
   {
     "idx": 0,
     "displayName": "Black",

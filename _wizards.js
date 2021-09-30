@@ -1,4 +1,4 @@
-_wizards = [
+_wizards  = [
   {
     "idx": 0,
     "name": "Holy Arcanist Illuminus of the Heavens",
