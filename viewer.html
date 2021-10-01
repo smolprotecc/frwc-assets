@@ -15,6 +15,7 @@
 <script>
 /* Global variables */
 frwc = {}
+local = false
 
 /* Default Options */
 defaults = {
@@ -231,107 +232,73 @@ render = function() {
 }
 
 
-addIdentitiesToNavigator = function(filter) {
-  let sortBy = ['head','body','prop','familiar','rune']
-  let d = ''
-
-  let sortableIdentities = Object.values(frwc._names.identities).map((x, i) => [x, Object.keys(frwc._names.identities)[i]])
-  sortableIdentities.sort()
-  sortableIdentities.forEach(function(item, _) {
-    let identityName = item[0]
-    let identityID = item[1]
-    let e = ''
-
-    e += '<div class="panel-item identity" id="identity-' + identityID + '"'
-    e += ' onclick="renderObject(' + identityID + ', \'identity\')">'
-    e += identityName + '<span class="mute">#' + identityID + '</span> '
+addElementsToNavigator = function(tag, list, componentsList, membersList) {
+  let output   = ''
+  let ordering = ['head','body','prop','familiar','rune']
+  let sortableElements = Object.values(list).map((x, i) => [x, Object.keys(list)[i]])
+  sortableElements.sort()
+  sortableElements.forEach(function(item, _) {
+    let name = item[0]
+    let id   = item[1]
+    let e    = ''
+    e += '<div class="panel-item ' + tag + '" id="' + tag + '-' + id + '"'
+    e += ' onclick="renderObject(' + id + ', \'' + tag + '\')">'
+    e += name + '<span class="mute">#' + id + '</span> '
     e += '<span class="mute">('
-
-    let affinity   = frwc._components.affinities[identityID]
-    sortBy.forEach(function(trait, _) {
-      e += affinity[trait] ? Object.keys(affinity[trait]).length : 0
-      if (_ < sortBy.length - 1) { e += '/' }
+    
+    let f = componentsList[id]
+    ordering.forEach(function(trait, _) {
+      e += f[trait] ? Object.keys(f[trait]).length : 0
+      if (_ < ordering.length - 1) { e += '/' }
     })
-    e += '/' + (frwc.identities[identityID].length) + ')' + '</div>'
-
-    /* Filter check */
-    if (filter) {
-      
+    if (tag == 'affinity') {
+      e += '/' + membersList[id].merged.length + ') </div>'
+    } else {
+      e += '/' + membersList[id].length + ') </div>'
     }
-
-    d += e
+    
+    /* Filter check here */
+    
+    output += e
   })
-  $('#navigator-panel').append(d)
-  $('#navigator-head').append('Identities <span class="mute">[</span>' + sortableIdentities.length + '<span class="mute">] (H/B/P/F/R/#)</span>')
+  $('#navigator-panel').append(output)
+  let prefix = tag
+  switch(tag) {
+    case 'identity': prefix = 'Identities'; break;
+    case 'positive': prefix = 'Positives' ; break;
+    case 'affinity': prefix = 'Affinities'; break;
+  }
+  $('#navigator-head').append(prefix + ' <span class="mute">[</span>' + sortableElements.length + '<span class="mute">] (H/B/P/F/R/#)</span>')
 }
 
-addPositivesToNavigator = function(filter) {
-  let sortBy = ['head','body','prop','familiar','rune']
-  let d = ''
-
-  let sortablePositives = Object.values(frwc._names.positives).map((x, i) => [x, Object.keys(frwc._names.positives)[i]])
-  sortablePositives.sort()
-  sortablePositives.forEach(function(item, _) {
-    let positiveName = item[0]
-    let positiveID = item[1]
-    let e = ''
-
-    e += '<div class="panel-item positive" id="positive-' + positiveID + '"'
-    e += ' onclick="renderObject(' + positiveID + ', \'positive\')">'
-    e += positiveName + '<span class="mute">#' + positiveID + '</span> '
-    e += '<span class="mute">('
-
-    let affinity   = frwc._components.affinities[positiveID]
-    sortBy.forEach(function(trait, _) {
-      e += affinity[trait] ? Object.keys(affinity[trait]).length : 0
-      if (_ < sortBy.length - 1) { e += '/' }
-    })
-    e += '/' + (frwc.positives[positiveID].length) + ')' + '</div>'
-
-    /* Filter check */
-    if (filter) {
-      
+/* Used by renderIdentity(), renderAffinity(), renderPositive() */
+renderElement = function(ordering, componentsList, urlList) {
+  let output = ''
+  let padCount = Math.floor(370 / 94) + 1
+  ordering.forEach(function(component, _) {
+    output += '<div id="scroller-' + component + '" class="scroller-wrapper"><div class="scroller ' + component + '">'
+    for (var i = 0; i < padCount; i++) {
+      output += '<div class="trait empty"></div>'
     }
-
-    d += e
-  })
-  $('#navigator-panel').append(d)
-  $('#navigator-head').append('Positives <span class="mute">[</span>' + sortablePositives.length + '<span class="mute">] (H/B/P/F/R/#)</span>')
-}
-
-addAffinitiesToNavigator = function(filter) {
-  let sortBy = ['head','body','prop','familiar','rune']
-  let d = ''
-
-  let sortableAffinities = Object.values(frwc._names.affinities).map((x, i) => [x, Object.keys(frwc._names.affinities)[i]])
-  sortableAffinities.sort()
-  sortableAffinities.forEach(function(item, _) {
-    let affinityName = item[0]
-    let affinityID = item[1]
-    let e = ''
-
-    e += '<div class="panel-item affinity" id="affinity-' + affinityID + '"'
-    e += ' onclick="renderObject(' + affinityID + ', \'affinity\')">'
-    e += affinityName + '<span class="mute">#' + affinityID + '</span> '
-    e += '<span class="mute">('
-
-    let affinity   = frwc._components.affinities[affinityID]
-    sortBy.forEach(function(trait, _) {
-      e += affinity[trait] ? Object.keys(affinity[trait]).length : 0
-      if (_ < sortBy.length - 1) { e += '/' }
-    })
-
-    e += '/' + frwc.affinities[affinityID].merged.length + ')' + '</div>'
-
-    /* Filter check */
-    if (filter) {
-      
+    let elements = componentsList[component]
+    let urls = urlList[component]
+    for (let componentID in elements) {
+      let e = ''
+      let url = urls[componentID]
+      let isp = elements[componentID]
+      let p = 'p'
+      let i = 'i'
+      if (isp == 'p') { i = '' } else if (isp == 'i') { p = '' }
+      e += '<div id="trait-' + componentID + '" class="trait" style="background-image:url(\'' + url + '\')">'
+      e += '<div class="is-positive ' + p + '">+</div><div class="is-identity ' + i + '">I</div></div>'
+      output += e
     }
-
-    d += e
+    for (var i = 0; i < padCount; i++) {
+      output += '<div class="trait empty"></div>'
+    }
+    output += '</div></div>'
   })
-  $('#navigator-panel').append(d)
-  $('#navigator-head').append('Affinities <span class="mute">[</span>' + sortableAffinities.length + '<span class="mute">] (H/B/P/F/R/#)</span>')
+  return output
 }
 
 renderIdentity = function(id) {
@@ -349,38 +316,7 @@ renderIdentity = function(id) {
   let sortBy = ['head','body','prop','familiar','rune']
   let d = ''
 
-  sortBy.forEach(function(component, _) {
-    d += '<div id="scroller-' + component + '" class="scroller-wrapper"><div class="scroller ' + component + '">'
-    // Add in some spacers
-    let n = Math.floor(370 / 94) + 1
-    for (var i = 0; i < n; i++) {
-      d += '<div class="trait empty"></div>'
-    }
-
-    let elements = identityComponents[component]
-    let urls     = componentURLs[component]
-    for (let componentID in elements) {
-      let e = ''
-      let url = urls[componentID]
-      let isp = elements[componentID]
-      let p = 'p'
-      let i = 'i'
-      if (isp == 'a') {
-        i = ''
-      } else if (isp == 'i') {
-        p = ''
-      }
-      e += '<div id="trait-' + componentID + '" class="trait" style="background-image:url(\'' + url + '\')">'
-      e += '<div class="is-positive ' + p + '">+</div><div class="is-identity ' + i + '">I</div></div>'
-      d += e
-    }
-
-    // Add in some spacers
-    for (var i = 0; i < n; i++) {
-      d += '<div class="trait empty"></div>'
-    }
-    d += '</div></div>'
-  })
+  d += renderElement(sortBy, identityComponents, frwc.traitURLs)
   
   // Grab 7 Random Wizards and render them
   d += '<div id="wizard-container"><div id="wizard-sampler">'
@@ -427,38 +363,7 @@ renderPositive = function(id) {
   let sortBy = ['head','body','prop','familiar','rune']
   let d = ''
 
-  sortBy.forEach(function(component, _) {
-    d += '<div id="scroller-' + component + '" class="scroller-wrapper"><div class="scroller ' + component + '">'
-    // Add in some spacers
-    let n = Math.floor(370 / 94) + 1
-    for (var i = 0; i < n; i++) {
-      d += '<div class="trait empty"></div>'
-    }
-
-    let elements = positiveComponents[component]
-    let urls     = componentURLs[component]
-    for (let componentID in elements) {
-      let e = ''
-      let url = urls[componentID]
-      let isp = elements[componentID]
-      let p = 'p'
-      let i = 'i'
-      if (isp == 'a') {
-        i = ''
-      } else if (isp == 'i') {
-        p = ''
-      }
-      e += '<div id="trait-' + componentID + '" class="trait" style="background-image:url(\'' + url + '\')">'
-      e += '<div class="is-positive ' + p + '">+</div><div class="is-identity ' + i + '">I</div></div>'
-      d += e
-    }
-
-    // Add in some spacers
-    for (var i = 0; i < n; i++) {
-      d += '<div class="trait empty"></div>'
-    }
-    d += '</div></div>'
-  })
+  d += renderElement(sortBy, positiveComponents, frwc.traitURLs)
   
   // Grab 7 Random Wizards and render them
   d += '<div id="wizard-container"><div id="wizard-sampler">'
@@ -504,39 +409,8 @@ renderAffinity = function(id) {
   
   let sortBy = ['head','body','prop','familiar','rune']
   let d = ''
-
-  sortBy.forEach(function(component, _) {
-    d += '<div id="scroller-' + component + '" class="scroller-wrapper"><div class="scroller ' + component + '">'
-    // Add in some spacers
-    let n = Math.floor(370 / 94) + 1
-    for (var i = 0; i < n; i++) {
-      d += '<div class="trait empty"></div>'
-    }
-
-    let elements = affinityComponents[component]
-    let urls     = componentURLs[component]
-    for (let componentID in elements) {
-      let e = ''
-      let url = urls[componentID]
-      let isp = elements[componentID]
-      let p = 'p'
-      let i = 'i'
-      if (isp == 'a') {
-        i = ''
-      } else if (isp == 'i') {
-        p = ''
-      }
-      e += '<div id="trait-' + componentID + '" class="trait" style="background-image:url(\'' + url + '\')">'
-      e += '<div class="is-positive ' + p + '">+</div><div class="is-identity ' + i + '">I</div></div>'
-      d += e
-    }
-
-    // Add in some spacers
-    for (var i = 0; i < n; i++) {
-      d += '<div class="trait empty"></div>'
-    }
-    d += '</div></div>'
-  })
+  
+  d += renderElement(sortBy, affinityComponents, frwc.traitURLs)
   
   // Grab 7 Random Wizards and render them
   d += '<div id="wizard-container"><div id="wizard-sampler">'
@@ -576,13 +450,13 @@ addNavigatorElements = function(key) {
   var key = key || defaults.navigatorKey
   switch(key) {
     case 'identities':
-      addIdentitiesToNavigator()
+      addElementsToNavigator('identity', frwc._names.identities, frwc._components.affinities, frwc.identities)
       break;
     case 'positives':
-      addPositivesToNavigator()
+      addElementsToNavigator('positive', frwc._names.positives, frwc._components.affinities, frwc.positives)
       break;
     case 'affinities':
-      addAffinitiesToNavigator()
+      addElementsToNavigator('affinity', frwc._names.affinities, frwc._components.affinities, frwc.affinities)
       break;
   }
 }
@@ -624,7 +498,9 @@ generateTraitURL = function(traitID, traitType) {
     qualified = 'vial-of-virgins-blood'
   }
   let traitMap = {head: 'heads', body: 'bodies', prop: 'props', familiar: 'familiars', rune: 'runes', background: 'backgrounds'}
-  return /* 'components/' + */ traitMap[traitType] + '/' + (traitType != 'rune' ? traitType + '-' : '') + qualified + '-400.png'
+  let uri = traitMap[traitType] + '/' + (traitType != 'rune' ? traitType + '-' : '') + qualified + '-400.png'
+  if (local) { uri = 'components/' + uri }
+  return uri
 }
 getRandomWizards = function(array, count) {
   let len = array.length, taken = new Array(len);
