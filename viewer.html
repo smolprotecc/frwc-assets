@@ -624,7 +624,7 @@ generateTraitURL = function(traitID, traitType) {
     qualified = 'vial-of-virgins-blood'
   }
   let traitMap = {head: 'heads', body: 'bodies', prop: 'props', familiar: 'familiars', rune: 'runes', background: 'backgrounds'}
-  return 'components/' + traitMap[traitType] + '/' + (traitType != 'rune' ? traitType + '-' : '') + qualified + '-400.png'
+  return /* 'components/' + */ traitMap[traitType] + '/' + (traitType != 'rune' ? traitType + '-' : '') + qualified + '-400.png'
 }
 getRandomWizards = function(array, count) {
   let len = array.length, taken = new Array(len);
