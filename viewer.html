@@ -18,7 +18,7 @@ frwc = {}
 
 /* Default Options */
 defaults = {
-  navigatorKey: 'affinities',
+  navigatorKey: 'affinities', //'positives',
 }
 
 /* Load Sequence */
@@ -37,30 +37,30 @@ document.addEventListener("DOMContentLoaded", function(event) {
 })
 
 parseData = function() {
-   console.log(_traits)
-   console.log(_wizards)
+  console.log(_traits)
+  console.log(_wizards)
   /* Hash Maps */
   let hash = {background: 'backgrounds', body: 'bodies', familiar: 'familiars', head: 'heads', prop: 'props', rune: 'runes'}
    
   /* Output variables */
-  let mapped = {traits:{}, traitTypes: {}, traitURLs:{}, affinities:{}, tags:{}, emergent:{}}
+  let mapped = {traits:{}, traitTypes: {}, traitURLs:{}, identities:{}, positives:{}, affinities:{}}
   for (var key in hash) { mapped.traits[key] = {} }
   
   let names = {}
       names.wizards    = {}
       names.traits     = {}
+      names.identities = {}
+      names.positives  = {}
       names.affinities = {}
-      names.tags       = {}
-      names.emergent   = {}
 
   let components = {}
       components.wizards    = {}
+      components.identities = {}
+      components.positives  = {}
       components.affinities = {}
-      components.tags       = {}
-      components.emergent   = {}
 
-  let tags       = {}
-  let affinities = {}
+  let identities = {}
+  let positives  = {}
 
   for (let wizardID in _wizards) {
     let wizard = _wizards[wizardID]
@@ -93,83 +93,83 @@ parseData = function() {
       let traitAffinities = retrieveTrait(n) || null
       if (traitAffinities) {
         // Handle the Tag key
-        traitAffinities.tags.forEach(function(tag, _) {
+        traitAffinities.tags.forEach(function(identity, _) {
           // Add the list for this Tag to our "mapped" Object
-          if (!mapped.tags[tag.idx]) {
-            if (typeof tags[tag.idx] == 'undefined') { tags[tag.idx] = clone(tag) }
-            mapped.tags[tag.idx] = []
+          if (!mapped.identities[identity.idx]) {
+            if (typeof identities[identity.idx] == 'undefined') { identities[identity.idx] = clone(identity) }
+            mapped.identities[identity.idx] = []
             // Also map the name of this Affinity to our "names" Object
-            names.tags[tag.idx] = tag.name
-            names.emergent[tag.idx] = tag.name
+            names.identities[identity.idx] = identity.name
+            names.affinities[identity.idx] = identity.name
           }
           // Add Wizard this Tag if not included
-          if (mapped.tags[tag.idx].indexOf(wizard.idx) == -1) {
-            mapped.tags[tag.idx].push(wizard.idx)
+          if (mapped.identities[identity.idx].indexOf(wizard.idx) == -1) {
+            mapped.identities[identity.idx].push(wizard.idx)
           }
           // Add this Wizard to the Emergent if not included
-          mapped.emergent[tag.idx] = mapped.emergent[tag.idx] || {}
-          mapped.emergent[tag.idx]['tags'] = mapped.emergent[tag.idx]['tags'] || []
-          if (mapped.emergent[tag.idx]['tags'].indexOf(wizard.idx) == -1) {
-            mapped.emergent[tag.idx]['tags'].push(wizard.idx)
+          mapped.affinities[identity.idx] = mapped.affinities[identity.idx] || {}
+          mapped.affinities[identity.idx]['identities'] = mapped.affinities[identity.idx]['identities'] || []
+          if (mapped.affinities[identity.idx]['identities'].indexOf(wizard.idx) == -1) {
+            mapped.affinities[identity.idx]['identities'].push(wizard.idx)
           }
           // Also add this to the components list and add the ID if not present
           // Tags
-          components.tags[tag.idx] = components.tags[tag.idx] || []
-          if (components.tags[tag.idx].indexOf(traitAffinities.idx) == -1) {
-            components.tags[tag.idx].push(traitAffinities.idx)
+          components.identities[identity.idx] = components.identities[identity.idx] || []
+          if (components.identities[identity.idx].indexOf(traitAffinities.idx) == -1) {
+            components.identities[identity.idx].push(traitAffinities.idx)
           }
           // Emergent:Tags
-          components.emergent[tag.idx] = components.emergent[tag.idx] || {}
-          components.emergent[tag.idx]['tags'] = components.emergent[tag.idx]['tags'] || []
-          if (components.emergent[tag.idx]['tags'].indexOf(traitAffinities.idx) == -1) {
-            components.emergent[tag.idx]['tags'].push(traitAffinities.idx)
+          components.affinities[identity.idx] = components.affinities[identity.idx] || {}
+          components.affinities[identity.idx]['identities'] = components.affinities[identity.idx]['identities'] || []
+          if (components.affinities[identity.idx]['identities'].indexOf(traitAffinities.idx) == -1) {
+            components.affinities[identity.idx]['identities'].push(traitAffinities.idx)
           }
           // Emergent:Trait Type
-          components.emergent[tag.idx][traitType] = components.emergent[tag.idx][traitType] || {}
-          if (typeof components.emergent[tag.idx][traitType][n] == 'undefined') {
-            components.emergent[tag.idx][traitType][n] = 't'
-          } else if (components.emergent[tag.idx][traitType][n] == 'a') {
-            components.emergent[tag.idx][traitType][n] = 'at'
+          components.affinities[identity.idx][traitType] = components.affinities[identity.idx][traitType] || {}
+          if (typeof components.affinities[identity.idx][traitType][n] == 'undefined') {
+            components.affinities[identity.idx][traitType][n] = 'i'
+          } else if (components.affinities[identity.idx][traitType][n] == 'p') {
+            components.affinities[identity.idx][traitType][n] = 'ip'
           }
         })
         // Handle the Affinity key
-        traitAffinities.affinity.forEach(function(affinity, _) {
+        traitAffinities.affinity.forEach(function(positive, _) {
           // Add the list for this Affinity to our "mapped" Object
-          if (!mapped.affinities[affinity.idx]) {
-            if (typeof affinities[affinity.idx] == 'undefined') { affinities[affinity.idx] = clone(affinity) }
-            mapped.affinities[affinity.idx] = []
+          if (!mapped.positives[positive.idx]) {
+            if (typeof positives[positive.idx] == 'undefined') { positives[positive.idx] = clone(positive) }
+            mapped.positives[positive.idx] = []
             // Also map the name of this Affinity to our "names" Object
-            names.affinities[affinity.idx] = affinity.name
-            names.emergent[affinity.idx] = affinity.name
+            names.positives[positive.idx] = positive.name
+            names.affinities[positive.idx] = positive.name
           }
           // Add Wizard to this Affinity if not included
-          if (mapped.affinities[affinity.idx].indexOf(wizard.idx) == -1) {
-            mapped.affinities[affinity.idx].push(wizard.idx)
+          if (mapped.positives[positive.idx].indexOf(wizard.idx) == -1) {
+            mapped.positives[positive.idx].push(wizard.idx)
           }
           // Add this Wizard to the Emergent if not included
-          mapped.emergent[affinity.idx] = mapped.emergent[affinity.idx] || {}
-          mapped.emergent[affinity.idx]['affinities'] = mapped.emergent[affinity.idx]['affinities'] || []
-          if (mapped.emergent[affinity.idx]['affinities'].indexOf(wizard.idx) == -1) {
-            mapped.emergent[affinity.idx]['affinities'].push(wizard.idx)
+          mapped.affinities[positive.idx] = mapped.affinities[positive.idx] || {}
+          mapped.affinities[positive.idx]['positives'] = mapped.affinities[positive.idx]['positives'] || []
+          if (mapped.affinities[positive.idx]['positives'].indexOf(wizard.idx) == -1) {
+            mapped.affinities[positive.idx]['positives'].push(wizard.idx)
           }
           // Also add this to the components list and add the ID if not present
           // Affinities
-          components.affinities[affinity.idx] = components.affinities[affinity.idx] || []
-          if (components.affinities[affinity.idx].indexOf(traitAffinities.idx) == -1) {
-            components.affinities[affinity.idx].push(traitAffinities.idx)
+          components.positives[positive.idx] = components.positives[positive.idx] || []
+          if (components.positives[positive.idx].indexOf(traitAffinities.idx) == -1) {
+            components.positives[positive.idx].push(traitAffinities.idx)
           }
           // Emergent:Affinities
-          components.emergent[affinity.idx] = components.emergent[affinity.idx] || {}
-          components.emergent[affinity.idx]['affinities'] = components.emergent[affinity.idx]['affinities'] || []
-          if (components.emergent[affinity.idx]['affinities'].indexOf(traitAffinities.idx) == -1) {
-            components.emergent[affinity.idx]['affinities'].push(traitAffinities.idx)
+          components.affinities[positive.idx] = components.affinities[positive.idx] || {}
+          components.affinities[positive.idx]['positives'] = components.affinities[positive.idx]['positives'] || []
+          if (components.affinities[positive.idx]['positives'].indexOf(traitAffinities.idx) == -1) {
+            components.affinities[positive.idx]['positives'].push(traitAffinities.idx)
           }
           // Emergent:Trait Type
-          components.emergent[affinity.idx][traitType] = components.emergent[affinity.idx][traitType] || {}
-          if (typeof components.emergent[affinity.idx][traitType][n] == 'undefined') {
-            components.emergent[affinity.idx][traitType][n] = 'a'
-          } else if (components.emergent[affinity.idx][traitType][n] == 't') {
-            components.emergent[affinity.idx][traitType][n] = 'at'
+          components.affinities[positive.idx][traitType] = components.affinities[positive.idx][traitType] || {}
+          if (typeof components.affinities[positive.idx][traitType][n] == 'undefined') {
+            components.affinities[positive.idx][traitType][n] = 'p'
+          } else if (components.affinities[positive.idx][traitType][n] == 'i') {
+            components.affinities[positive.idx][traitType][n] = 'ip'
           }
         })
         // Also add in the name
@@ -179,7 +179,20 @@ parseData = function() {
       }
     }
   }
-  // Adding backgrounds
+  for (let affinityID in mapped.affinities) {
+    let identities = mapped.affinities[affinityID].identities || []
+    let positives  = mapped.affinities[affinityID].positives  || []
+
+    let merged = [...identities, ...positives]
+
+    for (var i = 0; i < merged.length; ++i) {
+      for (var j = i+1; j < merged.length; ++j) {
+        if (merged[i] === merged[j])
+          merged.splice(j--, 1)
+      }
+    }
+    mapped.affinities[affinityID].merged = merged.sort(function(a, b) { return a - b })
+  }
   
   frwc = mapped
   frwc._referenceWizards = _wizards
@@ -188,7 +201,7 @@ parseData = function() {
   frwc._components = components
 
   console.log(frwc)
-  console.log(tags)
+  // console.log(identities)
 }
 
 render = function() {
@@ -218,6 +231,74 @@ render = function() {
 }
 
 
+addIdentitiesToNavigator = function(filter) {
+  let sortBy = ['head','body','prop','familiar','rune']
+  let d = ''
+
+  let sortableIdentities = Object.values(frwc._names.identities).map((x, i) => [x, Object.keys(frwc._names.identities)[i]])
+  sortableIdentities.sort()
+  sortableIdentities.forEach(function(item, _) {
+    let identityName = item[0]
+    let identityID = item[1]
+    let e = ''
+
+    e += '<div class="panel-item identity" id="identity-' + identityID + '"'
+    e += ' onclick="renderObject(' + identityID + ', \'identity\')">'
+    e += identityName + '<span class="mute">#' + identityID + '</span> '
+    e += '<span class="mute">('
+
+    let affinity   = frwc._components.affinities[identityID]
+    sortBy.forEach(function(trait, _) {
+      e += affinity[trait] ? Object.keys(affinity[trait]).length : 0
+      if (_ < sortBy.length - 1) { e += '/' }
+    })
+    e += '/' + (frwc.identities[identityID].length) + ')' + '</div>'
+
+    /* Filter check */
+    if (filter) {
+      
+    }
+
+    d += e
+  })
+  $('#navigator-panel').append(d)
+  $('#navigator-head').append('Identities <span class="mute">[</span>' + sortableIdentities.length + '<span class="mute">] (H/B/P/F/R/#)</span>')
+}
+
+addPositivesToNavigator = function(filter) {
+  let sortBy = ['head','body','prop','familiar','rune']
+  let d = ''
+
+  let sortablePositives = Object.values(frwc._names.positives).map((x, i) => [x, Object.keys(frwc._names.positives)[i]])
+  sortablePositives.sort()
+  sortablePositives.forEach(function(item, _) {
+    let positiveName = item[0]
+    let positiveID = item[1]
+    let e = ''
+
+    e += '<div class="panel-item positive" id="positive-' + positiveID + '"'
+    e += ' onclick="renderObject(' + positiveID + ', \'positive\')">'
+    e += positiveName + '<span class="mute">#' + positiveID + '</span> '
+    e += '<span class="mute">('
+
+    let affinity   = frwc._components.affinities[positiveID]
+    sortBy.forEach(function(trait, _) {
+      e += affinity[trait] ? Object.keys(affinity[trait]).length : 0
+      if (_ < sortBy.length - 1) { e += '/' }
+    })
+    e += '/' + (frwc.positives[positiveID].length) + ')' + '</div>'
+
+    /* Filter check */
+    if (filter) {
+      
+    }
+
+    d += e
+  })
+  $('#navigator-panel').append(d)
+  $('#navigator-head').append('Positives <span class="mute">[</span>' + sortablePositives.length + '<span class="mute">] (H/B/P/F/R/#)</span>')
+}
+
 addAffinitiesToNavigator = function(filter) {
   let sortBy = ['head','body','prop','familiar','rune']
   let d = ''
@@ -234,12 +315,13 @@ addAffinitiesToNavigator = function(filter) {
     e += affinityName + '<span class="mute">#' + affinityID + '</span> '
     e += '<span class="mute">('
 
-    let emergent   = frwc._components.emergent[affinityID]
+    let affinity   = frwc._components.affinities[affinityID]
     sortBy.forEach(function(trait, _) {
-      e += emergent[trait] ? Object.keys(emergent[trait]).length : 0
+      e += affinity[trait] ? Object.keys(affinity[trait]).length : 0
       if (_ < sortBy.length - 1) { e += '/' }
     })
-    e += '/' + (frwc.affinities[affinityID].length) + ')' + '</div>'
+
+    e += '/' + frwc.affinities[affinityID].merged.length + ')' + '</div>'
 
     /* Filter check */
     if (filter) {
@@ -249,7 +331,163 @@ addAffinitiesToNavigator = function(filter) {
     d += e
   })
   $('#navigator-panel').append(d)
-  $('#navigator-head').append('Affinity <span class="mute">(H/B/P/F/R/#)</span>')
+  $('#navigator-head').append('Affinities <span class="mute">[</span>' + sortableAffinities.length + '<span class="mute">] (H/B/P/F/R/#)</span>')
+}
+
+renderIdentity = function(id) {
+  console.log('Rendering identity (' + id + ')')
+  // Highlight it in the Navigator
+  $('.identity.active').removeClass('active')
+  $('#identity-' + id).addClass('active')
+  
+  addCSS(scrollerCSS, '#main', 'scrollerCSS')
+
+  let identityComponents = frwc._components.affinities[id]
+  let componentURLs      = frwc.traitURLs
+  let identityMembers    = frwc.identities[id]
+  
+  let sortBy = ['head','body','prop','familiar','rune']
+  let d = ''
+
+  sortBy.forEach(function(component, _) {
+    d += '<div id="scroller-' + component + '" class="scroller-wrapper"><div class="scroller ' + component + '">'
+    // Add in some spacers
+    let n = Math.floor(370 / 94) + 1
+    for (var i = 0; i < n; i++) {
+      d += '<div class="trait empty"></div>'
+    }
+
+    let elements = identityComponents[component]
+    let urls     = componentURLs[component]
+    for (let componentID in elements) {
+      let e = ''
+      let url = urls[componentID]
+      let isp = elements[componentID]
+      let p = 'p'
+      let i = 'i'
+      if (isp == 'a') {
+        i = ''
+      } else if (isp == 'i') {
+        p = ''
+      }
+      e += '<div id="trait-' + componentID + '" class="trait" style="background-image:url(\'' + url + '\')">'
+      e += '<div class="is-positive ' + p + '">+</div><div class="is-identity ' + i + '">I</div></div>'
+      d += e
+    }
+
+    // Add in some spacers
+    for (var i = 0; i < n; i++) {
+      d += '<div class="trait empty"></div>'
+    }
+    d += '</div></div>'
+  })
+  
+  // Grab 7 Random Wizards and render them
+  d += '<div id="wizard-container"><div id="wizard-sampler">'
+  let sample = getRandomWizards(identityMembers, 7)
+  // Add in some spacers
+  let n = Math.floor(370 / 144) + 1
+  for (var i = 0; i < n; i++) {
+    d += '<div class="wizard-sample empty"></div>'
+  }  
+  
+  sample.forEach(function(wizard, _){
+    d += '<div id="wizard-' + wizard + '" class="wizard-sample">'
+    let components = frwc._components.wizards[wizard]
+    components.forEach(function(component, i) {
+      let url = frwc.traitURLs[component[0]][component[1]]
+      d += '<div class="wizard-sample-component ' + component[0] + '" '
+      if (url) { d += 'style="background-image:url(\'' + url + '\')"' }
+      d += '></div>'
+    })
+    d += '</div>'
+  })
+  // Add in some spacers
+  for (var i = 0; i < n; i++) {
+    d += '<div class="wizard-sample empty"></div>'
+  }  
+  d += '</div></div>'
+  
+  $('#main').append(d)
+  document.getElementById('wizard-sampler').scrollTop = 77
+}
+
+renderPositive = function(id) {
+  console.log('Rendering positive (' + id + ')')
+  // Highlight it in the Navigator
+  $('.positive.active').removeClass('active')
+  $('#positive-' + id).addClass('active')
+  
+  addCSS(scrollerCSS, '#main', 'scrollerCSS')
+
+  let positiveComponents = frwc._components.affinities[id]
+  let componentURLs      = frwc.traitURLs
+  let positiveMembers    = frwc.positives[id]
+  
+  let sortBy = ['head','body','prop','familiar','rune']
+  let d = ''
+
+  sortBy.forEach(function(component, _) {
+    d += '<div id="scroller-' + component + '" class="scroller-wrapper"><div class="scroller ' + component + '">'
+    // Add in some spacers
+    let n = Math.floor(370 / 94) + 1
+    for (var i = 0; i < n; i++) {
+      d += '<div class="trait empty"></div>'
+    }
+
+    let elements = positiveComponents[component]
+    let urls     = componentURLs[component]
+    for (let componentID in elements) {
+      let e = ''
+      let url = urls[componentID]
+      let isp = elements[componentID]
+      let p = 'p'
+      let i = 'i'
+      if (isp == 'a') {
+        i = ''
+      } else if (isp == 'i') {
+        p = ''
+      }
+      e += '<div id="trait-' + componentID + '" class="trait" style="background-image:url(\'' + url + '\')">'
+      e += '<div class="is-positive ' + p + '">+</div><div class="is-identity ' + i + '">I</div></div>'
+      d += e
+    }
+
+    // Add in some spacers
+    for (var i = 0; i < n; i++) {
+      d += '<div class="trait empty"></div>'
+    }
+    d += '</div></div>'
+  })
+  
+  // Grab 7 Random Wizards and render them
+  d += '<div id="wizard-container"><div id="wizard-sampler">'
+  let sample = getRandomWizards(positiveMembers, 7)
+  // Add in some spacers
+  let n = Math.floor(370 / 144) + 1
+  for (var i = 0; i < n; i++) {
+    d += '<div class="wizard-sample empty"></div>'
+  }  
+  
+  sample.forEach(function(wizard, _){
+    d += '<div id="wizard-' + wizard + '" class="wizard-sample">'
+    let components = frwc._components.wizards[wizard]
+    components.forEach(function(component, i) {
+      let url = frwc.traitURLs[component[0]][component[1]]
+      d += '<div class="wizard-sample-component ' + component[0] + '" '
+      if (url) { d += 'style="background-image:url(\'' + url + '\')"' }
+      d += '></div>'
+    })
+    d += '</div>'
+  })
+  // Add in some spacers
+  for (var i = 0; i < n; i++) {
+    d += '<div class="wizard-sample empty"></div>'
+  }  
+  d += '</div></div>'
+  
+  $('#main').append(d)
+  document.getElementById('wizard-sampler').scrollTop = 77
 }
 
 renderAffinity = function(id) {
@@ -260,9 +498,9 @@ renderAffinity = function(id) {
   
   addCSS(scrollerCSS, '#main', 'scrollerCSS')
 
-  let affinityComponents = frwc._components.emergent[id]
+  let affinityComponents = frwc._components.affinities[id]
   let componentURLs      = frwc.traitURLs
-  let affinityMembers    = frwc.affinities[id]
+  let affinityMembers    = frwc.affinities[id].merged
   
   let sortBy = ['head','body','prop','familiar','rune']
   let d = ''
@@ -281,15 +519,15 @@ renderAffinity = function(id) {
       let e = ''
       let url = urls[componentID]
       let isp = elements[componentID]
-      let a = 'a'
-      let t = 't'
+      let p = 'p'
+      let i = 'i'
       if (isp == 'a') {
-        t = ''
-      } else if (isp == 't') {
-        a = ''
+        i = ''
+      } else if (isp == 'i') {
+        p = ''
       }
       e += '<div id="trait-' + componentID + '" class="trait" style="background-image:url(\'' + url + '\')">'
-      e += '<div class="is-affinity ' + a + '">A</div><div class="is-tag ' + t + '">T</div></div>'
+      e += '<div class="is-positive ' + p + '">+</div><div class="is-identity ' + i + '">I</div></div>'
       d += e
     }
 
@@ -327,7 +565,7 @@ renderAffinity = function(id) {
   d += '</div></div>'
   
   $('#main').append(d)
-  document.getElementById('wizard-sampler').scrollTop = 78
+  document.getElementById('wizard-sampler').scrollTop = 77
 }
 
 /* Routers */
@@ -337,6 +575,12 @@ addNavigatorElements = function(key) {
 
   var key = key || defaults.navigatorKey
   switch(key) {
+    case 'identities':
+      addIdentitiesToNavigator()
+      break;
+    case 'positives':
+      addPositivesToNavigator()
+      break;
     case 'affinities':
       addAffinitiesToNavigator()
       break;
@@ -345,6 +589,12 @@ addNavigatorElements = function(key) {
 renderObject = function(id, type) {
   $("#main *:not(#navigator, #navigator *)").remove()
   switch(type) {
+    case 'identity':
+      renderIdentity(id)
+      break;
+    case 'positive':
+      renderPositive(id)
+      break;
     case 'affinity':
       renderAffinity(id)
       break;
@@ -374,7 +624,7 @@ generateTraitURL = function(traitID, traitType) {
     qualified = 'vial-of-virgins-blood'
   }
   let traitMap = {head: 'heads', body: 'bodies', prop: 'props', familiar: 'familiars', rune: 'runes', background: 'backgrounds'}
-  return /* 'components/' + */ traitMap[traitType] + '/' + (traitType != 'rune' ? traitType + '-' : '') + qualified + '-400.png'
+  return 'components/' + traitMap[traitType] + '/' + (traitType != 'rune' ? traitType + '-' : '') + qualified + '-400.png'
 }
 getRandomWizards = function(array, count) {
   let len = array.length, taken = new Array(len);
@@ -514,7 +764,7 @@ navigatorCSS = ` /* Navigator CSS */
   #navigator-panel {
     position    : relative;
   }
-  #navigator-head, .panel-item.affinity {
+  #navigator-head, .panel-item.identity, .panel-item.positive, .panel-item.affinity {
     width       : calc(100% - 1.9em);
     height      : 34px;
     padding-top   : 0.4em;
@@ -530,21 +780,21 @@ navigatorCSS = ` /* Navigator CSS */
     display     : block;
     background  : rgba( 1, 1, 1, 0.21 );
   }
-  .panel-item.affinity {
+  .panel-item.identity, .panel-item.positive, .panel-item.affinity {
     position    : relative;
     top         : calc(34px + 0.8em);
     display     : block;
     cursor      : pointer;
     user-select : none;
   }
-  #navigator-head .mute, .panel-item.affinity .mute {
+  #navigator-head .mute, .panel-item.identity .mute, .panel-item.positive .mute, .panel-item.affinity .mute {
     color       : rgba( 211, 211, 211, 0.12 );
   }
-  .panel-item.affinity:hover {
+  .panel-item.identity:hover, .panel-item.positive:hover, .panel-item.affinity:hover {
     background  : rgba( 201, 201, 201, 0.24 );
   }
   
-  .affinity.active {
+  .identity.active, .positive.active, .affinity.active {
     background  : rgba( 201, 201, 201, 0.18 );
   }
 `
@@ -596,20 +846,20 @@ scrollerCSS = ` /* Scroller CSS */
     font-size: 9pt;
     color    : rgba( 255, 255, 255, 0.012 );
   }
-  .trait .is-affinity {
+  .trait .is-positive {
     position: absolute;
     top     : 4px;
     left    : 6px;
   }
-  .trait .is-tag {
+  .trait .is-identity {
     position: absolute;
     bottom  : 4px;
     right   : 6px;
   }
-  .trait .is-affinity.a {
+  .trait .is-positive.p {
     color   : rgba( 255, 255, 255, 0.23 );
   }
-  .trait .is-tag.t {
+  .trait .is-identity.i {
     color   : rgba( 255, 255, 255, 0.23 );
   }
   
