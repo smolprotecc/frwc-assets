@@ -20,14 +20,18 @@ local = false
 /* Default Options */
 defaults = {
   navigatorKey: 'affinities', //'positives',
+  navigatorOptions: ['affinities','identities','positives'],
 }
 
 /* Load Sequence */
 document.addEventListener("DOMContentLoaded", function(event) {   
   parseData()
   addCSS(cssRules)
+  addCSS(commonNavigatorCSS)
   render()
   addNavigatorElements()
+  
+  uxBehaviours()
   
   var p = $.when(1)
       p = p.then(function() { 
@@ -203,6 +207,10 @@ parseData = function() {
 
   console.log(frwc)
   // console.log(identities)
+}
+
+resetNavigatorPosition = function() {
+  document.getElementById('navigator').scrollTop = 0
 }
 
 render = function() {
@@ -444,10 +452,12 @@ renderAffinity = function(id) {
 
 /* Routers */
 addNavigatorElements = function(key) {
-  // Prepare the panel
-  $('#navigator').empty().append('<div id="navigator-head"></div><div id="navigator-panel"></div>')
-
   var key = key || defaults.navigatorKey
+  
+  // Prepare the panel
+  $('#navigator').empty().append('<div id="navigator-head" class="' + key + '"></div><div id="navigator-panel"></div>')
+  addCommonNavigatorElements()
+
   switch(key) {
     case 'identities':
       addElementsToNavigator('identity', frwc._names.identities, frwc._components.affinities, frwc.identities)
@@ -461,7 +471,7 @@ addNavigatorElements = function(key) {
   }
 }
 renderObject = function(id, type) {
-  $("#main *:not(#navigator, #navigator *)").remove()
+  $("#main *:not(#navigator, #navigator *, #navigator-return, #navigator-return > div, #navigator-left, #navigator-right)").remove()
   switch(type) {
     case 'identity':
       renderIdentity(id)
@@ -473,6 +483,68 @@ renderObject = function(id, type) {
       renderAffinity(id)
       break;
   }
+}
+
+addCommonNavigatorElements = function() {
+  /* Add navigator arrows */
+  $('#navigator-left').remove()
+  $('#navigator-right').remove()
+  let d = ''
+  d += '<div id="navigator-left" onclick="switchNavigator(\'left\')"></div>'
+  d += '<div id="navigator-right" onclick="switchNavigator(\'right\')"></div>'
+  $('#main').append(d)
+
+  /* Add a ReturnToTop arrow */
+  $('#main').append('<div id="navigator-return" class="invisible" onclick="resetNavigatorPosition()"><div>&uarr;</div></div>')
+  $('#navigator').off('scroll').on('scroll', function(e) {
+    
+    if (document.getElementById(e.target.id).scrollTop > 89) {
+      if (document.getElementById('navigator-return').className == 'invisible') {
+        $('#navigator-return').removeClass('invisible')
+      }
+      if (document.getElementById('navigator-left').className != 'invisible') {
+        $('#navigator-left').addClass('invisible')
+        $('#navigator-right').addClass('invisible')
+      }
+    } else {
+      if (document.getElementById('navigator-return').className != 'invisible') {
+        $('#navigator-return').addClass('invisible')
+      }
+      if (document.getElementById('navigator-left').className == 'invisible') {
+        $('#navigator-left').removeClass('invisible')
+        $('#navigator-right').removeClass('invisible')
+      }
+    }
+  })
+}
+
+/* UX Functions */
+uxBehaviours = function() {
+
+}
+switchNavigator = function(dir) {
+  /* Figure out where we are first */
+  let key = document.getElementById('navigator-head').className
+  let menu = defaults.navigatorOptions
+  
+  let nextKey = menu.indexOf(key)
+  if (nextKey == -1) {
+    nextKey = 0
+  } else if (dir == 'right') {
+    if (nextKey >= menu.length - 1) {
+      nextKey = 0
+    } else {
+      nextKey++
+    }
+  } else if (dir == 'left') {
+    if (nextKey <= 0) {
+      nextKey = menu.length - 1
+    } else {
+      nextKey--
+    }
+  }
+  let nextElement = menu[nextKey]
+  addNavigatorElements(nextElement)
 }
 
 /* Helper Functions */
@@ -560,6 +632,7 @@ cssRules = `
 @import url('https://fonts.googleapis.com/css2?family=Neucha&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Arimo&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Yaldevi:wght@300&display=swap');
 
 .FRWC-CSS { display:none; } /* CSS Rules */
 html, body {
@@ -608,6 +681,74 @@ body::-webkit-scrollbar-thumb {
   z-index        : 3;
 }
 `
+commonNavigatorCSS = ` /* Navigator Common Elements CSS */
+  #navigator-left, #navigator-right {
+    position: absolute;
+    width: 0; 
+    height: 0; 
+    z-index: 13;
+    border-top: 10px solid transparent;
+    border-bottom: 10px solid transparent; 
+    top: calc((34px + 0.4em + 0.4em)/2);
+    transform: translate( 0%, -50% );
+    cursor:pointer;
+    transition: all 130ms;
+  }
+  #navigator-left {
+    border-right:10px solid rgba( 1, 1, 1, 0.16 ); 
+    border-right:10px solid rgba( 188, 177, 199, 0.13 );
+    left: 7px;
+  }
+  #navigator-right {
+    border-left:10px solid rgba( 188, 177, 199, 0.13 );
+    left: calc(360px - 7px - 10px);
+  }
+  #navigator-left:hover {
+    border-right:10px solid rgba( 188, 188, 199, 0.56 ); 
+  }
+  #navigator-right:hover {
+    border-left:10px solid rgba( 188, 177, 199, 0.56 );
+  }
+  
+  #navigator-return.invisible, #navigator-left.invisible, #navigator-right.invisible {
+    display      : none;
+    opacity      : 0;
+  }
+  
+  #navigator-return {
+    position     : fixed; 
+    bottom       : 0%;
+    left         : calc(360px + 0.1ch);
+    z-index      : 13;
+    
+    width        : 3ch;
+    height       : 3ch;
+    border       : 1px solid rgba(255,255,255,0.04);
+    border-radius: 6px;
+    background   : rgba( 255, 255, 255, 0.02 );
+    
+    font-family  : 'Yaldevi';
+    text-align   : center;
+    line-height  : 3.2ch;
+    cursor       : pointer;
+  }
+  #navigator-return div {
+    transition   : all 230ms;
+    background   : -webkit-linear-gradient(rgba(44, 44, 44, 1), rgba(167, 167, 167, 1), rgba(133, 133, 133, 1));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  #navigator-return:hover {
+    border       : 1px solid rgba( 255, 255, 255, 0.09 );
+    background   : rgba( 1, 1, 1, 0.04 );
+  }
+  #navigator-return:hover div {
+    background   : -webkit-linear-gradient(rgba(114, 114, 114, 1), rgba(255, 255, 255, 0.88));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+`
+
 navigatorCSS = ` /* Navigator CSS */
   #navigator {
     position: absolute;
