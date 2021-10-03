@@ -19,8 +19,17 @@ local = false
 
 /* Default Options */
 defaults = {
-  navigatorKey: 'affinities', //'positives',
+  navigatorKey    : 'affinities', //'positives',
   navigatorOptions: ['affinities','identities','positives'],
+
+  // Sizing options
+  samplerSize: 144,
+  traitSize  : 87,
+  informationWidth: 600,
+  informationHeight: 230,
+
+  // other options
+  wizardDoubleClick: 'https://opensea.io/assets/0x521f9c7505005cfa19a8e5786a9c3c9c9f5e6f42/',
 }
 
 /* Load Sequence */
@@ -29,7 +38,6 @@ document.addEventListener("DOMContentLoaded", function(event) {
   addCSS(cssRules)
   addCSS(commonNavigatorCSS)
   render()
-  addNavigatorElements()
   
   uxBehaviours()
   
@@ -209,17 +217,15 @@ parseData = function() {
   // console.log(identities)
 }
 
-resetNavigatorPosition = function() {
-  document.getElementById('navigator').scrollTop = 0
-}
-
 render = function() {
   addCSS(navigatorCSS)
   
   /* Draw navigator element */
   const navigator = document.createElement('div')
         navigator.setAttribute('id', 'navigator')
-  document.getElementById('main').appendChild(navigator)
+  document.body.appendChild(navigator)
+  
+  addNavigatorElements()
   
   let filterCSS = ` /* Filter CSS */
     #filter {
@@ -282,7 +288,12 @@ addElementsToNavigator = function(tag, list, componentsList, membersList) {
 /* Used by renderIdentity(), renderAffinity(), renderPositive() */
 renderElement = function(ordering, componentsList, urlList) {
   let output = ''
-  let padCount = Math.floor(370 / 94) + 1
+  let padCount = Math.floor(370 / defaults.traitSize)
+  
+  /* A little bit of UX magic here to be able to scroll to the last element and place it at 1st position */
+  let w = window.innerWidth - $('#navigator').width()
+  let c = Math.floor(w / defaults.traitSize) - 1 + 1
+  
   ordering.forEach(function(component, _) {
     output += '<div id="scroller-' + component + '" class="scroller-wrapper"><div class="scroller ' + component + '">'
     for (var i = 0; i < padCount; i++) {
@@ -301,12 +312,43 @@ renderElement = function(ordering, componentsList, urlList) {
       e += '<div class="is-positive ' + p + '">+</div><div class="is-identity ' + i + '">I</div></div>'
       output += e
     }
-    for (var i = 0; i < padCount; i++) {
+    for (var i = 0; i < c; i++) {
       output += '<div class="trait empty"></div>'
     }
     output += '</div></div>'
   })
   return output
+}
+
+renderWizardSampler = function(members, count) {
+  let sample = getRandomWizards(members, count ? count : 7)
+  let n = Math.floor(370 / defaults.traitSize) - 1
+
+  /* A little bit of UX magic here to be able to scroll to the last element and place it at 1st position */
+  let w = window.innerWidth - $('#navigator').width()
+  let c = Math.floor(w / defaults.samplerSize) - 1 + 1
+  
+  let d = ''
+  d += '<div id="wizard-container"><div id="wizard-sampler">'
+  for (var i = 0; i < n; i++) {
+    d += '<div class="wizard-sample empty"></div>'
+  }
+  sample.forEach(function(wizard, _) {
+    let c = frwc._components.wizards[wizard]
+    d += '<div id="wizard-' + wizard + '" class="wizard-sample">'
+    c.forEach(function(component, i) {
+      let uri = frwc.traitURLs[component[0]][component[1]]
+      d += '<div class="wizard-sample-component ' + component[0] + '" '
+      if (uri) { d += 'style="background-image:url(\'' + uri + '\')"' }
+      d += '></div>'
+    })
+    d += '</div>'
+  })
+  for (var i = 0; i < c; i++) {
+    d += '<div class="wizard-sample empty"></div>'
+  }
+  d += '</div></div>'
+  return d
 }
 
 renderIdentity = function(id) {
@@ -315,6 +357,7 @@ renderIdentity = function(id) {
   $('.identity.active').removeClass('active')
   $('#identity-' + id).addClass('active')
   
+  $('.scrollerCSS').remove()
   addCSS(scrollerCSS, '#main', 'scrollerCSS')
 
   let identityComponents = frwc._components.affinities[id]
@@ -325,34 +368,9 @@ renderIdentity = function(id) {
   let d = ''
 
   d += renderElement(sortBy, identityComponents, frwc.traitURLs)
-  
-  // Grab 7 Random Wizards and render them
-  d += '<div id="wizard-container"><div id="wizard-sampler">'
-  let sample = getRandomWizards(identityMembers, 7)
-  // Add in some spacers
-  let n = Math.floor(370 / 144) + 1
-  for (var i = 0; i < n; i++) {
-    d += '<div class="wizard-sample empty"></div>'
-  }  
-  
-  sample.forEach(function(wizard, _){
-    d += '<div id="wizard-' + wizard + '" class="wizard-sample">'
-    let components = frwc._components.wizards[wizard]
-    components.forEach(function(component, i) {
-      let url = frwc.traitURLs[component[0]][component[1]]
-      d += '<div class="wizard-sample-component ' + component[0] + '" '
-      if (url) { d += 'style="background-image:url(\'' + url + '\')"' }
-      d += '></div>'
-    })
-    d += '</div>'
-  })
-  // Add in some spacers
-  for (var i = 0; i < n; i++) {
-    d += '<div class="wizard-sample empty"></div>'
-  }  
-  d += '</div></div>'
-  
-  $('#main').append(d)
+  d += renderWizardSampler(identityMembers, 7)
+  $('#main-content').append(d)
+  $('body').trigger('new-samplers')
   document.getElementById('wizard-sampler').scrollTop = 77
 }
 
@@ -362,6 +380,7 @@ renderPositive = function(id) {
   $('.positive.active').removeClass('active')
   $('#positive-' + id).addClass('active')
   
+  $('.scrollerCSS').remove()
   addCSS(scrollerCSS, '#main', 'scrollerCSS')
 
   let positiveComponents = frwc._components.affinities[id]
@@ -372,44 +391,20 @@ renderPositive = function(id) {
   let d = ''
 
   d += renderElement(sortBy, positiveComponents, frwc.traitURLs)
-  
-  // Grab 7 Random Wizards and render them
-  d += '<div id="wizard-container"><div id="wizard-sampler">'
-  let sample = getRandomWizards(positiveMembers, 7)
-  // Add in some spacers
-  let n = Math.floor(370 / 144) + 1
-  for (var i = 0; i < n; i++) {
-    d += '<div class="wizard-sample empty"></div>'
-  }  
-  
-  sample.forEach(function(wizard, _){
-    d += '<div id="wizard-' + wizard + '" class="wizard-sample">'
-    let components = frwc._components.wizards[wizard]
-    components.forEach(function(component, i) {
-      let url = frwc.traitURLs[component[0]][component[1]]
-      d += '<div class="wizard-sample-component ' + component[0] + '" '
-      if (url) { d += 'style="background-image:url(\'' + url + '\')"' }
-      d += '></div>'
-    })
-    d += '</div>'
-  })
-  // Add in some spacers
-  for (var i = 0; i < n; i++) {
-    d += '<div class="wizard-sample empty"></div>'
-  }  
-  d += '</div></div>'
-  
-  $('#main').append(d)
+  d += renderWizardSampler(positiveMembers, 7)
+  $('#main-content').append(d)
+  $('body').trigger('new-samplers')
   document.getElementById('wizard-sampler').scrollTop = 77
 }
-
+ 
 renderAffinity = function(id) {
   console.log('Rendering affinity (' + id + ')')
   // Highlight it in the Navigator
   $('.affinity.active').removeClass('active')
   $('#affinity-' + id).addClass('active')
   
-  addCSS(scrollerCSS, '#main', 'scrollerCSS')
+  $('.scrollerCSS').remove()
+  addCSS(scrollerCSS, '#main', 'scrollerCSS') // lets you adjust the scroller view per element-type
 
   let affinityComponents = frwc._components.affinities[id]
   let componentURLs      = frwc.traitURLs
@@ -419,34 +414,9 @@ renderAffinity = function(id) {
   let d = ''
   
   d += renderElement(sortBy, affinityComponents, frwc.traitURLs)
-  
-  // Grab 7 Random Wizards and render them
-  d += '<div id="wizard-container"><div id="wizard-sampler">'
-  let sample = getRandomWizards(affinityMembers, 7)
-  // Add in some spacers
-  let n = Math.floor(370 / 144) + 1
-  for (var i = 0; i < n; i++) {
-    d += '<div class="wizard-sample empty"></div>'
-  }  
-  
-  sample.forEach(function(wizard, _){
-    d += '<div id="wizard-' + wizard + '" class="wizard-sample">'
-    let components = frwc._components.wizards[wizard]
-    components.forEach(function(component, i) {
-      let url = frwc.traitURLs[component[0]][component[1]]
-      d += '<div class="wizard-sample-component ' + component[0] + '" '
-      if (url) { d += 'style="background-image:url(\'' + url + '\')"' }
-      d += '></div>'
-    })
-    d += '</div>'
-  })
-  // Add in some spacers
-  for (var i = 0; i < n; i++) {
-    d += '<div class="wizard-sample empty"></div>'
-  }  
-  d += '</div></div>'
-  
-  $('#main').append(d)
+  d += renderWizardSampler(affinityMembers, 7)
+  $('#main-content').append(d)
+  $('body').trigger('new-samplers')
   document.getElementById('wizard-sampler').scrollTop = 77
 }
 
@@ -472,6 +442,7 @@ addNavigatorElements = function(key) {
 }
 renderObject = function(id, type) {
   $("#main *:not(#navigator, #navigator *, #navigator-return, #navigator-return > div, #navigator-left, #navigator-right)").remove()
+  renderCommonMainElements()
   switch(type) {
     case 'identity':
       renderIdentity(id)
@@ -485,17 +456,23 @@ renderObject = function(id, type) {
   }
 }
 
+
+/* UI/UX Functions */
+resetNavigatorPosition = function() { document.getElementById('navigator').scrollTop = 0 }
+
 addCommonNavigatorElements = function() {
-  /* Add navigator arrows */
   $('#navigator-left').remove()
   $('#navigator-right').remove()
+  $('#navigator-return').remove()
+  
+  /* Add navigator arrows */
   let d = ''
   d += '<div id="navigator-left" onclick="switchNavigator(\'left\')"></div>'
   d += '<div id="navigator-right" onclick="switchNavigator(\'right\')"></div>'
-  $('#main').append(d)
+  $('body').append(d)
 
   /* Add a ReturnToTop arrow */
-  $('#main').append('<div id="navigator-return" class="invisible" onclick="resetNavigatorPosition()"><div>&uarr;</div></div>')
+  $('body').append('<div id="navigator-return" class="invisible" onclick="resetNavigatorPosition()"><div>&uarr;</div></div>')
   $('#navigator').off('scroll').on('scroll', function(e) {
     
     if (document.getElementById(e.target.id).scrollTop > 89) {
@@ -517,13 +494,202 @@ addCommonNavigatorElements = function() {
     }
   })
 }
+renderCommonMainElements = function() {
+  /* https://codepen.io/dances-with-bears/pen/inlwc */
+  addCSS(`
+@import url('https://fonts.googleapis.com/css2?family=Syne+Mono&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Xanh+Mono&display=swap');
 
-/* UX Functions */
+#information {
+  position: absolute;
+  width: ${defaults.informationWidth}px;
+  height: calc(${defaults.informationHeight}px + 37px);
+  left  : calc(360px + 7px);
+  top   : calc(5 * (${defaults.traitSize}px + 0.6em) + 1.1 * ${defaults.samplerSize}px);
+  background: rgba( 255, 255, 255, 0.13 );
+  border-radius: 6px;
+  backdrop-filter: blur(6px);
+
+font-family: 'Arimo',monospace;
+font-size  : 11pt;
+color : rgba( 44, 44, 44, 1 );
+color : rgba( 171, 171, 171, 1 );
+   }
+#information-header {
+ font-size: 16pt;
+ padding-top: 0.2em;
+ padding-bottom: 0.2em;
+  height: 37px;
+  text-align:center;
+  line-height: calc(37px);
+}
+#information-content {
+  position: absolute;
+  width: 100%;
+  height: calc(${defaults.informationHeight}px - 37px);
+  background: rgba( 255, 255, 255, 0.06 );
+}
+#information-left {
+  position: absolute;
+  width: 63%;
+  padding-left: 0.3em;
+  top : 0%;
+
+  height: calc(100%);
+  border-right: 1px solid rgba(255,255,255,0.15);
+}
+#information-right {
+  position: absolute;
+  left: 63%;
+  top: 0%;
+  height: calc(100%); 
+}
+#information-footer {
+  position: absolute;
+  top: calc(${defaults.informationHeight}px);
+  width: 100%;
+  font-size: 9pt;
+  line-height: 44px;
+text-align:center;
+color : rgba( 171, 171, 171, 0.55 );
+}
+  `)
+
+  let d = ''
+  d += '<div id="main-content">'
+  d += '<div id="information">'
+  d +=  '<div id="information-header"><div id="information-header-label"></div></div>'
+  d +=  '<div id="information-content"><div id="information-content-left"></div><div id="information-content-right"></div></div>'
+  d +=  '<div id="information-footer"><div id="information-footer-content"></div></div>'
+  d += '</div>'
+  d += '</div>'
+  $('#main').append(d)
+
+  
+}
 uxBehaviours = function() {
+  addCSS(`
+.information-subclass-1, .information-subclass-2, .information-subclass-3 {
+  display: inline-block;
+  line-height: 1.6em;
+}
+.information-subclass-1 {
+  width: 90px;
+}
+.information-subclass-2 {
+  width: 210px;
+}
+.information-subclass-2.i {
+  color: rgba(0, 112, 221, 1);
+}
+.information-subclass-2.p {
+  color: rgba(236, 63, 168, 1);
+}
+.information-subclass-2.ip {
+  color: rgba(255, 128, 0, 1);
+}
+.information-subclass-3 {
+  
+}
+`)
+
+  // Eventify up the samplers
+  $('body').off('new-samplers').on('new-samplers', function() {
+    // Update the information board
+    $('.wizard-sample:not(.empty)').on('mouseenter', function(e, v) {
+      let id = e.currentTarget.id.replace('wizard-','')
+    
+      // Remove previous modifications so they persist even when not hovering over the Wizard
+      $('.trait.i').removeClass('i')
+      $('.trait.p').removeClass('p')
+      $('.trait.ip').removeClass('ip')
+      $('.wizard-sample').removeClass('highlighted')
+      // Reset all positions of scrollers
+      $('.scroller').scrollTop(0)
+      
+      let wizard = frwc._referenceWizards[id]
+
+      // Prep the information preface
+      let d = ''
+      d += '<div id="information-left">'
+      d += '<br/>'
+
+      let traits  = ['head', 'body', 'prop', 'familiar', 'rune']
+      let hash    = {affinity: 'affinities', identity: 'identities', positive: 'positives'}
+
+      let element = $('.panel-item.active').attr('id')
+          element = element.split('-')
+      let elementType  = element[0]
+      let elementID    = element[1]
+
+      var components;
+      if (elementType == 'affinity') {
+        components = frwc._components[hash[elementType]][elementID]
+      } else {
+        components = frwc._components['affinities'][elementID]
+      }
+
+      let traitNames   = frwc._names.traits
+      let traitMembers = frwc.traits
+
+      traits.forEach(function(trait, _) {
+        let isMemberOfElement = false
+        // Highlight the wizard's traits that belong to the Element
+        if (components[trait] && components[trait][wizard[trait]]) {
+          let type = components[trait][wizard[trait]]
+          let traitDiv = $('#trait-' + wizard[trait])
+          traitDiv.addClass(type)
+            
+          // Now we want to move this to 1st position by scrolling
+          document.querySelector('.scroller.' + trait).scrollTop = (12 + (traitDiv.index() - 1) * (87 + 3)) - Math.floor(360/94) * 94
+
+          // For use in the information constructor
+          isMemberOfElement = type
+        }	
+
+        // Include data into the information sheet
+        d += '<div class="information-subclass-1">' + trait.substring(0, 1).toUpperCase() + trait.substring(1, trait.length) + ':</div>'
+        d += '<div class="information-subclass-2 ' + (isMemberOfElement ? isMemberOfElement : '') + '">'
+        if (traitNames[wizard[trait]]) {
+          d += traitNames[wizard[trait]].substring(0,26).padEnd(26,' ')
+          d += '</div><div class="information-subclass-3">'
+          d += ' ' + typeof traitMembers[trait][wizard[trait]] != 'undefined' ? (traitMembers[trait][wizard[trait]].length / 100).toFixed(2) + '%' : ''
+          d += '</div>'
+        } else {
+          d += '-</div>'
+        }
+        d += '<br/>'
+         
+      })
+
+      // Complete the information sheet
+      d += '</div>'
+      d += '<div id="information-right">'
+      d += '</div>'
+      $('#information-content').empty().append(d)
+      $('#information-header').empty().append(wizard.name + '<span class="mute">#' + wizard.idx + '</span>')
+      $('#information').css('opacity','1')
+      
+      // Make some visual changes to the selected wizard
+      $('#wizard-' + id).addClass('highlighted')
+
+      // Update the footer
+      $('#information-footer-content').empty().append('<i>Double click the picture to go buy the Wizard.</i>')
+      
+    }).on('mouseleave', function(e,v) {
+      
+    }).on('dblclick', function(e,v) {
+    
+      let id = e.currentTarget.id.replace('wizard-','')
+      let win = window.open(defaults.wizardDoubleClick + id, '_blank')
+      win.focus()
+      
+    })
+     
+  })
 
 }
-switchNavigator = function(dir) {
-  /* Figure out where we are first */
+switchNavigator = function(dir) { /* Figure out where we are first */
   let key = document.getElementById('navigator-head').className
   let menu = defaults.navigatorOptions
   
@@ -624,22 +790,18 @@ addCSS = function(rule, container, ruleIdentifier) {
   } }
 
 /* CSS Rules */
-// for scrollerCSS
-traitSize   = 87
-samplerSize = 144
-
 cssRules = `
 @import url('https://fonts.googleapis.com/css2?family=Neucha&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Arimo&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Yaldevi:wght@300&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Major+Mono+Display&display=swap');
 
 .FRWC-CSS { display:none; } /* CSS Rules */
 html, body {
   padding    : 0px;
   margin     : 0px;
   height     : 100%;
-  overflow   : hidden;
 }
 body {
   display         : flex;
@@ -648,6 +810,7 @@ body {
   background-size: 400% 400%;
   animation: gradient 15s ease infinite;
   height: 100vh;
+  overflow-y: hidden;
 }
 body::-webkit-scrollbar {
   display:none;
@@ -679,6 +842,30 @@ body::-webkit-scrollbar-thumb {
   font-family    : 'Neucha', cursive;
   font-size      : 15pt;
   z-index        : 3;
+  overflow-y : hidden;
+}
+#main-content {
+  position:relative;
+  width: 100%;
+  height: 100%;
+  overflow: scroll;
+}
+
+#main-content::-webkit-scrollbar {
+    width: 12px;
+    height: 12px;
+    display:none;
+    visibility:hidden;
+}
+#main-content::-webkit-scrollbar-track {
+    background: white;
+}
+#main-content::-webkit-scrollbar-thumb {
+    background: #ddd;
+    visibility:hidden;
+}
+#main-content:hover::-webkit-scrollbar-thumb {
+    visibility:visible;
 }
 `
 commonNavigatorCSS = ` /* Navigator Common Elements CSS */
@@ -819,16 +1006,16 @@ scrollerCSS = ` /* Scroller CSS */
   .scrollerCSS {display: none;}
   .scroller-wrapper {
     position: inherit;
-    height: ${traitSize}px;
-    border: 1px solid rgba(255,255,255,0);
+    height: ${defaults.traitSize}px;
+    border: 2px solid rgba(255,255,255,0);
   }
   .scroller {
     position  : inherit;
-    width     : ${traitSize}px;
+    width     : ${defaults.traitSize}px;
     height    : ${window.innerWidth}px;
     overflow-y: auto;
     overflow-x: hidden;
-    transform : rotate(-90deg) translateY(-${traitSize}px);
+    transform : rotate(-90deg) translateY(-${defaults.traitSize}px);
     transform-origin: right top;
     border: 1px solid rgba(1,1,1,0);
   }
@@ -838,11 +1025,11 @@ scrollerCSS = ` /* Scroller CSS */
   }
   .trait {
     position: relative;
-    width : ${traitSize}px;
-    height: ${traitSize}px;
+    width : ${defaults.traitSize}px;
+    height: ${defaults.traitSize}px;
     margin-top: 3px;
     margin-bottom : 3px;
-    transform : rotate(90deg) translateX(${traitSize}px);
+    transform : rotate(90deg) translateX(${defaults.traitSize}px);
     transform-origin: right top;
     
     background-size: cover;
@@ -879,28 +1066,37 @@ scrollerCSS = ` /* Scroller CSS */
   .trait .is-identity.i {
     color   : rgba( 255, 255, 255, 0.23 );
   }
+  .trait.i {
+    background-color: rgba( 0, 112, 221, 0.21 );
+  }
+  .trait.p {
+    background-color: rgba( 236, 63, 168, 0.21 );
+  }
+  .trait.ip {
+    background-color: rgba(255, 128, 0, 0.21 );
+  }
   
   #wizard-container {
     position: inherit;
     margin-top: 15px;
-    height: ${traitSize}px;
+    height: ${defaults.traitSize}px;
   }
   #wizard-sampler {
     position  : inherit;
-    width     : ${samplerSize}px;
+    width     : ${defaults.samplerSize}px;
     height    : ${window.innerWidth}px;
     overflow-y: auto;
     overflow-x: hidden;
-    transform : rotate(-90deg) translateY(-${samplerSize}px);
+    transform : rotate(-90deg) translateY(-${defaults.samplerSize}px);
     transform-origin: right top;
   }
   .wizard-sample {
     position: relative;
-    width : ${samplerSize}px;
-    height: ${samplerSize}px;
+    width : ${defaults.samplerSize}px;
+    height: ${defaults.samplerSize}px;
     margin-top: 3px;
     margin-bottom : 3px;
-    transform : rotate(90deg) translateX(${samplerSize}px);
+    transform : rotate(90deg) translateX(${defaults.samplerSize}px);
     transform-origin: right top;
     cursor: pointer;
     border-radius: 6px;
@@ -909,8 +1105,8 @@ scrollerCSS = ` /* Scroller CSS */
     position: absolute;
     left: 0%;
     top : 0%;
-    width : ${samplerSize}px;
-    height: ${samplerSize}px;
+    width : ${defaults.samplerSize}px;
+    height: ${defaults.samplerSize}px;
     
     background-size: cover !important;
     background: transparent;
@@ -921,10 +1117,13 @@ scrollerCSS = ` /* Scroller CSS */
   }
   .wizard-sample-component.background {
     filter  : alpha(opacity=1);
-    opacity : 0.44;
+    opacity : 0.35;
   }
   .wizard-sample.empty {
-    
+  
+  }
+  .wizard-sample.highlighted .wizard-sample-component.background {
+    opacity : 1.0;
   }
   #wizard-sampler::-webkit-scrollbar {
     display   : none;
