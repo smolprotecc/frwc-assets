@@ -20,7 +20,7 @@ local = false
 /* Default Options */
 defaults = {
   navigatorKey    : 'affinities', //'positives',
-  navigatorOptions: ['affinities','identities','positives'],
+  navigatorOptions: ['wizard','affinities','identities','positives'],
 
   // Sizing options
   samplerSize: 144,
@@ -72,14 +72,17 @@ parseData = function() {
       components.positives  = {}
       components.affinities = {}
 
-  let identities = {}
-  let positives  = {}
+  let identities  = {}
+  let positives   = {}
+  let memberships = {}
 
   for (let wizardID in _wizards) {
     let wizard = _wizards[wizardID]
      
     // Insert names for Wizards
     names.wizards[wizard.idx] = wizard.name
+    // Generate space for this Wizard in memberships
+    memberships[wizard.idx] = []
     // Generate the components list for a Wizard
     components.wizards[wizard.idx] = []
     
@@ -115,10 +118,15 @@ parseData = function() {
             names.identities[identity.idx] = identity.name
             names.affinities[identity.idx] = identity.name
           }
-          // Add Wizard this Tag if not included
+          // Add Wizard to this Tag if not included
           if (mapped.identities[identity.idx].indexOf(wizard.idx) == -1) {
             mapped.identities[identity.idx].push(wizard.idx)
           }
+          // Add Membership to this Wizard and record the part
+          if (typeof memberships[wizard.idx][identity.idx] == 'undefined') {
+            memberships[wizard.idx][identity.idx] = {}
+          }
+          memberships[wizard.idx][identity.idx][traitType] = n
           // Add this Wizard to the Emergent if not included
           mapped.affinities[identity.idx] = mapped.affinities[identity.idx] || {}
           mapped.affinities[identity.idx]['identities'] = mapped.affinities[identity.idx]['identities'] || []
@@ -159,6 +167,11 @@ parseData = function() {
           if (mapped.positives[positive.idx].indexOf(wizard.idx) == -1) {
             mapped.positives[positive.idx].push(wizard.idx)
           }
+          // Add Membership to this Wizard and record the part
+          if (typeof memberships[wizard.idx][positive.idx] == 'undefined') {
+            memberships[wizard.idx][positive.idx] = {}
+          }
+          memberships[wizard.idx][positive.idx][traitType] = n
           // Add this Wizard to the Emergent if not included
           mapped.affinities[positive.idx] = mapped.affinities[positive.idx] || {}
           mapped.affinities[positive.idx]['positives'] = mapped.affinities[positive.idx]['positives'] || []
@@ -206,12 +219,47 @@ parseData = function() {
     }
     mapped.affinities[affinityID].merged = merged.sort(function(a, b) { return a - b })
   }
+
+  let list = ['head', 'body', 'prop', 'familiar', 'rune']
+  let denominator = 10000
+  probabilities = {}
+  for (var affinityID in names.affinities) {
+    let name = names.affinities[affinityID]
+    probabilities[affinityID] = {
+      name: name,
+      1: {},
+      2: {},
+      3: {},
+      4: {},
+      5: {},
+      head: {},
+      body: {},
+      prop: {},
+      familiar: {},
+      rune: {},
+    }
+    var c = components.affinities[affinityID]
+    list.forEach(function(item, _) {
+      if (typeof c[item] != 'undefined') {
+        for (var k in c[item]) {
+          probabilities[affinityID][item][k] = {}
+          probabilities[affinityID][item][k]['affinity-chance'] = mapped.traits[item][k].length / denominator
+          probabilities[affinityID][item][k]['identity-chance'] = mapped.identities[k] ? mapped.identities[k].length / denominator : 0
+          probabilities[affinityID][item][k]['positive-chance'] = mapped.positives[k] ? mapped.positives[k].length / denominator : 0 
+        }
+        
+      }
+    })
+  }
+  mapped.probabilities = probabilities
+
   
   frwc = mapped
   frwc._referenceWizards = _wizards
   frwc._referenceTraits  = _traits
   frwc._names   = names
   frwc._components = components
+  frwc._memberships = memberships
 
   console.log(frwc)
   // console.log(identities)
@@ -245,6 +293,49 @@ render = function() {
   /* Draw Filter window */
 }
 
+addWizardSearchToNavigator = function() {
+  $('#navigator-input input')
+     .attr('placeholder','input wizard ID here')
+     .on('change', function(e, v) {
+       addWizardToNavigator(e.target.value)
+     })
+}
+
+addWizardToNavigator = function(id) {
+  // Check ID is valid
+  if (!id) { 
+    console.log('No valid ID provided #1.')
+    $('#navigator-input input').attr('placeholder','no wizard ID provided')
+    return
+  }
+  let name = frwc._names.wizards[id]
+  if (!name) {
+    console.log('No valid ID provided #2.')
+    $('#navigator-input input').attr('placeholder','wizard ID provided not discoverable')
+    return
+  }
+  console.log(name)
+  let memberships = frwc._memberships[id]
+  let list       = {}
+  let components = {}
+  let affinities = {}
+  for (var affinityID in memberships) {
+    list[affinityID]       = frwc._names.affinities[affinityID]
+    components[affinityID] = frwc._components.affinities[affinityID]
+    affinities[affinityID] = frwc.affinities[affinityID]
+  }
+
+  $('#navigator-head').empty()
+  $('#navigator-panel')
+     .empty()
+  addElementsToNavigator('affinity', list, components, affinities)
+  
+  // Add the name of the Wizard
+  // Add the picture of the Wizard
+  // Add the affinities of the Wizard  
+
+  
+}
 
 addElementsToNavigator = function(tag, list, componentsList, membersList) {
   let output   = ''
@@ -282,7 +373,8 @@ addElementsToNavigator = function(tag, list, componentsList, membersList) {
     case 'positive': prefix = 'Positives' ; break;
     case 'affinity': prefix = 'Affinities'; break;
   }
-  $('#navigator-head').append(prefix + ' <span class="mute">[</span>' + sortableElements.length + '<span class="mute">] (H/B/P/F/R/#)</span>')
+  $('#navigator-head')
+    .append(prefix + ' <span class="mute">[</span>' + sortableElements.length + '<span class="mute">] (H/B/P/F/R/#)</span>')
 }
 
 /* Used by renderIdentity(), renderAffinity(), renderPositive() */
@@ -321,7 +413,11 @@ renderElement = function(ordering, componentsList, urlList) {
 }
 
 renderWizardSampler = function(members, count) {
-  let sample = getRandomWizards(members, count ? count : 7)
+  let id = $('#navigator-input input').val()
+  console.log(id)
+  let sample = getRandomWizards(members, count ? count : 7, id)
+  console.log(sample)
+
   let n = Math.floor(370 / defaults.traitSize) - 1
 
   /* A little bit of UX magic here to be able to scroll to the last element and place it at 1st position */
@@ -418,6 +514,11 @@ renderAffinity = function(id) {
   $('#main-content').append(d)
   $('body').trigger('new-samplers')
   document.getElementById('wizard-sampler').scrollTop = 77
+
+  let wizardID = $('#navigator-input input').val()
+  if (wizardID != '' && typeof frwc._referenceWizards[wizardID] != 'undefined') {
+    renderWizard(wizardID)
+  }
 }
 
 /* Routers */
@@ -426,6 +527,9 @@ addNavigatorElements = function(key) {
   
   // Prepare the panel
   $('#navigator').empty().append('<div id="navigator-head" class="' + key + '"></div><div id="navigator-panel"></div>')
+  $('#navigator-input input')
+     .attr('placeholder','')
+     .off('change')
   addCommonNavigatorElements()
 
   switch(key) {
@@ -437,6 +541,9 @@ addNavigatorElements = function(key) {
       break;
     case 'affinities':
       addElementsToNavigator('affinity', frwc._names.affinities, frwc._components.affinities, frwc.affinities)
+      break;
+    case 'wizard':
+      addWizardSearchToNavigator('wizard')
       break;
   }
 }
@@ -456,6 +563,113 @@ renderObject = function(id, type) {
   }
 }
 
+inspectWizard = function(wizardID) {
+  if (!wizardID) { return false }
+  let wizard = frwc._components.wizards[wizardID]
+  let w = {}
+  for (var part in wizard) {
+    w[wizard[part][0]] = wizard[part][1]
+  }
+  console.log(w)
+  let output = []
+  for (var affinityID in frwc.affinities) {
+    let members = frwc.affinities[affinityID]
+    let o = {}
+    let m = members.merged
+    let c = frwc._components.affinities[affinityID]
+    if (m.indexOf(wizardID) != -1) {
+      for (var part in w) {
+        if (typeof c[part] != 'undefined' && typeof c[part][w[part]] != 'undefined') {
+          o[part] = [w[part], c[part][w[part]]]
+        }
+      }
+      output.push([frwc._names.affinities[affinityID], frwc._components.affinities[affinityID], o])
+      console.log(frwc._names.affinities[affinityID])
+      // console.log(frwc._components.affinities[affinityID])
+      console.log(o)
+    }
+  }
+  return output
+}
+
+renderWizard = function(id) {
+      // Remove previous modifications so they persist even when not hovering over the Wizard
+      $('.trait.i').removeClass('i')
+      $('.trait.p').removeClass('p')
+      $('.trait.ip').removeClass('ip')
+      $('.wizard-sample').removeClass('highlighted')
+      // Reset all positions of scrollers
+      $('.scroller').scrollTop(0)
+      
+      let wizard = frwc._referenceWizards[id]
+
+      // Prep the information preface
+      let d = ''
+      d += '<div id="information-left">'
+      d += '<br/>'
+
+      let traits  = ['head', 'body', 'prop', 'familiar', 'rune']
+      let hash    = {affinity: 'affinities', identity: 'identities', positive: 'positives'}
+
+      let element = $('.panel-item.active').attr('id')
+          element = element.split('-')
+      let elementType  = element[0]
+      let elementID    = element[1]
+
+      var components;
+      if (elementType == 'affinity') {
+        components = frwc._components[hash[elementType]][elementID]
+      } else {
+        components = frwc._components['affinities'][elementID]
+      }
+
+      let traitNames   = frwc._names.traits
+      let traitMembers = frwc.traits
+
+      traits.forEach(function(trait, _) {
+        let isMemberOfElement = false
+        // Highlight the wizard's traits that belong to the Element
+        if (components[trait] && components[trait][wizard[trait]]) {
+          let type = components[trait][wizard[trait]]
+          let traitDiv = $('#trait-' + wizard[trait])
+          traitDiv.addClass(type)
+            
+          // Now we want to move this to 1st position by scrolling
+          document.querySelector('.scroller.' + trait).scrollTop = (12 + (traitDiv.index() - 1) * (87 + 3)) - Math.floor(360/94) * 94
+
+          // For use in the information constructor
+          isMemberOfElement = type
+        }	
+
+        // Include data into the information sheet
+        d += '<div class="information-subclass-1">' + trait.substring(0, 1).toUpperCase() + trait.substring(1, trait.length) + ':</div>'
+        d += '<div class="information-subclass-2 ' + (isMemberOfElement ? isMemberOfElement : '') + '">'
+        if (traitNames[wizard[trait]]) {
+          d += traitNames[wizard[trait]].substring(0,26).padEnd(26,' ')
+          d += '</div><div class="information-subclass-3">'
+          d += ' ' + typeof traitMembers[trait][wizard[trait]] != 'undefined' ? (traitMembers[trait][wizard[trait]].length / 100).toFixed(2) + '%' : ''
+          d += '</div>'
+        } else {
+          d += '-</div>'
+        }
+        d += '<br/>'
+         
+      })
+
+      // Complete the information sheet
+      d += '</div>'
+      d += '<div id="information-right">'
+      d += '</div>'
+      $('#information-content').empty().append(d)
+      $('#information-header').empty().append(wizard.name + '<span class="mute">#' + wizard.idx + '</span>')
+      $('#information').css('opacity','1')
+      
+      // Make some visual changes to the selected wizard
+      $('#wizard-' + id).addClass('highlighted')
+
+      // Update the footer
+      $('#information-footer-content').empty().append('<i>Double click the picture to go buy the Wizard.</i>')
+}
 
 /* UI/UX Functions */
 resetNavigatorPosition = function() { document.getElementById('navigator').scrollTop = 0 }
@@ -464,11 +678,14 @@ addCommonNavigatorElements = function() {
   $('#navigator-left').remove()
   $('#navigator-right').remove()
   $('#navigator-return').remove()
-  
+  $('#navigator-input').remove()
+
   /* Add navigator arrows */
   let d = ''
   d += '<div id="navigator-left" onclick="switchNavigator(\'left\')"></div>'
   d += '<div id="navigator-right" onclick="switchNavigator(\'right\')"></div>'
+  /* Add navigator filter */
+  d += '<div id="navigator-input"><input dir="rtl"></input></div>'
   $('body').append(d)
 
   /* Add a ReturnToTop arrow */
@@ -598,83 +815,7 @@ uxBehaviours = function() {
     // Update the information board
     $('.wizard-sample:not(.empty)').on('mouseenter', function(e, v) {
       let id = e.currentTarget.id.replace('wizard-','')
-    
-      // Remove previous modifications so they persist even when not hovering over the Wizard
-      $('.trait.i').removeClass('i')
-      $('.trait.p').removeClass('p')
-      $('.trait.ip').removeClass('ip')
-      $('.wizard-sample').removeClass('highlighted')
-      // Reset all positions of scrollers
-      $('.scroller').scrollTop(0)
-      
-      let wizard = frwc._referenceWizards[id]
-
-      // Prep the information preface
-      let d = ''
-      d += '<div id="information-left">'
-      d += '<br/>'
-
-      let traits  = ['head', 'body', 'prop', 'familiar', 'rune']
-      let hash    = {affinity: 'affinities', identity: 'identities', positive: 'positives'}
-
-      let element = $('.panel-item.active').attr('id')
-          element = element.split('-')
-      let elementType  = element[0]
-      let elementID    = element[1]
-
-      var components;
-      if (elementType == 'affinity') {
-        components = frwc._components[hash[elementType]][elementID]
-      } else {
-        components = frwc._components['affinities'][elementID]
-      }
-
-      let traitNames   = frwc._names.traits
-      let traitMembers = frwc.traits
-
-      traits.forEach(function(trait, _) {
-        let isMemberOfElement = false
-        // Highlight the wizard's traits that belong to the Element
-        if (components[trait] && components[trait][wizard[trait]]) {
-          let type = components[trait][wizard[trait]]
-          let traitDiv = $('#trait-' + wizard[trait])
-          traitDiv.addClass(type)
-            
-          // Now we want to move this to 1st position by scrolling
-          document.querySelector('.scroller.' + trait).scrollTop = (12 + (traitDiv.index() - 1) * (87 + 3)) - Math.floor(360/94) * 94
-
-          // For use in the information constructor
-          isMemberOfElement = type
-        }	
-
-        // Include data into the information sheet
-        d += '<div class="information-subclass-1">' + trait.substring(0, 1).toUpperCase() + trait.substring(1, trait.length) + ':</div>'
-        d += '<div class="information-subclass-2 ' + (isMemberOfElement ? isMemberOfElement : '') + '">'
-        if (traitNames[wizard[trait]]) {
-          d += traitNames[wizard[trait]].substring(0,26).padEnd(26,' ')
-          d += '</div><div class="information-subclass-3">'
-          d += ' ' + typeof traitMembers[trait][wizard[trait]] != 'undefined' ? (traitMembers[trait][wizard[trait]].length / 100).toFixed(2) + '%' : ''
-          d += '</div>'
-        } else {
-          d += '-</div>'
-        }
-        d += '<br/>'
-         
-      })
-
-      // Complete the information sheet
-      d += '</div>'
-      d += '<div id="information-right">'
-      d += '</div>'
-      $('#information-content').empty().append(d)
-      $('#information-header').empty().append(wizard.name + '<span class="mute">#' + wizard.idx + '</span>')
-      $('#information').css('opacity','1')
-      
-      // Make some visual changes to the selected wizard
-      $('#wizard-' + id).addClass('highlighted')
-
-      // Update the footer
-      $('#information-footer-content').empty().append('<i>Double click the picture to go buy the Wizard.</i>')
+      renderWizard(id)
       
     }).on('mouseleave', function(e,v) {
       
@@ -740,14 +881,27 @@ generateTraitURL = function(traitID, traitType) {
   if (local) { uri = 'components/' + uri }
   return uri
 }
-getRandomWizards = function(array, count) {
+getRandomWizards = function(array, count, proto) {
   let len = array.length, taken = new Array(len);
   if (count > len) { count = len }
   let result = new Array(count)
+  let wizard = frwc._referenceWizards[proto] || false
   while (count--) {
     let x = Math.floor(Math.random() * len)
-    result[count] = array[x in taken ? taken[x] : x]
-    taken[x] = --len in taken ? taken[len] : len
+    let y = array[x in taken ? taken[x] : x]
+    if (wizard) {
+      if (y != proto) {
+        result[count] = y
+        taken[x] = --len in taken ? taken[len] : len
+      }
+    } else {
+      result[count] = array[x in taken ? taken[x] : x]
+      taken[x] = --len in taken ? taken[len] : len
+    }
+  }
+  if (wizard) {
+    result.unshift(proto)
+    result.pop()
   }
   return result
 }
@@ -933,6 +1087,38 @@ commonNavigatorCSS = ` /* Navigator Common Elements CSS */
     background   : -webkit-linear-gradient(rgba(114, 114, 114, 1), rgba(255, 255, 255, 0.88));
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
+  }
+
+  #navigator-input {
+    position: absolute;
+    left: calc(32px);
+    width: calc(360px - 34px - 34px);
+    height: 30px; 
+    z-index: 13;
+    top: calc((34px + 0.4em + 0.4em)/2);
+    cursor:pointer;
+    transform: translate( 0%, -50% );
+  }
+  #navigator-input input {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    border: 1px solid rgba( 255, 1, 1, 0 );
+    border-bottom: 1px solid rgba( 255, 255, 255, 0.03 );
+    outline: none;
+    background: rgba(0,0,0,0);
+    transition: all 130ms;
+    font-family  : 'Arimo', serif;
+    font-size    : 13pt;
+    color       : rgba( 211, 211, 211, 0.77 );
+  }
+  #navigator-input input:hover {
+    border-bottom: 1px solid rgba( 255, 255, 255, 0.14 );
+  }
+  #navigator-input input:focus {
+    background: rgba(255,255,255,0.03);
+    backdrop-filter: blur(3px);
+    border-bottom: 1px solid rgba( 255, 255, 255, 0.33 );
   }
 `
 
