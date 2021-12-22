@@ -40,6 +40,8 @@ document.addEventListener("DOMContentLoaded", function(event) {
   render()
   
   uxBehaviours()
+ 
+  uniqueParser()
   
   var p = $.when(1)
       p = p.then(function() { 
@@ -853,6 +855,64 @@ switchNavigator = function(dir) { /* Figure out where we are first */
   let nextElement = menu[nextKey]
   addNavigatorElements(nextElement)
 }
+ 
+uniqueArray = []
+uniqueParser = function() {
+  let filteredList   = {}
+  let exclusionArray = []
+
+  for (var i = 0; i < frwc._referenceWizards.length; i++) {
+    // convenience variable
+    let wizard = frwc._referenceWizards[i]
+
+    // initialise our dictionary of bodies for this head
+    filteredList[wizard.head] = filteredList[wizard.head] || {}
+
+    // check exclusion list for head*body
+    let product = wizard.head + '-' + wizard.body
+    if (exclusionArray.indexOf(product) != -1) {
+      // excluded so skip this wizard
+      // do thing
+    } else if (typeof filteredList[wizard.head][wizard.body] != 'undefined') {
+      // this key already exists within our filtered list, so we drop this previous one
+      delete filteredList[wizard.head][wizard.body]
+      // and do nothing with the current one
+  
+      // and ADD it to the exclusionArray
+      exclusionArray.push(product)
+    } else {
+      filteredList[wizard.head][wizard.body] = wizard.idx
+    }
+  }
+  console.log(filteredList)
+
+  uniqueArray    = []
+  displayUniques = {}
+  let traitMap       = frwc._names.traits
+
+  for (var head in filteredList) {
+    let bodies = filteredList[head]
+    let nameHead = traitMap[head] + '-' + head
+    displayUniques[nameHead] = {}
+    for (var body in bodies) {
+      let nameBody = traitMap[body] + '-' + body
+      displayUniques[nameHead][nameBody] = bodies[body]
+      uniqueArray.push(bodies[body])
+    }
+  }
+  uniqueArray.sort()
+  console.log(displayUniques)
+}
+
+checkUniqueCombo = function(id) {
+  if (uniqueArray.indexOf(id) == -1) {
+    console.log(id + ' is not unique for a head/body combination.')
+    return
+  } 
+  console.log(id + ' is a unique head/body combination.')
+}
+
+console.log('Do "checkUniqueCombo(ID)" to check if your wizard is unique.')
 
 /* Helper Functions */
 generateTraitURL = function(traitID, traitType) {
