@@ -45,10 +45,12 @@ document.addEventListener("DOMContentLoaded", function(event) {
   uniqueParser()
  
   // check for supplied id
+  // a bit hacky but ehhh
   let providedID = window.location.href.match(/\?id\=(\d+)/)
   if (providedID) {
     if (parseInt(providedID[1]) < 10000) {
       $('#navigator-input input').val(providedID[1])
+      addWizardToNavigator(providedID[1])
     }
   }
 })
@@ -334,10 +336,11 @@ addWizardToNavigator = function(id) {
      .empty()
   addElementsToNavigator('affinity', list, components, affinities)
   
-  // Add the name of the Wizard
-  // Add the picture of the Wizard
-  // Add the affinities of the Wizard  
-
+  // pick the first
+  // so damned hacky
+  try {
+   $('#navigator-panel .panel-item affinity')[0].click()
+  } catch(err) { console.log(err) }
   
 }
 
