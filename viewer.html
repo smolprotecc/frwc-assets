@@ -29,7 +29,8 @@ defaults = {
   informationHeight: 230,
 
   // other options
-  wizardDoubleClick: 'https://opensea.io/assets/0x521f9c7505005cfa19a8e5786a9c3c9c9f5e6f42/',
+  // wizardDoubleClick: 'https://opensea.io/assets/0x521f9c7505005cfa19a8e5786a9c3c9c9f5e6f42/',
+  wizardDoubleClick: 'https://forgotten.market/0x521f9c7505005cfa19a8e5786a9c3c9c9f5e6f42/'
 }
 
 /* Load Sequence */
@@ -42,13 +43,14 @@ document.addEventListener("DOMContentLoaded", function(event) {
   uxBehaviours()
  
   uniqueParser()
-  
-  var p = $.when(1)
-      p = p.then(function() { 
-      
-      }).then(function() {  
-      
-      })
+ 
+  // check for supplied id
+  let providedID = window.location.href.match(/\?id\=(\d+)/)
+  if (providedID) {
+    if (parseInt(providedID[1]) < 10000) {
+      $('#navigator-input input').val(providedID[1])
+    }
+  }
 })
 
 parseData = function() {
