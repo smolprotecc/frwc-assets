@@ -1,0 +1,22 @@
+<style>
+body {
+  background: rgba( 144, 44, 34, 1 );
+}
+</style>
+<body>
+Open the developer window.
+</body>
+<script src='data/warriors-json.js'></script>
+<script src='frwc64.warriors.js'></script>
+
+<script>
+
+document.addEventListener("DOMContentLoaded", async function(event) { 
+
+  console.log(frwc64)
+  
+  frwc64.warriorManager.posthoc()
+});
+
+  
+</script>
