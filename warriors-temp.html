@@ -38,7 +38,7 @@ document.addEventListener("DOMContentLoaded", async function(event) {
       uri += '&apikey=' + settings.ETHERSCAN
       uri += '&data=' + fx
   
-   console.log(uri)
+   // console.log(uri)
   
    fetch(uri).then(e => e.json()).then(f => f.result).then(g => {
                 let h = g.substring(2)
