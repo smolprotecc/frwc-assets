@@ -215,6 +215,7 @@ document.addEventListener('DOMContentLoaded', function(e) {
                 link = link.replace('-','')
                 head = ''
               }
+              pre = 'assets/wizards/' + pre
               categoryItem.setAttribute('onclick','render("' + pre + '/' + head + link + '-400.png","' + category + '", "' + item + '", "' + displayRate + '")')
         categoryPanel.appendChild(categoryItem)
       }
