@@ -943,7 +943,8 @@ generateTraitURL = function(traitID, traitType) {
   }
   let traitMap = {head: 'heads', body: 'bodies', prop: 'props', familiar: 'familiars', rune: 'runes', background: 'backgrounds'}
   let uri = traitMap[traitType] + '/' + (traitType != 'rune' ? traitType + '-' : '') + qualified + '-400.png'
-  if (local) { uri = 'components/' + uri }
+  uri = 'assets/wizards/' + uri
+  // if (local) { uri = 'components/' + uri }
   return uri
 }
 getRandomWizards = function(array, count, proto) {
