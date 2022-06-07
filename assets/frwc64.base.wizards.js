@@ -3,6 +3,7 @@ frwc64.wizards = typeof frwc64.wizards != 'undefined' ? frwc64.wizards : {}
 
 frwc64.wizards.base64 = {
     get: function(trait) {
+      if (!trait) { return trait }
       let qualified = this.parse(trait)
       return this.prefix + this.slot(qualified)
     },

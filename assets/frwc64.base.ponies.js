@@ -3,6 +3,7 @@ frwc64.ponies = typeof frwc64.ponies != 'undefined' ? frwc64.ponies : {}
 
 frwc64.ponies.base64 = {
     get: function(trait) {
+      if (!trait) { return trait }
       let qualified = this.parse(trait)
       return this.prefix + this.slot(qualified)
     },
