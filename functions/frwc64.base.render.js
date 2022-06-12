@@ -1,6 +1,7 @@
 frwc64 = typeof frwc64 != 'undefined' ? frwc64 : {}
+frwc64.base64 = typeof frwc64.base64 != 'undefined' ? frwc64.base64 : {}
 
-frwc64.render = function(list, target, options) {
+frwc64.base64.render = function(list, target, options) {
   // check options
   let x = 0;
   let y = 0;
