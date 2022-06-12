@@ -6,26 +6,17 @@ let render = (function() {
     // https://stackoverflow.com/questions/56553281/webworker-offscreencanvas-draw-regular-image/56553680#56553680
     // https://stackoverflow.com/questions/16245767/creating-a-blob-from-a-base64-string-in-javascript
     let element = list.shift()
-    console.log(list)
-    console.log(element)
     
     const blob = await fetch(element).then(res => res.blob());
     const image = await createImageBitmap(blob);
-    console.log(blob)
-    console.log(image)
     context.drawImage(image, dimensions.x, dimensions.y, dimensions.width, dimensions.height);
     // iterate
     if (list.length > 0) {
       await renderElements(list, dimensions)
     } else {
     // exit
-      console.log(canvas)
-      /*
       const bitmap = canvas.transferToImageBitmap();
-      console.log(bitmap)
-      // self.postMessage({msg: 'render', bitmap: bitmap}, [bitmap]);
-      self.postMessage(bitmap, [bitmap]);
-      */
+      self.postMessage({msg: 'render', bitmap: bitmap}, [bitmap]);
     }
   }
   
