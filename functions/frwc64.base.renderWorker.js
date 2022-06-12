@@ -14,7 +14,7 @@ let render = (function() {
     context.drawImage(image, dimensions.x, dimensions.y, dimensions.width, dimensions.height);
     // iterate
     if (list.length > 0) {
-      renderElements(list, dimensions)
+      await renderElements(list, dimensions)
     } else {
     // exit
       const bitmap = canvas.transferToImageBitmap();
@@ -22,7 +22,7 @@ let render = (function() {
     }
   }
   
-  let start = function(list, options) {
+  let start = async function(list, options) {
     let x, y, width, height;
     if (options) {
      x = options.x || x
@@ -31,7 +31,7 @@ let render = (function() {
      height = options.height || height
     }
     // Start recursion
-    renderElements(list, {x: x, y: y, width: width, height: height})
+    await renderElements(list, {x: x, y: y, width: width, height: height})
   }
   
   return {
