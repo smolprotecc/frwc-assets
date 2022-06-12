@@ -14,6 +14,7 @@ frwc64.base64.render = function(list, target, options) {
   worker.addEventListener('message', function(ev) {
     if(ev.data.msg === 'render') {
       console.log(ev.data)
+      console.log(ev.data.bitmap)
       context.transferFromImageBitmap(ev.data.bitmap);
     }
   });
