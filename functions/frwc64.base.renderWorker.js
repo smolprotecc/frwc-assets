@@ -30,7 +30,9 @@ let render = (function() {
   }
   
   let start = async function(list, options) {
-    let x, y, width, height;
+    let x = 0; 
+    let y = 0;
+    let width, height;
     if (options) {
      x = options.x || x
      y = options.y || y
