@@ -12,6 +12,7 @@ frwc64.base64.render = function(list, target, options) {
   const offscreenCanvas = canvas.transferControlToOffscreen();
   
   let worker = new Worker(workerFile);
+  /*
   worker.addEventListener('message', function(ev) {    
     console.log(ev.data)
     context.transferFromImageBitmap(ev.data)
@@ -20,5 +21,6 @@ frwc64.base64.render = function(list, target, options) {
       // context.transferFromImageBitmap(ev.data.bitmap);
     }
   });
+  */
   worker.postMessage({msg: 'init', canvas: offscreenCanvas, list: list, options: options}, [offscreenCanvas]);
 }
