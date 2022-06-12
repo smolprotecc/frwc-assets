@@ -22,7 +22,8 @@ let render = (function() {
       console.log(canvas)
       const bitmap = canvas.transferToImageBitmap();
       console.log(bitmap)
-      self.postMessage({msg: 'render', bitmap: bitmap}, [bitmap]);
+      // self.postMessage({msg: 'render', bitmap: bitmap}, [bitmap]);
+      self.postMessage(bitmap, [bitmap]);
     }
   }
   
