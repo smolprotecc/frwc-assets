@@ -10,7 +10,6 @@ frwc64.base64.render = function(list, target, options) {
   let context = canvas.getContext('bitmaprenderer');
   let offscreenCanvas = new OffscreenCanvas(canvas.width, canvas.height);
   let worker = new Worker(workerFile);
-  worker.postMessage({msg: 'init', canvas: offscreenCanvas, list: list, options: options}, [offscreenCanvas]);
   worker.addEventListener('message', function(ev) {    
     console.log(ev.data)
     context.transferFromImageBitmap(ev.data)
@@ -19,4 +18,5 @@ frwc64.base64.render = function(list, target, options) {
       // context.transferFromImageBitmap(ev.data.bitmap);
     }
   });
+  worker.postMessage({msg: 'init', canvas: offscreenCanvas, list: list, options: options}, [offscreenCanvas]);
 }
