@@ -2,29 +2,23 @@ let canvas;
 let context;
 
 let render = (function() {
-  // check options
-  let x = 0;
-  let y = 0;
-  let width = 0;
-  let height = 0;
-  
-  let next = function(list) {
+  let next = function(list, dimensions) {
     if (list.length > 0) {
-      renderElements(list)
+      renderElements(list, dimensions)
     } else {
       exit()
     }
   }
     
-  let renderElements = async function(list) {
+  let renderElements = async function(list, dimensions) {
     // https://stackoverflow.com/questions/56553281/webworker-offscreencanvas-draw-regular-image/56553680#56553680
     // https://stackoverflow.com/questions/16245767/creating-a-blob-from-a-base64-string-in-javascript
     let element = list.shift()
     
     const blob = await fetch(element).then(res => res.blob());
     const image = await createImageBitmap(blob);
-    context.drawImage(image, x, y, width, height);
-    next(list);
+    context.drawImage(image, dimensions.x, dimensions.y, dimensions.width, dimensions.height);
+    next(list, dimensions);
   }
   
   let exit = function() {
@@ -33,6 +27,7 @@ let render = (function() {
   }
   
   let start = function(list, options) {
+    let x, y, width, height;
     if (options) {
      x = options.x || x
      y = options.y || y
@@ -40,7 +35,7 @@ let render = (function() {
      height = options.height || height
     }
     // Start recursion
-    renderElements(list)
+    renderElements(list, {x: x, y: y, width: width, height: height})
   }
   
   return {
