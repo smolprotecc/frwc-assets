@@ -44,6 +44,7 @@ function render(list, images, options) {
 self.onmessage = function(ev) {
   if (ev.data.msg === 'init') {
     list = ev.data.list;
+    images = ev.data.images;
     options = ev.data.options;
     
     canvas = ev.data.canvas;
