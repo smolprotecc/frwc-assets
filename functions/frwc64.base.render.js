@@ -11,10 +11,10 @@ frwc64.base64.render = function(list, target, options) {
   let offscreenCanvas = new OffscreenCanvas(canvas.width, canvas.height);
   let worker = new Worker(workerFile);
   worker.postMessage({msg: 'init', canvas: offscreenCanvas, list: list, options: options}, [offscreenCanvas]);
-  worker.addEventListener('message', function(ev) {
-    if(ev.data.msg === 'render') {
-      console.log(ev.data)
-      context.transferFromImageBitmap(ev.data)
+  worker.addEventListener('message', function(ev) {    
+    console.log(ev.data)
+    context.transferFromImageBitmap(ev.data)
+    if (ev.data.msg === 'render') {
       // console.log(ev.data.bitmap)
       // context.transferFromImageBitmap(ev.data.bitmap);
     }
