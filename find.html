@@ -170,7 +170,7 @@ let show = function(showOptions) {
     // Blocking method
     // frwc64.warriors.functions.render(id, '#warrior-' + id + '-canvas')
     // Non-blocking method
-    let components = frwc64.warriors.functions.generateBase64(frwc64.warriors.functions.retrieveComponents(id))
+    let components = frwc64.warriors.functions.generateBase64(frwc64.warriors.functions.retrieveComponents(id).components)
     frwc64.base64.render(components,'#warrior-' + id + '-canvas', {width: 120, height: 120})
   })
   eventify()
