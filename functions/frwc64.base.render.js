@@ -7,7 +7,7 @@ frwc64.base64 = typeof frwc64.base64 != 'undefined' ? frwc64.base64 : {}
 
 frwc64.base64.render = function(list, target, options) {
   let canvas = document.querySelector(target);
-  let context = canvas.getContext('2d');
+  let context = canvas.getContext('bitmaprenderer');
   let offscreenCanvas = new OffscreenCanvas(canvas.width, canvas.height);
   let worker = new Worker(workerFile);
   worker.postMessage({msg: 'init', canvas: offscreenCanvas, list: list, options: options}, [offscreenCanvas]);
