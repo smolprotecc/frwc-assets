@@ -2,6 +2,8 @@ let canvas;
 let context;
 
 let render = (function() {
+  let p = new OffscreenCanvas(240,240)
+  
   let renderElements = async function(list, dimensions) {
     // https://stackoverflow.com/questions/56553281/webworker-offscreencanvas-draw-regular-image/56553680#56553680
     // https://stackoverflow.com/questions/16245767/creating-a-blob-from-a-base64-string-in-javascript
@@ -28,6 +30,7 @@ let render = (function() {
   }
   
   let start = async function(list, options) {
+    console.log(p)
     let x, y, width, height;
     if (options) {
      x = options.x || x
