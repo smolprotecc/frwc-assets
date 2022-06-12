@@ -6,13 +6,11 @@ frwc64 = typeof frwc64 != 'undefined' ? frwc64 : {}
 frwc64.base64 = typeof frwc64.base64 != 'undefined' ? frwc64.base64 : {}
 
 frwc64.base64.render = function(list, target, options) {
-  let images = list.map(element => new Image())
-  
   let canvas = document.querySelector(target);
   let context = canvas.getContext('2d');
   let offscreenCanvas = new OffscreenCanvas(canvas.width, canvas.height);
   let worker = new Worker(workerFile);
-  worker.postMessage({msg: 'init', canvas: offscreenCanvas, list: list, images: images, options: options}, [offscreenCanvas]);
+  worker.postMessage({msg: 'init', canvas: offscreenCanvas, list: list, options: options}, [offscreenCanvas]);
   worker.addEventListener('message', function(ev) {
     if(ev.data.msg === 'render') {
       context.transferFromImageBitmap(ev.data.bitmap);
