@@ -11,6 +11,8 @@ let render = (function() {
     
     const blob = await fetch(element).then(res => res.blob());
     const image = await createImageBitmap(blob);
+    console.log(blob)
+    console.log(image)
     context.drawImage(image, dimensions.x, dimensions.y, dimensions.width, dimensions.height);
     // iterate
     if (list.length > 0) {
