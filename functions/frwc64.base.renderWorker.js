@@ -19,7 +19,9 @@ let render = (function() {
       await renderElements(list, dimensions)
     } else {
     // exit
+      console.log(canvas)
       const bitmap = canvas.transferToImageBitmap();
+      console.log(bitmap)
       self.postMessage({msg: 'render', bitmap});
     }
   }
