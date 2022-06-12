@@ -1,3 +1,7 @@
+// https://levelup.gitconnected.com/improve-javascript-performance-with-offscreencanvas-1180dc5376e9
+// Requires a .js file to run a worker for offscreen non-blocking rendering
+const workerFile = 'frwc64.base.renderWorker.js';
+
 frwc64 = typeof frwc64 != 'undefined' ? frwc64 : {}
 frwc64.base64 = typeof frwc64.base64 != 'undefined' ? frwc64.base64 : {}
 
@@ -17,22 +21,12 @@ frwc64.base64.render = function(list, target, options) {
   // reference the target
   let canvas = document.querySelector(target);
   let context = canvas.getContext();
-  // prepare pointer, callback and render functions
-  let pointer = 0;
-  let next = function() {
-    pointer++
-    if (pointer < list.length) {
-      renderElement(list[pointer])
+  let offscreenCanvas = new OffscreenCanvas(canvas.width, canvas.height);
+  let worker = new Worker(workerFile);
+  worker.postMessage({msg: 'init', canvas: offscreenCanvas}, [offscreenCanvas,list,target,options]);
+  worker.addEventListener('message', function(ev) {
+    if(ev.data.msg === 'render') {
+      context.transferFromImageBitmap(ev.data.bitmap);
     }
-  }
-  let renderElement = function(element) {
-    let image = new Image();
-    image.onload = function() {
-      context.drawImage(image, x, y, width, height);
-      next();
-    }
-    image.src = element
-  }
-  
-  renderElement(list[pointer])
+  });
 }
