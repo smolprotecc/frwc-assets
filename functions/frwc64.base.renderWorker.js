@@ -1,7 +1,7 @@
 let canvas;
 let context;
 
-function render(list, options) {
+function render(list, images, options) {
   // check options
   let x = 0;
   let y = 0;
@@ -19,13 +19,12 @@ function render(list, options) {
   let next = function() {
     pointer++
     if (pointer < list.length) {
-      renderElement(list[pointer])
+      renderElement(list[pointer], images[pointer])
     } else {
       exit()
     }
   }
-  let renderElement = function(element) {
-    let image = new Image();
+  let renderElement = function(element, image) {
     image.onload = function() {
       context.drawImage(image, x, y, width, height);
       next();
@@ -39,7 +38,7 @@ function render(list, options) {
   }
   
   // Start recursion
-  renderElement(list[pointer])
+  renderElement(list[pointer], images[pointer])
 }
 
 self.onmessage = function(ev) {
