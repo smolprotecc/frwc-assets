@@ -1,44 +1,30 @@
 let canvas;
 let context;
 
-function render(list, options) {
+let render = (function() {
   // check options
   let x = 0;
   let y = 0;
   let width = 0;
   let height = 0;
-  if (options) {
-    x = options.x || x
-    y = options.y || y
-    width = options.width || width
-    height = options.height || height
-  }
   
-  // prepare pointer, callback and render functions
-  let pointer = 0;
-  let next = function() {
-    pointer++
-    if (pointer < list.length) {
-      renderElement(list[pointer])
+  let next = function(list) {
+    if (list.length > 0) {
+      renderElements(list)
     } else {
       exit()
     }
   }
-  let renderElement = function(element) {
+    
+  let renderElements = async function(list) {
     // https://stackoverflow.com/questions/56553281/webworker-offscreencanvas-draw-regular-image/56553680#56553680
     // https://stackoverflow.com/questions/16245767/creating-a-blob-from-a-base64-string-in-javascript
+    let element = list.shift()
     
-    const blob = await fetch(element).then(res => res.blob())
+    const blob = await fetch(element).then(res => res.blob());
     const image = await createImageBitmap(blob);
     context.drawImage(image, x, y, width, height);
-    
-    /*
-    image.onload = function() {
-      context.drawImage(image, x, y, width, height);
-      next();
-    }
-    image.src = element
-    */
+    next(list);
   }
   
   let exit = function() {
@@ -46,9 +32,21 @@ function render(list, options) {
     self.postMessage({msg: 'render', bitmap});
   }
   
-  // Start recursion
-  renderElement(list[pointer])
-}
+  let start = function(list, options) {
+    if (options) {
+     x = options.x || x
+     y = options.y || y
+     width = options.width || width
+     height = options.height || height
+    }
+    // Start recursion
+    renderElements(list)
+  }
+  
+  return {
+    start: start, 
+  }
+})()
 
 self.onmessage = function(ev) {
   if (ev.data.msg === 'init') {
@@ -57,6 +55,6 @@ self.onmessage = function(ev) {
     
     canvas = ev.data.canvas;
     context = canvas.getContext('2d');
-    render(list, options)
+    render.start(list, options)
   }
 }
