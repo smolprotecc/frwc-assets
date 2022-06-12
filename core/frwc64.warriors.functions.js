@@ -1,0 +1,77 @@
+frwc64 = typeof frwc64 != 'undefined' ? frwc64 : {} 
+frwc64.warriors = typeof frwc64.warriors != 'undefined' ? frwc64.warriors : {}
+
+frwc64.warriors.functions = {
+  retrieveComponents: function(idx) {
+    let list = frwc64.warriors._list
+    let components = frwc64.warriors._components
+    
+    // if soul, send call to frwc64.souls
+    let warrior = list[idx]
+    if (!warrior) { return false }
+    
+    let order   = ['background','body','head','rune','companion','weapon','shield']
+    let section = ['backgrounds','bodies','heads','runes','companions','weapons','shields']
+    let output  = []
+    order.forEach(part => {
+      let component;
+      if (part == 'background') {
+        component = warrior.background
+      } else {
+        component = warrior.components[part]
+      }
+      output.push(components[component])
+    })
+    return {id: idx, components: output}
+  },
+ 
+  generateBase64: function(components) {
+    return components.map(trait => frwc64.warriors.base64.get(trait))
+  },
+  
+  render: function(idx, target, options) {
+    let renderComplete = 'rendered-wizard'
+    let list = this.retrieveComponents(idx)
+    let elements = this.generateBase64(list.components)
+    
+    // Do rendering
+    const canvas = document.querySelector(target)
+    const ctx    = canvas.getContext('2d')
+    if (!options ||
+        (options && typeof options.clearRect == 'undefined') ||
+        (options && typeof options.clearRect != 'undefined' && options.clearRect != false)) {
+      ctx.clearRect(0, 0, canvas.width, canvas.height)
+    }
+    let x = 0, y = 0, w = canvas.width, h = canvas.height;
+    if (options) {
+      if (options.x) { x = options.x }
+      if (options.y) { y = options.y }
+      if (options.w) { w = options.w }
+      if (options.h) { h = options.h }
+    }
+    
+    let background;
+    let count = 0
+    elements.forEach((item, index) => {
+      count++
+      if (item) {
+        let image = new Image()
+        image.onload = function() {
+          ctx.drawImage(image, x, y, w, h)
+          if (index === 0) { //background 
+            background = ctx.getImageData(x, y, 1, 1).data
+            let color = `rgba(${background[0]}, ${background[1]}, ${background[2]}, ${background[3]/255*1})`
+            ctx.fillStyle = color
+            ctx.fillRect(x, y, w, h)
+          }
+          if (index >= count - 1) {
+            document.dispatchEvent(new CustomEvent(renderComplete))
+          }
+        }
+        image.src = item
+      }
+    })
+  
+    return {id: idx, elements: elements}
+  }
+}
