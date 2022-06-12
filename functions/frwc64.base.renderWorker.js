@@ -49,6 +49,6 @@ self.onmessage = function(ev) {
     
     canvas = ev.data.canvas;
     context = canvas.getContext('2d');
-    render(list, options)
+    render(list, images, options)
   }
 }
