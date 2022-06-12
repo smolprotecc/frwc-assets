@@ -28,7 +28,6 @@ let render = (function() {
   }
   
   let start = async function(list, options) {
-    console.log(p)
     let x, y, width, height;
     if (options) {
      x = options.x || x
