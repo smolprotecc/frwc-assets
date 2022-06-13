@@ -36,9 +36,8 @@ body {
   display        : inline-block;
   margin         : 2px;
   backdrop-filter: blur(6px);
-  z-index        : 1;
-  transform      : scale(1);
   perspective    : 600px;
+  z-index        : 1;
 }
 .warrior-tile:hover {
   position : relative;
@@ -59,7 +58,7 @@ body {
 }
 .warrior-tile,
 .warrior-tile canvas {
-  transition     : all 250ms ease-out;
+  transition     : all 120ms ease-out;
 }
 #search-bar {
   position       : absolute;
