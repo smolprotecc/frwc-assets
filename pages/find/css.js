@@ -35,13 +35,13 @@ body {
   margin         : 2px;
   transition     : all 250ms ease-out;
   z-index        : 1;
-  transform      : scale(1);
+  transform      : scale(0.94);
   perspective    : 600px;
 }
 .warrior-tile:hover {
   position : relative;
   border   : 3px solid rgba(255,255,255,0.27);
-  transform: scale(1.2);
+  transform: scale(1.1);
   z-index  : 25;
 }
 #search-bar {
