@@ -3,7 +3,6 @@
 const workerFile = 'functions/frwc64.base.renderWorker.js';
 const worker = new Worker(workerFile);
 
-
 frwc64 = typeof frwc64 != 'undefined' ? frwc64 : {}
 frwc64.base64 = typeof frwc64.base64 != 'undefined' ? frwc64.base64 : {}
 
