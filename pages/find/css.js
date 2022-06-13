@@ -46,7 +46,6 @@ body {
 }
 .warrior-tile canvas {
   border-radius: 3px;
-  backdrop-filter: blur(6px);
   border : 3px solid rgba(255,255,255,0.07);
   border-top: 7px solid rgba(255,255,255,0.07);
   border-bottom: 7px solid rgba(255,255,255,0.07);
