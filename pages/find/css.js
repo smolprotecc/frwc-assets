@@ -35,6 +35,7 @@ body {
   position       : relative;
   display        : inline-block;
   margin         : 2px;
+  backdrop-filter: blur(6px);
   z-index        : 1;
   transform      : scale(1);
   perspective    : 600px;
