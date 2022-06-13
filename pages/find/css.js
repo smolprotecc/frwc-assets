@@ -11,7 +11,7 @@ const addCSS = function(rule, container, ruleIdentifier) {
   }
 }
 
-addCSS(`
+const CSSRules = `
 body {
   background     : rgba( 24, 24, 44, 1 );
   display        : flex;
@@ -87,4 +87,4 @@ body {
 .mute {
   filter: opacity(0.67);
 }
-`)
+`
