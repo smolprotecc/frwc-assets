@@ -1,4 +1,6 @@
 const addCSS = function(rule, container, ruleIdentifier) {
+  console.log(document)
+  console.log(window)
   let rc = ruleIdentifier ? ruleIdentifier : 'customCSS'
   let output = '<span class="' + rc + '" style="display:none;">&shy;<style>' + rule + '</style></span>'
   document.querySelectorAll(rc).forEach(e => e.remove())
@@ -9,7 +11,7 @@ const addCSS = function(rule, container, ruleIdentifier) {
   }
 }
 
-const CSSRules = `
+addCSS(`
 body {
   background     : rgba( 24, 24, 44, 1 );
   display        : flex;
@@ -85,4 +87,4 @@ body {
 .mute {
   filter: opacity(0.67);
 }
-`
+`)
