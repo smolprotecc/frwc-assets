@@ -34,6 +34,7 @@ body {
   backdrop-filter: blur(6px);
   margin         : 2px;
   transition     : all 250ms ease-out;
+  z-index        : 1;
   transform      : scale(1);
   perspective    : 600px;
 }
