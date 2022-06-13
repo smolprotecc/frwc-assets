@@ -8,7 +8,7 @@ let render = (function() {
     // https://stackoverflow.com/questions/16245767/creating-a-blob-from-a-base64-string-in-javascript
     let element = list.shift()
     
-    const blob = await fetch(element).then(res => res.blob());
+    const blob = await fetch(element).then(res => res.blob()).catch(err){console.log(err); console.log(element)};
     const image = await createImageBitmap(blob);
     datum[identifier].context.drawImage(image, dimensions.x, dimensions.y, dimensions.width, dimensions.height);
     // iterate
