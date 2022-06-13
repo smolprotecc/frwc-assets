@@ -88,18 +88,17 @@ body {
 #info-bar {
   position     : absolute;
   bottom       : calc(31px + 31px + 0px);
-  left         : 50%;
-  width        : calc(100% - 15%*2);
+  right        : calc(15%);
   height       : 44px;
   font-size    : 15pt;
   text-align   : right;
   color        : rgba(211,211,211, 0.88);
   padding-right: 2.2ch;
+  padding-left : 2.2ch;
   line-height  : 44px;
-  transform    : translate(-50%, 0%);
   z-index      : 13;
   pointer-events: none;
-  background   : rgba( 1, 1, 1, 0.04);
+  background   : rgba( 1, 1, 1, 0.27);
   backdrop-filter: blur(3px);
 }
 .mute {
