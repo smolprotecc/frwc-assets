@@ -98,6 +98,9 @@ body {
   line-height  : 44px;
   transform    : translate(-50%, 0%);
   z-index      : 13;
+  pointer-events: none;
+  background   : rgba( 1, 1, 1, 0.04);
+  backdrop-filter: blur(3px);
 }
 .mute {
   filter: opacity(0.67);
