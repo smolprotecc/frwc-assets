@@ -34,13 +34,13 @@ body {
   backdrop-filter: blur(6px);
   margin         : 2px;
   transition     : all 250ms ease-out;
-  transform      : scale(0.94);
+  transform      : scale(1);
   perspective    : 600px;
 }
 .warrior-tile:hover {
   position : relative;
   border   : 3px solid rgba(255,255,255,0.27);
-  transform: scale(1.1);
+  transform: scale(1.22);
 }
 #search-bar {
   position       : absolute;
