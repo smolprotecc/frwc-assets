@@ -1,0 +1,239 @@
+<!-- Our CSS data-->
+<script src="find/css.js"></script>
+
+<!-- Our render function -->
+<script src="functions/frwc64.base.render.js"></script>
+
+<!-- Get the necessary files -->
+<script src="assets/frwc64.base.warriors.js"></script>
+<script src="core/frwc64.warriors.components.js"></script>
+<script src="core/frwc64.warriors.functions.js"></script>
+<script src="core/frwc64.warriors.list.js"></script>
+
+
+<style>
+</style>
+<body>
+  <div id='content'></div>
+  <div id='info-bar'></div>
+  <div id='search-bar'><textarea id='input' placeholder="search here"></textarea></div>
+</body>
+
+<script>
+
+console.log(frwc64)
+rcomponents = {}
+for (var key in frwc64.warriors._components) {
+  let component = frwc64.warriors._components[key]
+  rcomponents[component] = key
+}
+
+let list = Object.keys(frwc64.warriors._list).map(key => frwc64.warriors._list[key])
+
+let filter = function(options) {
+  let m = list
+
+  // Filter by name
+  if (options.name) {
+    console.log('Filtering by name.')
+
+    m = m.filter(warrior => {
+      let matched = true
+      options.name.forEach(item => {
+        if (warrior.name.match(item)) {
+
+        } else { matched = false }
+      })
+      return matched
+    })
+  }
+
+  // Filter by part
+  if (options.part) {
+    console.log('Searching for parts...')
+    let M = []
+    let bits = Object.keys(rcomponents)
+    bits.forEach(trait => {
+      let _trait = trait.toLowerCase()
+      options.part.forEach(part => {
+        let _part = part.toLowerCase()
+        if (_trait.match(_part)) {
+          M.push(rcomponents[trait])
+        }
+      })
+    })
+    M = M.map(n => parseInt(n))
+
+    console.log('Filter the list with composed part list.')
+    m = m.filter(warrior => {
+      let Q = Object.keys(warrior.components).map(key => warrior.components[key])
+      let P = []
+      Q.forEach(part => {
+        if (M.indexOf(part) != -1) {
+          P.push(part)
+        }
+      })
+      if (options.partNecessary) {
+        if (P.length == options.part.length) {
+          return warrior
+        }
+      } else if (P.length > 0) { return warrior }
+    })
+  }
+  
+  console.log(m)
+  return m
+}
+
+let delay = (ms = 650) => new Promise(r => setTimeout(r, ms));
+let show = async function(showOptions) {
+  if (showOptions.reset) {
+    let v = document.querySelectorAll('.warrior-tile')
+    v.forEach(item => {
+      item.parentNode.removeChild(item)
+    })
+  }
+
+  let m = filter(showOptions)
+  
+  // split m into delays of n=150 batches
+  let b = []
+  while(m.length) {
+     b.push(m.splice(0, 150))
+  }
+  for (var i = 0; i < b.length; i++) {
+    let t = b[i]
+    t.forEach(warrior => {  
+      let id     = warrior.idx
+      let canvas = '<canvas id="warrior-' + id + '-canvas" width="120px" height="120px"></canvas>'
+      let div    = '<div class="warrior-tile" id="warrior-' + id + '" onclick="goto(' + id + ')">' + canvas + '</div>'
+      document.querySelector('#content').insertAdjacentHTML('beforeend',div)
+    
+      // Blocking method
+      // frwc64.warriors.functions.render(id, '#warrior-' + id + '-canvas')
+      // Non-blocking method
+      let components = frwc64.warriors.functions.generateBase64(frwc64.warriors.functions.retrieveComponents(id).components)
+          components = components.filter(component => typeof component != 'undefined')
+      frwc64.base64.render(id, components,'#warrior-' + id + '-canvas', {width: 120, height: 120})
+    })
+    await delay()
+  }
+  eventify()
+}
+
+let goto = function(idx) {
+  window.open('https://opensea.io/assets/ethereum/0x9690b63eb85467be5267a3603f770589ab12dc95/' + idx, '_blank').focus();
+}
+
+// https://codepen.io/nelsonr/pen/WNQaZPb
+function map(val, minA, maxA, minB, maxB) {
+  return minB + ((val - minA) * (maxB - minB)) / (maxA - minA);
+}
+
+function Card3D(card, ev) {
+  let img = card.querySelector('canvas');
+  img = img.parentNode
+  let imgRect = card.getBoundingClientRect();
+  let width = imgRect.width;
+  let height = imgRect.height;
+  let mouseX = ev.offsetX;
+  let mouseY = ev.offsetY;
+  let rotateY = map(mouseX, 0, 180, -25, 25);
+  let rotateX = map(mouseY, 0, 250, 25, -25);
+  let brightness = map(mouseY, 0, 250, 1.5, 0.5);
+  
+  img.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+  img.style.filter = `brightness(${brightness})`;
+}
+
+function eventify() {
+ var cards = document.querySelectorAll('.warrior-tile');
+
+ cards.forEach((card) => {
+  card.addEventListener('mouseenter', (ev) => {
+    UpdateINFO(card)
+  })
+
+  card.addEventListener('mousemove', (ev) => {
+    Card3D(card, ev);
+  });
+  
+  card.addEventListener('mouseleave', (ev) => {
+    let img = card.querySelector('canvas');
+    img = img.parentNode
+    
+    img.style.transform = 'rotateX(0deg) rotateY(0deg)';
+    img.style.filter = 'brightness(1)';
+  });
+ });
+}
+
+function UpdateINFO(card) {
+  let idx = card.id.replace('warrior-','')
+  let warrior = frwc64.warriors._list[idx]
+
+  let infobar = document.querySelector('#info-bar')
+  infobar.innerHTML = ''
+  infobar.insertAdjacentHTML('beforeend',
+    warrior.name + '<span class="mute">#' + idx + '</span>')
+}
+
+let parse = function(instruction) {
+  let instructions = {}
+  if (instruction.match(/^\//)) {
+    instruction = instruction.replace(/^\//, '')
+    instructions.reset = true
+  }
+  let matches = instruction.split(/(?:")\s+(?=\w)/)
+  matches.forEach(match => {
+    if (match.match(/"$/)) { } else { match = match + '"' }
+    match = match.trim()
+
+    let command = match.match(/^\w+\+?\s+/)
+    command = command[0].trim()
+
+    match = match.replace(command,'').replace(/"/g,'').trim()
+    
+    match = match.split(/\s+/g)
+    console.log(match)
+
+    switch(command) {
+      case 'trait':
+        command = 'part'
+        break;
+      case 'trait+':
+        command = 'part'
+        instructions.partNecessary = true
+        break;
+    }
+    instructions[command] = match
+  })
+  console.log(instructions)
+
+  show(instructions)
+}
+
+document.addEventListener("DOMContentLoaded", async function(event) {
+  
+  const input = document.querySelector('#input')
+
+  input.value = '/ name "bear"'
+  input.focus()
+
+  input.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') {
+      e.preventDefault()
+    }
+  })
+  input.addEventListener('keyup', (e) => {
+    if (e.key === 'Enter') {
+      input.select()
+      parse(input.value)
+    }
+  })
+
+  show({name:['Bear']})
+})
+
+
+</script>
