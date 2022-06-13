@@ -12,11 +12,6 @@ const addCSS = function(rule, container, ruleIdentifier) {
 const CSSRules = `
 body {
   background     : rgba( 24, 24, 44, 1 );
-  display        : flex;
-  flex-wrap      : wrap;
-  justify-content: center;
-  align-items    : center;
-  align-content  : center;
 }
 #content {
   display        : flex;
