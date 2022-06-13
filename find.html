@@ -165,7 +165,7 @@ let show = async function(showOptions) {
   // split m into delays of n=150 batches
   let b = []
   while(m.length) {
-     b.push(a.splice(0, 150))
+     b.push(m.splice(0, 150))
   }
   for (var i = 0; i < b.length; i++) {
     let t = b[i]
