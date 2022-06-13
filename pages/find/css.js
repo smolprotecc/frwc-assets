@@ -3,6 +3,8 @@ let addCSS = function(rule, container, ruleIdentifier) {
   let rc = ruleIdentifier ? ruleIdentifier : 'customCSS'
   let output = '<span class="' + rc + '" style="display:none;">&shy;<style>' + rule + '</style></span>'
   document.querySelectorAll(rc).forEach(e => e.remove())
+  console.log(container)
+  console.log(document.querySelector(container))
   if (container) {
     document.querySelector(container).insertAdjacentHTML('beforeend', output)
   } else {
