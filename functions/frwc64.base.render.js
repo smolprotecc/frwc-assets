@@ -16,7 +16,7 @@ frwc64.base64.render = function(list, target, options) {
     // console.log(ev.data)
     // context.transferFromImageBitmap(ev.data)
     if (ev.data.msg === 'render') {
-      console.log(ev.data.bitmap)
+      // console.log(ev.data.bitmap)
       context.transferFromImageBitmap(ev.data.bitmap);
     }
   });
