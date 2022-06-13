@@ -97,6 +97,7 @@ body {
   padding-right: 2.2ch;
   line-height  : 44px;
   transform    : translate(-50%, 0%);
+  z-index      : 13;
 }
 .mute {
   filter: opacity(0.67);
