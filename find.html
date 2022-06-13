@@ -151,7 +151,8 @@ let filter = function(options) {
   return m
 }
 
-let show = function(showOptions) {
+let delay = (ms = 650) => new Promise(r => setTimeout(r, ms));
+let show = async function(showOptions) {
   if (showOptions.reset) {
     let v = document.querySelectorAll('.warrior-tile')
     v.forEach(item => {
@@ -160,20 +161,29 @@ let show = function(showOptions) {
   }
 
   let m = filter(showOptions)
-
-  m.forEach(warrior => {
-    let id     = warrior.idx
-    let canvas = '<canvas id="warrior-' + id + '-canvas" width="120px" height="120px"></canvas>'
-    let div    = '<div class="warrior-tile" id="warrior-' + id + '" onclick="goto(' + id + ')">' + canvas + '</div>'
-    document.querySelector('#content').insertAdjacentHTML('beforeend',div)
+  
+  // split m into delays of n=150 batches
+  let b = []
+  while(m.length) {
+     b.push(a.splice(0, 150))
+  }
+  for (var i = 0; i < b.length; i++) {
+    let t = b[i]
+    t.forEach(warrior => {  
+      let id     = warrior.idx
+      let canvas = '<canvas id="warrior-' + id + '-canvas" width="120px" height="120px"></canvas>'
+      let div    = '<div class="warrior-tile" id="warrior-' + id + '" onclick="goto(' + id + ')">' + canvas + '</div>'
+      document.querySelector('#content').insertAdjacentHTML('beforeend',div)
     
-    // Blocking method
-    // frwc64.warriors.functions.render(id, '#warrior-' + id + '-canvas')
-    // Non-blocking method
-    let components = frwc64.warriors.functions.generateBase64(frwc64.warriors.functions.retrieveComponents(id).components)
-        components = components.filter(component => typeof component != 'undefined')
-    frwc64.base64.render(id, components,'#warrior-' + id + '-canvas', {width: 120, height: 120})
-  })
+      // Blocking method
+      // frwc64.warriors.functions.render(id, '#warrior-' + id + '-canvas')
+      // Non-blocking method
+      let components = frwc64.warriors.functions.generateBase64(frwc64.warriors.functions.retrieveComponents(id).components)
+          components = components.filter(component => typeof component != 'undefined')
+      frwc64.base64.render(id, components,'#warrior-' + id + '-canvas', {width: 120, height: 120})
+    })
+    await delay()
+  }
   eventify()
 }
 
