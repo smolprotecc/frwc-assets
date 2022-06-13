@@ -18,6 +18,7 @@ let render = (function() {
     // exit
       const bitmap = datum[identifier].canvas.transferToImageBitmap();
       self.postMessage({msg: 'render', identifier: identifier, bitmap: bitmap}, [bitmap]);
+      delete datum[identifier]
     }
   }
   
