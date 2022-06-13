@@ -159,11 +159,11 @@ function Card3D(card, ev) {
   let height = imgRect.height;
   let mouseX = ev.offsetX;
   let mouseY = ev.offsetY;
-  let rotateY = map(mouseX, 0, 180, -20, 20);
-  let rotateX = map(mouseY, 0, 180, 20, -20);
+  let rotateY = map(mouseX, 0, 126, -25, 25);
+  let rotateX = map(mouseY, 0, 134, 25, -25);
   let brightness = map(mouseY, 0, 250, 1.5, 0.5);
   
-  img.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(${expand})`;
+  img.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
   img.style.filter = `brightness(${brightness})`;
 }
 
@@ -184,7 +184,7 @@ function eventify() {
     let img = card.querySelector('canvas');
     // img = img.parentNode
     
-    img.style.transform = 'rotateX(0deg) rotateY(0deg) scale(1)';
+    img.style.transform = 'rotateX(0deg) rotateY(0deg)';
     img.style.filter = 'brightness(1)';
     // img.style.zIndex = 1;
   });
