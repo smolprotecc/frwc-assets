@@ -23,6 +23,7 @@ const destinationURL = 'https://opensea.io/assets/ethereum/0x9690b63eb85467be526
 const goto = function(idx) { window.open(destinationURL + idx, '_blank').focus(); }
 
 const list = Object.keys(frwc64.warriors._list).map(key => frwc64.warriors._list[key])
+const expand = 1.22
 
 document.addEventListener('DOMContentLoaded', async function() {
   addCSS(CSSRules,'body','general')
@@ -162,7 +163,7 @@ function Card3D(card, ev) {
   let rotateX = map(mouseY, 0, 250, 25, -25);
   let brightness = map(mouseY, 0, 250, 1.5, 0.5);
   
-  img.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+  img.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(${expand})`;
   img.style.filter = `brightness(${brightness})`;
 }
 
@@ -183,7 +184,7 @@ function eventify() {
     let img = card.querySelector('canvas');
     img = img.parentNode
     
-    img.style.transform = 'rotateX(0deg) rotateY(0deg)';
+    img.style.transform = 'rotateX(0deg) rotateY(0deg) scale(1)';
     img.style.filter = 'brightness(1)';
     img.style.zIndex = 1;
   });
