@@ -1,4 +1,5 @@
 let addCSS = function(rule, container, ruleIdentifier) {
+  console.log(document.body)
   let rc = ruleIdentifier ? ruleIdentifier : 'customCSS'
   let output = '<span class="' + rc + '" style="display:none;">&shy;<style>' + rule + '</style></span>'
   document.querySelectorAll(rc).forEach(e => e.remove())
