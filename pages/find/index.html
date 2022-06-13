@@ -164,6 +164,7 @@ function Card3D(card, ev) {
   
   img.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
   img.style.filter = `brightness(${brightness})`;
+  img.style.zIndex = 25;
 }
 
 function eventify() {
@@ -184,6 +185,7 @@ function eventify() {
     
     img.style.transform = 'rotateX(0deg) rotateY(0deg)';
     img.style.filter = 'brightness(1)';
+    img.style.zIndex = 1;
   });
  });
 }
