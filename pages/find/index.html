@@ -19,6 +19,31 @@
 
 <script>
 
+const destinationURL = 'https://opensea.io/assets/ethereum/0x9690b63eb85467be5267a3603f770589ab12dc95/'
+const goto = function(idx) { window.open(destinationURL + idx, '_blank').focus(); }
+
+document.addEventListener('DOMContentLoaded', async function() {
+  addCSS(CSSRules,'body','general')
+  
+  const input = document.querySelector('#input')
+  input.value = '/ name "bear"'
+  input.focus()
+  input.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') {
+      e.preventDefault()
+    }
+  })
+  input.addEventListener('keyup', (e) => {
+    if (e.key === 'Enter') {
+      input.select()
+      parse(input.value)
+    }
+  })  
+  
+  // sample
+  show({name:['Bear']})
+})
+
 console.log(frwc64)
 rcomponents = {}
 for (var key in frwc64.warriors._components) {
@@ -119,9 +144,6 @@ let show = async function(showOptions) {
   eventify()
 }
 
-let goto = function(idx) {
-  window.open('https://opensea.io/assets/ethereum/0x9690b63eb85467be5267a3603f770589ab12dc95/' + idx, '_blank').focus();
-}
 
 // https://codepen.io/nelsonr/pen/WNQaZPb
 function map(val, minA, maxA, minB, maxB) {
@@ -210,28 +232,6 @@ let parse = function(instruction) {
 
   show(instructions)
 }
-
-document.addEventListener("DOMContentLoaded", async function(event) {
-  
-  const input = document.querySelector('#input')
-
-  input.value = '/ name "bear"'
-  input.focus()
-
-  input.addEventListener('keydown', (e) => {
-    if (e.key === 'Enter') {
-      e.preventDefault()
-    }
-  })
-  input.addEventListener('keyup', (e) => {
-    if (e.key === 'Enter') {
-      input.select()
-      parse(input.value)
-    }
-  })
-
-  show({name:['Bear']})
-})
 
 
 </script>
