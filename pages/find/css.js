@@ -29,18 +29,29 @@ body {
 .warrior-tile {
   position       : relative;
   display        : inline-block;
-  border         : 3px solid rgba(255,255,255,0.07);
-  border-radius  : 3px;
-  backdrop-filter: blur(6px);
   margin         : 2px;
-  transition     : all 250ms ease-out;
   transform      : scale(1);
   perspective    : 600px;
 }
 .warrior-tile:hover {
   position : relative;
-  border   : 3px solid rgba(255,255,255,0.27);
   transform: scale(1.22);
+}
+.warrior-tile canvas {
+  border-radius: 3px;
+  backdrop-filter: blur(6px);
+  border : 3px solid rgba(255,255,255,0.07);
+  border-top: 7px solid rgba(255,255,255,0.07);
+  border-bottom: 7px solid rgba(255,255,255,0.07);
+}
+.warrior-tile:hover canvas {
+  border : 3px solid rgba(255,255,255,0.27);
+  border-top: 7px solid rgba(255,255,255,0.27);
+  border-bottom: 7px solid rgba(255,255,255,0.27);
+}
+.warrior-tile,
+.warrior-tile canvas {
+  transition     : all 250ms ease-out;
 }
 #search-bar {
   position       : absolute;
