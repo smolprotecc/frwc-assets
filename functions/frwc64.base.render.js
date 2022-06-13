@@ -11,6 +11,7 @@ worker.addEventListener('message', function(ev) {
   if (ev.data.msg === 'render') {
       // console.log(ev.data.bitmap)
     frwc64.base64._workerDatum[ev.data.identifier].context.transferFromImageBitmap(ev.data.bitmap);
+    delete frwc64.base64._workerDatum[ev.data.identifier]
   }
 });
 
