@@ -22,6 +22,8 @@
 const destinationURL = 'https://opensea.io/assets/ethereum/0x9690b63eb85467be5267a3603f770589ab12dc95/'
 const goto = function(idx) { window.open(destinationURL + idx, '_blank').focus(); }
 
+const list = Object.keys(frwc64.warriors._list).map(key => frwc64.warriors._list[key])
+
 document.addEventListener('DOMContentLoaded', async function() {
   addCSS(CSSRules,'body','general')
   
@@ -50,8 +52,6 @@ for (var key in frwc64.warriors._components) {
   let component = frwc64.warriors._components[key]
   rcomponents[component] = key
 }
-
-let list = Object.keys(frwc64.warriors._list).map(key => frwc64.warriors._list[key])
 
 let filter = function(options) {
   let m = list
