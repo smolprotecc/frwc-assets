@@ -19,6 +19,11 @@ body {
   align-content  : center;
 }
 #content {
+  display        : flex;
+  flex-wrap      : wrap;
+  justify-content: center;
+  align-items    : center;
+  align-content  : center;
   position  : absolute;
   top       : 0%;
   left      : 0%;
@@ -30,11 +35,13 @@ body {
   position       : relative;
   display        : inline-block;
   margin         : 2px;
+  z-index        : 1;
   transform      : scale(1);
   perspective    : 600px;
 }
 .warrior-tile:hover {
   position : relative;
+  z-index  : 25;
   transform: scale(1.22);
 }
 .warrior-tile canvas {
