@@ -1,3 +1,5 @@
+<!-- Our CSS data-->
+<script src="find/css.js"></script>
 
 <!-- Our render function -->
 <script src="functions/frwc64.base.render.js"></script>
@@ -10,74 +12,6 @@
 
 
 <style>
-body {
-  background: rgba( 24, 24, 44, 1 );
-  display   : flex;
-  flex-wrap : wrap;
-  justify-content: center;
-  align-items    : center;
-  align-content  : center;
-}
-#content {
-  position: absolute;
-  top: 0%;
-  left: 0%;
-  width: 100%;
-  height: 100%;
-  overflow-y: scroll;
-}
-.warrior-tile {
-  display: inline-block;
-  border : 3px solid rgba(255,255,255,0.07);
-  border-radius: 3px;
-  backdrop-filter: blur(6px);
-  margin: 2px;
-}
-.warrior-tile:hover {
-  border : 3px solid rgba(255,255,255,0.27);
-}
-#search-bar {
-  z-index: 50;
-  position: absolute;
-  bottom  : 31px;
-  left: 50%;
-  width: calc(100% - 15%*2);
-  transform: translate(-50%, 0%);
-  height: 31px;
-  border-radius: 15px;
-  background: rgba(255,255,255,0.08);
-  backdrop-filter: blur(6px);
-}
-#input {
-  position: absolute;
-  left: calc(0% + 2em);
-  top : 0%;
-  width: calc(100% - 2em*2);
-  height: 100%;
-  background: none;
-  border: none;
-  outline: none;
-  color : rgba(211,211,211,1);
-  resize: none;
-  line-height: 26px;
-}
-
-#info-bar {
-  position: absolute;
-  bottom: calc(31px + 31px + 0px);
-  left: 50%;
-  width: calc(100% - 15%*2);
-  height: 44px;
-  transform: translate(-50%, 0%);
-  font-size: 15pt;
-  text-align: right;
-  color : rgba(211,211,211, 0.88);
-  padding-right: 2.2ch;
-  line-height: 44px;
-}
-.mute {
-  filter: opacity(0.67);
-}
 </style>
 <body>
   <div id='content'></div>
