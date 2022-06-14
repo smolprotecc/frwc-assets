@@ -31,7 +31,7 @@ frwc64.warriors.names = {
     },
     uniques: [
       'The Emissary',
-      'Gilgamesh',
+      'Gligamesh',
       'Atalanta',
       'Achilles',
       'Barbarella',
