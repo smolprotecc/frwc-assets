@@ -34,7 +34,7 @@ frwc64.warriors.names = {
         for (var i = 0; i < prefixes.length; i++) {
           let prefix = new RegExp(prefixes[i] + '$')
           if (modify.match(prefix)) {
-            title = prefix
+            title = prefixes[i]
             modify = modify.replace(prefix, '')
             break
           }
