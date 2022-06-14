@@ -42,7 +42,6 @@ frwc64.warriors.names = {
       'Soul Reaper',
       'The Emissary',
       'The Green Knight',
-      'Wilson',
     ],
     prefixes: [
       'Ace',
