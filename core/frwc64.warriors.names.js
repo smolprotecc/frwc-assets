@@ -29,31 +29,47 @@ frwc64.warriors.names = {
       name = modify.trim()
       return {prefix: prefix, name: name, suffix: suffix, fullname: input} 
     },
+    uniques: [
+      'The Emissary',
+      'Gilgamesh',
+      'Atalanta',
+      'Achilles',
+      'Barbarella',
+      'Beowulf',
+      'Heracles',
+      'The Green Knight',
+      'Austringer',
+      'Soul Reaper',
+      'Persefoni',
+      'Lethal Deadly Venom',
+      'Wilson Wolf Master',
+    ],
     prefixes: [
+        
     ],
     postfixes: [
       'the Beautiful Baboon',
       'the Conqueror',
       'the Degenerate',
-      'The Graceful',
+      'The Graceful', // T
       'the Handsome Hyena',
       'the Joyous',
       'the Magnificent',
-      'The Majestic',
-      'The Mischievous',
+      'The Majestic', // T
+      'The Mischievous', // T
       'the Pulverizing',
       'the Raptor Boy',
-      'The Resourceful',
+      'The Resourceful', // T
       'the Righteous',
       'the Sailor',
-      'The Sassy',
-      'The Seeing',
+      'The Sassy', // T
+      'The Seeing', // T
     ],
     suffixes: [
       // unclassed
       'for Freedom',
-      'the Rune Raiders',
-      'or Scalawags',
+      'the Rune Raiders', // Fixed in main collection?
+      'or Scalawags', // Typo?
       'in a Birthday Suit',
       // of ###
       'of Arcadia',
