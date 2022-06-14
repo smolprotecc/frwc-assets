@@ -96,6 +96,7 @@ body {
   pointer-events: none;
   background   : rgba( 1, 1, 1, 0.27);
   backdrop-filter: blur(3px);
+  border-radius: 4px;
 }
 .mute {
   filter: opacity(0.67);
