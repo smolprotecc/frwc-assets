@@ -37,7 +37,7 @@ body {
 .warrior-tile:hover {
   position : relative;
   z-index  : 25;
-  /* transform: scale(1.22); */
+  transform: scale(1.22);
 }
 .warrior-tile canvas {
   backdrop-filter: blur(6px);
