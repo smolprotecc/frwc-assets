@@ -30,9 +30,9 @@ body {
   position       : relative;
   display        : inline-block;
   margin         : 2px;
-  backdrop-filter: blur(6px);
   perspective    : 600px;
   z-index        : 1;
+  transition     : all 250ms ease-out;
 }
 .warrior-tile:hover {
   position : relative;
@@ -40,6 +40,7 @@ body {
   /* transform: scale(1.22); */
 }
 .warrior-tile canvas {
+  backdrop-filter: blur(6px);
   border-radius: 3px;
   border : 3px solid rgba(255,255,255,0.07);
   border-top: 7px solid rgba(255,255,255,0.07);
