@@ -150,7 +150,7 @@ frwc64.warriors.names = {
       'Double-Crosser',
       'Dread',
       'Dueler',
-      'Ear',
+      'Ear Splitter',
       'Eidolon',
       'Eliminator',
       'Enkindler',
