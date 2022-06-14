@@ -31,7 +31,30 @@ frwc64.warriors.names = {
     },
     prefixes: [
     ],
+    postfixes: [
+      'the Beautiful Baboon',
+      'the Conqueror',
+      'the Degenerate',
+      'The Graceful',
+      'the Handsome Hyena',
+      'the Joyous',
+      'the Magnificent',
+      'The Majestic',
+      'The Mischievous',
+      'the Pulverizing',
+      'the Raptor Boy',
+      'The Resourceful',
+      'the Righteous',
+      'the Sailor',
+      'The Sassy',
+      'The Seeing',
+    ],
     suffixes: [
+      // unclassed
+      'for Freedom',
+      'the Rune Raiders',
+      'or Scalawags',
+      'in a Birthday Suit',
       // of ###
       'of Arcadia',
       'of Area 71',
