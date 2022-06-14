@@ -216,12 +216,14 @@ let parse = function(instruction) {
 
     let command = match.match(/^\w+\+?\s+/)
     command = command[0].trim()
-
-    match = match.replace(command,'').replace(/"/g,'').trim()
     
-    match = match.split(/\s+/g)
+    match = match.replace(command,'').trim() // .replace(/"/g,'').trim()
+    
+    // match = match.split(/\s+/g)
+    match = match.split(/\"(.+?)\"/g)
+    match = match.filter(item => item != '').filter(item => item != " ")
     console.log(match)
-
+    
     switch(command) {
       case 'trait':
         command = 'part'
