@@ -3,31 +3,47 @@ frwc64.warriors = typeof frwc64.warriors != 'undefined' ? frwc64.warriors : {}
 
 frwc64.warriors.names = {
     splitter: function(input) {
-      let prefixes = this.prefixes
-      let suffixes = this.suffixes
-      let modify = input
-      let prefix = ''
-      let name   = ''
-      let suffix = ''
+      let uniques   = this.uniques
+      let prefixes  = this.prefixes
+      let postfixes = this.postfixes
+      let suffixes  = this.suffixes
 
-      for (var i = 0; i < prefixes.length; i++) {
-        let pattern = new RegExp('^' + prefixes[i] + '')
-        if (modify.match(pattern)) {
-          prefix = prefixes[i]
-          modify = modify.replace(prefixes[i], '')
-          break
+      suffixes = suffixes.concat(postfixes)
+
+      let modify = input
+      let title  = ''
+      let name   = ''
+      let affiliation = ''
+
+      if (uniques.indexOf(input) != -1) {
+        name = input
+      } else {
+        // sort out suffixes
+        suffixes.sort((a,b) => b.length - a.length)
+        for (var i = 0; i < suffixes.length; i++) {
+          let suffix = suffixes[i]
+          if (modify.match(suffix)) {
+            affiliation = suffix
+            modify = modify.replace(suffix, '').trim()
+            break
+          }
         }
-      }
-      for (var i = 0; i < suffixes.length; i++) {
-        let pattern = new RegExp('' + suffixes[i] + '$')
-        if (modify.match(pattern)) {
-          suffix = suffixes[i]
-          modify = modify.replace(suffixes[i], '')
-          break
+
+        // sort out prefixes
+        prefixes.sort((a,b) => b.length - a.length)
+        for (var i = 0; i < prefixes.length; i++) {
+          let prefix = new RegExp(prefixes[i] + '$')
+          if (modify.match(prefix)) {
+            title = prefix
+            modify = modify.replace(prefix, '')
+            break
+          }
         }
+
       }
+
       name = modify.trim()
-      return {prefix: prefix, name: name, suffix: suffix, fullname: input} 
+      return {name: name, title: title, affiliation: affiliation, fullname: input} 
     },
     uniques: [
       'Achilles',
@@ -55,7 +71,7 @@ frwc64.warriors.names = {
       'Arbiter',
       'Archer',
       'Armageddon',
-      'Ass',
+      'Ass Kicker',
       'Assailant',
       'Assasinator',
       'Assassin',
@@ -80,7 +96,7 @@ frwc64.warriors.names = {
       'Bloodletter',
       'Bludgeoner',
       'Bomb',
-      'Boom',
+      'Boom Boom',
       'Bow',
       'Boy',
       'Breaker',
@@ -97,7 +113,7 @@ frwc64.warriors.names = {
       'Cauterizer',
       'Chainsaw',
       'Champion',
-      'Chaos',
+      'Chaos Agent',
       'Charlatan',
       'Chastiser',
       'Chisler',
@@ -126,7 +142,7 @@ frwc64.warriors.names = {
       'Death',
       'Debilitator',
       'Decimator',
-      'Deep',
+      'Deep Fryer',
       'Defeater',
       'Defender',
       'Delinquent',
@@ -214,7 +230,7 @@ frwc64.warriors.names = {
       'Menace',
       'Mercenary',
       'Mincer',
-      'Mischief',
+      'Mischief Maker',
       'Miscreant',
       'Monk',
       'Musician',
@@ -279,7 +295,7 @@ frwc64.warriors.names = {
       'Stalker',
       'Stinger',
       'Stormer',
-      'Straight',
+      'Straight Shooter',
       'Striker',
       'Swashbuckler',
       'Swindler',
