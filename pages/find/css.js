@@ -32,7 +32,7 @@ body {
   margin         : 2px;
   perspective    : 600px;
   z-index        : 1;
-  transition     : all 250ms ease-out;
+  /* transition     : all 250ms ease-out; */
 }
 .warrior-tile:hover {
   position : relative;
