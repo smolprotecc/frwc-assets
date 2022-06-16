@@ -53,7 +53,7 @@ body {
 }
 .warrior-tile,
 .warrior-tile canvas {
-  transition     : all 120ms ease-out;
+  /* transition     : all 120ms ease-out; */
 }
 #search-bar {
   position       : absolute;
