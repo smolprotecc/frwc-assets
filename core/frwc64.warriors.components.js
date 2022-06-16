@@ -575,3 +575,17 @@ frwc64.warriors._components = {
   570: "Wratchet",
   571: "Yellow Chainsaw"
 }
+
+frwc64.warriors._variations = {
+   73: {
+    "Green Road Spandex 2": [
+       'Flower of the Wheel',
+       'Forgotten Lady Tanned',
+       'Lady of the Oasis',
+       'Moorish Girl',
+       'She Wolf',
+       'Summer Warrior',
+       'Vedic Warrior',
+      ]
+   }
+}
