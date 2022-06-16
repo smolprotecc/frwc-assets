@@ -577,7 +577,7 @@ frwc64.warriors._components = {
 }
 
 frwc64.warriors._variations = {
-   73: {
+  "Green Road Spandex": {
     "Green Road Spandex 2": [
        'Flower of the Wheel',
        'Forgotten Lady Tanned',
@@ -586,6 +586,6 @@ frwc64.warriors._variations = {
        'She Wolf',
        'Summer Warrior',
        'Vedic Warrior',
-      ]
-   }
+    ]
+  }
 }
