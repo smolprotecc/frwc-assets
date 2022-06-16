@@ -37,11 +37,12 @@ frwc64.warriors.functions = {
     let body = components[0]
     let head = components[1]
     
+    let _body = reference[body] ? reference[body] : body
     let _head = reference[head]
     
     let r;
-    if (variations[body]) {
-      let m = variations[body]
+    if (variations[_body]) {
+      let m = variations[_body]
       for (var b in m) {
         if (m[b].indexOf(_head) != -1) {
           r = b
