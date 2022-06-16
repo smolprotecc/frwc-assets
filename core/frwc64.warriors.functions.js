@@ -16,13 +16,44 @@ frwc64.warriors.functions = {
     order.forEach(part => {
       let component;
       if (part == 'background') {
-        component = warrior.background
+        // component = warrior.background
       } else {
         component = warrior.components[part]
+        output.push(component)
       }
-      output.push(components[component])
+      // output.push(components[component])
     })
+    output = this.checkVariations(output)
+    output = output.map(component => components[component] ? components[component] : component)
+    output.unshift(components[warrior.background])
     return {id: idx, components: output}
+  },
+  
+  checkVariations: function(components) {
+    let reference = frwc64.warriors._components
+    let variations = frwc64.warriors._variations
+   
+    // We let the head influence the body
+    let body = components[0]
+    let head = components[1]
+    
+    let _head = reference[head]
+    
+    let r;
+    if (variations[body]) {
+      let m = variations[body]
+      for (var b in m) {
+        if (m[b].indexOf(_head) != -1) {
+          r = b
+          break
+        }
+      }
+    }
+    if (r) {
+      components[0] = r
+    }
+    
+    return components
   },
  
   generateBase64: function(components) {
