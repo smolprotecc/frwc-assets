@@ -76,7 +76,7 @@ frwc64.warriors.functions = {
       }
     }
     if (_head === 'Lady of the Mountain') {
-      let mountain_dark = ['Battle Bikini']
+      let mountain_dark = ['Battle Bikini','Classic Gold Barbarian Bikini']
       if (mountain_dark.indexOf(_body) != -1) {
         components[1] = 'Lady of the Mountain Dark'
       }
@@ -104,7 +104,7 @@ frwc64.warriors.functions = {
       }
     }
     if (_head === 'Corsair') {
-      let corsair_dark = ['Battle Bikini','Purple Valkyrie Armor','Yellow Road Spandex','Zuli Suit']
+      let corsair_dark = ['Battle Bikini','Classic Gold Barbarian Bikini','Purple Valkyrie Armor','Yellow Road Spandex','Zuli Suit']
       if (corsair_dark.indexOf(_body) != -1) {
         components[1] = 'Corsair Dark'
       }
