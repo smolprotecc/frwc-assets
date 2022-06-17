@@ -101,6 +101,22 @@ body {
   backdrop-filter: blur(3px);
   border-radius: 4px;
 }
+#show-more {
+  position        : absolute;
+  left            : 50%;
+  bottom          : calc(31px + 31px);
+  transform       : translate(-50%, 0%);
+  width           : 240px;
+  font-size       : 15pt;
+  color           : rgba(211,211,211,0.95);
+  backdrop-filter : blur(13px);
+  z-index         : 50;
+  border-radius   : 5px;
+  background-color: rgba(255,255,255, 0.04);
+  text-align      : center;
+  cursor          : pointer;
+  line-height     : 44px;
+}
 .mute {
   filter: opacity(0.67);
 }
