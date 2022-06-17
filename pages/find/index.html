@@ -119,11 +119,14 @@ let show = async function(showOptions) {
   }
 
   let m = filter(showOptions)
+  showList(m)
+  /*
+  showThese(m)
   
   // split m into delays of n=150 batches
   let b = []
   while(m.length) {
-     b.push(m.splice(0, 150))
+     b.push(m.splice(0, batchSize))
   }
   for (var i = 0; i < b.length; i++) {
     let t = b[i]
@@ -143,8 +146,37 @@ let show = async function(showOptions) {
     await delay()
   }
   eventify()
+  */
 }
 
+let referenceSearch = [];
+let activeList = [];
+let batchSize = 50;
+function showList(list) {
+  referenceSearch = list;
+  activeList = list;
+  let m = activeList.splice(0, batchSize);
+  if (m > 0) { showNext(m) }
+}
+  
+function showNext(list) {
+  const content = document.querySelector('#content')
+  let d = ''
+  list.forEach(warrior => {
+     let id     = warrior.idx
+     let canvas = '<canvas id="warrior-' + id + '-canvas" width="120px" height="120px"></canvas>'
+     let div    = '<div class="warrior-tile" id="warrior-' + id + '" onclick="goto(' + id + ')">' + canvas + '</div>'
+     d += div
+  })
+  content.insertAdjacentHTML('beforeend', d)
+  list.forEach(warrior => {
+     let id = warrior.idx
+     let components = frwc64.warriors.functions.generateBase64(frwc64.warriors.functions.retrieveComponents(id).components)
+         components = components.filter(component => typeof component != 'undefined')
+     frwc64.base64.render(id, components, '#warrior-' + id + '-canvas', {width: 120, height: 120})
+  })
+  eventify()
+}
 
 // https://codepen.io/nelsonr/pen/WNQaZPb
 function map(val, minA, maxA, minB, maxB) {
