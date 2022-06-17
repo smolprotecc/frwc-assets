@@ -624,7 +624,7 @@ frwc64.warriors._headmap = {
        501, 2502, 3083, 4990, 6652, 6814, 7308, 8319, 8796, 8864, 9750, 11353, 13026, 14432, 15709, 
        // 8703, 9160, 9194, 9878, 9884, 9914, 10204, 10803, 11768, 12228, 13658, 13884, 14575, 15220, // Included into strict ruleset: all Street Punk with Teal Camo have Purple Lady of the Oasis
     ],
-    "Lady of the Oasis 3": [3880, 4176, 4631],
+    "Lady of the Oasis Green": [3880, 4176, 4631],
   },
   "Valkyrie": {
     "Valkyrie 2": [
