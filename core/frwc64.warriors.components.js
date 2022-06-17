@@ -583,7 +583,7 @@ frwc64.warriors._variations = {
     ],
    },
    "Green Road Spandex": {
-    "Green Road Spandex 2": [
+    "Green Road Spandex Red": [
        'Flower of the Wheel',
        'Forgotten Lady Tanned',
        'Lady of the Oasis Purple',
@@ -597,7 +597,7 @@ frwc64.warriors._variations = {
 
 frwc64.warriors._headmap = {
   "Archipelagian": {
-    "Archipelagian-2": [
+    "Archipelagian Light": [
        655, 808, 860, 996, 1095, 1338, 2430, 2461, 3429, 3512, 4110, 
        5036, 5640, 5816, 6175, 6291, 6399, 6461, 6985, 7564, 7785, 7789, 8761, 8849, 9143, 9865, 
        10356, 10539, 10928, 11011, 11151, 11430, 11551, 11901, 11951, 
@@ -617,7 +617,7 @@ frwc64.warriors._headmap = {
     ],
   },
   "Lady of the Mountain": {
-    "Lady of the Mountain 2": [4340, 8566, 10586, 11998, 12164, 15968],
+    "Lady of the Mountain Dark": [4340, 8566, 10586, 11998, 12164, 15968],
   },
   "Lady of the Oasis": {
     "Lady of the Oasis Purple": [
@@ -627,7 +627,7 @@ frwc64.warriors._headmap = {
     "Lady of the Oasis Green": [3880, 4176, 4631],
   },
   "Valkyrie": {
-    "Valkyrie 2": [
+    "Valkyrie Blonde": [
        271, 1493, 3678, 3762, 3835, 4022, 4216, 4864, 5303, 5327, 5541,
        6245, 6247, 6826, 7073, 7252, 8229, 9122, 9264, 9324, 9502, 9525, 
        10208, 10338, 10556, 11117, 11538, 11568, 11812, 11838, 12119, 12331, 12646, 12732, 
