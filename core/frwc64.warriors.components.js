@@ -616,7 +616,7 @@ frwc64.warriors._headmap = {
       3360, 7099, 10238, 
       107, 617, 848, 1918, 1968, 6369, 11974, 12014, 14464, // Green Road Spandex
     ],
-    "Forgotten Lady Dark": [
+    "Forgotten Lady Tanned": [
       1239, 1355, 2752, 2881, 3626, 3923, 4153, 4197, 4327, 4956, 5760, 6577, 6695, 6712, 7026, 13210, 14671, // Green Road Spandex
     ],
   },
