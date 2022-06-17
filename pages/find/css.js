@@ -24,6 +24,7 @@ body {
 #content {
   display        : flex;
   flex-wrap      : wrap;
+  justify-content: center;
   position  : absolute;
   top       : 0%;
   left      : 0%;
