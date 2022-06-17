@@ -15,7 +15,7 @@
   <div id='container'><div id='content'></div></div>
   <div id='info-bar'></div>
   <div id='search-bar'><textarea id='input' placeholder="search here"></textarea></div>
-  <div id='show-more'>show more</div>
+  <div id='show-more' onclick='showNext()'>show more</div>
 </body>
 
 <script>
@@ -160,9 +160,14 @@ function showList(list) {
 }
   
 function showNext() {
+  const showButton = document.querySelector('#show-next')
+  
   // Calculate if there are warriors left to show
   let list = activeList.splice(0, batchSize);
-  if (list <= 0) { return }
+  if (list <= 0) { 
+    showButton.value = 'showing ' + referenceSearch.length + ' of ' + referenceSearch.length
+    return 
+  }
   
   const content = document.querySelector('#content')
   let d = ''
@@ -180,6 +185,9 @@ function showNext() {
      frwc64.base64.render(id, components, '#warrior-' + id + '-canvas', {width: 120, height: 120})
   })
   eventify()
+  
+  // update the display
+  showButton.value = 'showing ' + (referenceSearch.length - activeList.length) + ' of ' + referenceSearch.length + ' | show more'
 }
 
 // https://codepen.io/nelsonr/pen/WNQaZPb
