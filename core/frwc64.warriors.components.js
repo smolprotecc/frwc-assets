@@ -584,6 +584,8 @@ frwc64.warriors._variations = {
       "Bambam",
       "Corsair",
       "Dominatrix",
+      "Forgotten Lady",
+      "Forgotten Lady Blonde",
       "Hibernian",
       "Kelt",
       "Kempo",
