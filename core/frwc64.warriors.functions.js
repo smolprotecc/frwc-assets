@@ -80,6 +80,10 @@ frwc64.warriors.functions = {
       if (oasis_purple.indexOf(_body) != -1) {
         components[1] = 'Lady of the Oasis Purple'
       }
+      let oasis_green = ['Armor of Water']
+      if (oasis_green.indexOf(_body) != -1) {
+        components[1] = 'Lady of the Oasis Green'
+      }
     }
     if (_head === 'Corsair') {
       let corsair_dark = ['Battle Bikini','Purple Valkyrie Armor','Yellow Road Spandex','Zuli Suit']
