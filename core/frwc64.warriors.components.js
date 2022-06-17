@@ -579,6 +579,7 @@ frwc64.warriors._components = {
 frwc64.warriors._variations = {
    "Nord Armor": {
     "Nord Armor Light": [
+      "Archipelagian Light",
       "Corsair",
       "Dominatrix",
       "Hibernian",
