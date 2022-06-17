@@ -580,6 +580,13 @@ frwc64.warriors._variations = {
    "Nord Armor": {
     "Nord Armor Light": [
       "Corsair",
+      "Dominatrix",
+      "Hibernian",
+      "Kelt",
+      "Lady Barbarian",
+      "Lady of the Mountain",
+      "Onna-Musha",
+      "Psyche Warrior",
     ],
    },
    "Green Road Spandex": {
