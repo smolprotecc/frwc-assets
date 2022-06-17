@@ -577,15 +577,61 @@ frwc64.warriors._components = {
 }
 
 frwc64.warriors._variations = {
-  "Green Road Spandex": {
+   "Nord Armor": {
+    "Nord Armor Light": [
+      "Corsair",
+    ],
+   },
+   "Green Road Spandex": {
     "Green Road Spandex 2": [
        'Flower of the Wheel',
        'Forgotten Lady Tanned',
-       'Lady of the Oasis',
+       'Lady of the Oasis 2',
        'Moorish Girl',
        'She Wolf',
        'Summer Warrior',
        'Vedic Warrior',
-    ]
+      ]
+   },
+}
+
+frwc64.warriors._headmap = {
+  "Archipelagian": {
+    "Archipelagian-2": [
+       655, 808, 860, 996, 1095, 1338, 2430, 2461, 3429, 3512, 4110, 
+       5036, 5640, 5816, 6175, 6291, 6399, 6461, 6985, 7564, 7785, 7789, 8761, 8849, 9143, 9865, 
+       10356, 10539, 10928, 11011, 11151, 11430, 11551, 11901, 11951, 
+       12148, 12226, 12725, 12923, 13019, 13202, 13552, 13957, 
+       14926, 14942, 15900
+    ],
+  },
+  "Corsair": {
+    "Corsair Dark": [
+       // 590, 3715, 4524, 7807, 8107, 9151, 11336, 13032, 13396, 15682, // Included into strict ruleset: all Yellow Road Spandex have Dark Corsair
+       8563, // The only Corsair Dark with a Nord Armor body
+    ],
+  },
+  "Forgotten Lady": {
+    "Forgotten Lady Blonde": [
+      3360, 7099, 10238
+    ],
+  },
+  "Lady of the Mountain": {
+    "Lady of the Mountain 2": [4340, 8566, 10586, 11998, 12164, 15968],
+  },
+  "Lady of the Oasis": {
+    "Lady of the Oasis Purple": [
+       501, 2502, 3083, 4990, 6652, 6814, 7308, 8319, 8796, 8864, 9750, 11353, 13026, 14432, 15709, 
+       // 8703, 9160, 9194, 9878, 9884, 9914, 10204, 10803, 11768, 12228, 13658, 13884, 14575, 15220, // Included into strict ruleset: all Street Punk with Teal Camo have Purple Lady of the Oasis
+    ],
+    "Lady of the Oasis 3": [3880, 4176, 4631],
+  },
+  "Valkyrie": {
+    "Valkyrie 2": [
+       271, 1493, 3678, 3762, 3835, 4022, 4216, 4864, 5303, 5327, 5541,
+       6245, 6247, 6826, 7073, 7252, 8229, 9122, 9264, 9324, 9502, 9525, 
+       10208, 10338, 10556, 11117, 11538, 11568, 11812, 11838, 12119, 12331, 12646, 12732, 
+       13374, 13480, 13813, 15127, 15355, 15478, 15543, 15913, 
+    ],
   }
 }
