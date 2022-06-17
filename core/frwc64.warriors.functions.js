@@ -86,7 +86,7 @@ frwc64.warriors.functions = {
       if (oasis_purple.indexOf(_body) != -1) {
         components[1] = 'Lady of the Oasis Purple'
       }
-      let oasis_green = ['Armor of Water']
+      let oasis_green = ['Armor of Water','Red Battle Bikini']
       if (oasis_green.indexOf(_body) != -1) {
         components[1] = 'Lady of the Oasis Green'
       }
@@ -95,6 +95,12 @@ frwc64.warriors.functions = {
       let valkyrie_blonde = ['Red Battle Bikini']
       if (valkyrie_blonde.indexOf(_body) != -1) {
         components[1] = 'Valkyrie Blonde'
+      }
+    }
+    if (_head === 'Archipelagian') {
+      let archipelgian_light = ['Red Battle Bikini']
+      if (archipelgian_light.indexOf(_body) != -1) {
+        components[1] = 'Archipelagian Light'
       }
     }
     if (_head === 'Corsair') {
