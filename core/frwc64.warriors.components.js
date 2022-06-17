@@ -587,6 +587,7 @@ frwc64.warriors._variations = {
       "Lady Barbarian",
       "Lady of the Mountain",
       "Onna-Musha",
+      "Peahen Warrior",
       "Psyche Warrior",
     ],
    },
