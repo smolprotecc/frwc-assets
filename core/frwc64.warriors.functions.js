@@ -75,6 +75,12 @@ frwc64.warriors.functions = {
         components[1] = 'Forgotten Lady Brown'
       }
     }
+    if (_head === 'Lady of the Mountain') {
+      let mountain_dark = ['Battle Bikini']
+      if (mountain_dark.indexOf(_body) != -1) {
+        components[1] = 'Lady of the Mountain Dark'
+      }
+    }
     if (_head === 'Lady of the Oasis') {
       let oasis_purple = ['Street Punk with Teal Camo']
       if (oasis_purple.indexOf(_body) != -1) {
