@@ -104,10 +104,11 @@ body {
 #show-more {
   position        : absolute;
   left            : 50%;
-  bottom          : calc(31px + 31px);
+  bottom          : calc(31px + 31px + 11px);
   transform       : translate(-50%, 0%);
-  width           : 240px;
-  font-size       : 15pt;
+  min-width       : 240px;
+  font-family     : sans-serif;
+  font-size       : 11pt;
   color           : rgba(211,211,211,0.95);
   backdrop-filter : blur(13px);
   z-index         : 50;
