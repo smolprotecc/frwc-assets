@@ -91,6 +91,12 @@ frwc64.warriors.functions = {
         components[1] = 'Lady of the Oasis Green'
       }
     }
+    if (_head === 'Valkyrie') {
+      let valkyrie_blonde = ['Red Battle Bikini']
+      if (valkyrie_blonde.indexOf(_body) != -1) {
+        components[1] = 'Valkyrie Blonde'
+      }
+    }
     if (_head === 'Corsair') {
       let corsair_dark = ['Battle Bikini','Purple Valkyrie Armor','Yellow Road Spandex','Zuli Suit']
       if (corsair_dark.indexOf(_body) != -1) {
