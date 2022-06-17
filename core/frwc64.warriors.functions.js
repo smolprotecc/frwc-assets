@@ -23,13 +23,13 @@ frwc64.warriors.functions = {
       }
       // output.push(components[component])
     })
-    output = this.checkVariations(output)
+    output = this.checkVariations(output, idx)
     output = output.map(component => components[component] ? components[component] : component)
     output.unshift(components[warrior.background])
     return {id: idx, components: output}
   },
   
-  checkVariations: function(components) {
+  checkVariations: function(components, id) {
     let reference = frwc64.warriors._components
     let variations = frwc64.warriors._variations
     let mapping = frwc64.warriors._headmap
