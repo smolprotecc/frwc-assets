@@ -584,11 +584,13 @@ frwc64.warriors._variations = {
       "Dominatrix",
       "Hibernian",
       "Kelt",
+      "Kempo",
       "Lady Barbarian",
       "Lady of the Mountain",
       "Onna-Musha",
       "Peahen Warrior",
       "Psyche Warrior",
+      "Valkyrie Blonde",
     ],
    },
    "Green Road Spandex": {
