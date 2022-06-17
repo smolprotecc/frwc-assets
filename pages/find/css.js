@@ -13,18 +13,23 @@ const CSSRules = `
 body {
   background     : rgba( 24, 24, 44, 1 );
 }
-#content {
+#container {
   display        : flex;
   flex-wrap      : wrap;
   justify-content: center;
   align-items    : center;
   align-content  : center;
   position  : absolute;
+  top       : 2%;
+  left      : 3%;
+  width     : calc(100% - 2*2%);
+  height    : calc(100% - 2*3%);
+  overflow-y: scroll;
+}
+#content {
+  position  : absolute;
   top       : 0%;
   left      : 0%;
-  width     : 100%;
-  height    : 100%;
-  overflow-y: scroll;
 }
 .warrior-tile {
   position       : relative;
