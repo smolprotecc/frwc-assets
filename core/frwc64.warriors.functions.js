@@ -32,6 +32,7 @@ frwc64.warriors.functions = {
   checkVariations: function(components) {
     let reference = frwc64.warriors._components
     let variations = frwc64.warriors._variations
+    let mapping = frwc64.warriors._headmap
    
     // We let the head influence the body
     let body = components[0]
@@ -40,6 +41,19 @@ frwc64.warriors.functions = {
     let _body = reference[body] ? reference[body] : body
     let _head = reference[head]
     
+    // map heads to variations first, i.e. two different types of Forgotten Lady heads for a single body type
+    if (mapping[_head]) {
+      let m = mapping[_head]
+      for (var b in m) {
+        if (m[b].indexOf(id) != -1) {
+          _head = b
+          components[1] = b
+          break
+        }
+      }
+    }
+    
+    // change the body based on the head
     let r;
     if (variations[_body]) {
       let m = variations[_body]
@@ -52,6 +66,26 @@ frwc64.warriors.functions = {
     }
     if (r) {
       components[0] = r
+    }
+    
+    // run some strictly preserved inverse body=>head rules based on the collection
+    if (_head === 'Forgotten Lady') {
+      let lady_brown = ['Street Punk with Teal Camo']
+      if (lady_brown.indexOf(_body) != -1) {
+        components[1] = 'Forgotten Lady Brown'
+      }
+    }
+    if (_head === 'Lady of the Oasis') {
+      let oasis_purple = ['Street Punk with Teal Camo']
+      if (oasis_purple.indexOf(_body) != -1) {
+        components[1] = 'Lady of the Oasis Purple'
+      }
+    }
+    if (_head === 'Corsair') {
+      let corsair_dark = ['Battle Bikini','Purple Valkyrie Armor','Yellow Road Spandex','Zuli Suit']
+      if (corsair_dark.indexOf(_body) != -1) {
+        components[1] = 'Corsair Dark'
+      }
     }
     
     return components
