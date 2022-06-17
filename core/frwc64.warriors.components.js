@@ -581,8 +581,10 @@ frwc64.warriors._variations = {
     "Nord Armor Light": [
       "Archipelagian Light",
       "Athenian",
+      "Autumn Warrior",
       "Avalonian",
       "Bambam",
+      "Bonnie Lass",
       "Corsair",
       "Dominatrix",
       "Forgotten Lady",
@@ -595,7 +597,9 @@ frwc64.warriors._variations = {
       "Onna-Musha",
       "Peahen Warrior",
       "Psyche Warrior",
+      "Spring Warrior",
       "Valkyrie Blonde",
+      "Woodlander",
     ],
    },
    "Green Road Spandex": {
