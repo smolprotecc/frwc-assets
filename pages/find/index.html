@@ -19,6 +19,24 @@
 </body>
 
 <script>
+/* Copies any object deeply */
+const clone = function(obj) {
+      let copy
+      if (null == obj || 'object' != typeof obj) { return obj }
+      if (obj instanceof String) { return (' ' + obj).slice(1) }  /* https://stackoverflow.com/a/31733628 */
+      if (obj instanceof Date) { return new Date().setTime(obj.getTime()) }
+      if (obj instanceof Array) {
+         copy = []
+         for (let i = 0; i < obj.length; i++) { copy[i] = clone(obj[i]) }
+         return copy
+      }
+      if (obj instanceof Object) {
+         copy = {}
+         for (let attr in obj) { if (obj.hasOwnProperty(attr)) { copy[attr] = clone(obj[attr]) } }
+         return copy
+      }
+      throw new Error('Unable to copy obj! Type not supported.')
+}
 
 const destinationURL = 'https://opensea.io/assets/ethereum/0x9690b63eb85467be5267a3603f770589ab12dc95/'
 const goto = function(idx) { window.open(destinationURL + idx, '_blank').focus(); }
@@ -127,7 +145,7 @@ let referenceSearch = [];
 let activeList = [];
 let batchSize = 50;
 function showList(list) {
-  referenceSearch = list;
+  referenceSearch = clone(list);
   activeList = list;
   showNext();
 }
@@ -160,7 +178,11 @@ function showNext() {
   eventify()
   
   // update the display
-  showButton.textContent = 'showing ' + (referenceSearch.length - activeList.length) + ' of ' + referenceSearch.length + ' | show more'
+  if (activeList.length == 0) {
+    showButton.textContent = 'showing ' + referenceSearch.length + ' of ' + referenceSearch.length
+  } else {
+    showButton.textContent = 'showing ' + (referenceSearch.length - activeList.length) + ' of ' + referenceSearch.length + ' | show more'
+  }
 }
 
 function eventify() {
