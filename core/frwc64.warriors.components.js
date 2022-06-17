@@ -631,6 +631,7 @@ frwc64.warriors._headmap = {
       107, 617, 848, 1918, 1968, 6369, 11974, 12014, 14464, // Green Road Spandex
       4711, 13499, // Red Battle Bikini
       5821, 15274, // Classic Leather Barbarian Bikini
+      2265, 5978, // Nord Armor
     ],
     "Forgotten Lady Brown": [
       1239, 1355, 2752, 2881, 3626, 3923, 4153, 4197, 4327, 4956, 5760, 6577, 6695, 6712, 7026, 13210, 14671, // Green Road Spandex
