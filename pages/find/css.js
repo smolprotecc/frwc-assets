@@ -18,7 +18,7 @@ body {
   flex-wrap      : wrap;
   justify-content: center;
   align-items    : center;
-  /* align-content  : center; */
+  align-content  : center;
   position  : absolute;
   top       : 0%;
   left      : 0%;
