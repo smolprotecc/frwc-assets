@@ -586,7 +586,7 @@ frwc64.warriors._variations = {
     "Green Road Spandex 2": [
        'Flower of the Wheel',
        'Forgotten Lady Tanned',
-       'Lady of the Oasis 2',
+       'Lady of the Oasis Purple',
        'Moorish Girl',
        'She Wolf',
        'Summer Warrior',
