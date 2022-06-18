@@ -646,7 +646,6 @@ frwc64.warriors._variations = {
       "Legionnaire Helmet",
       "Lycan Warrior Light",
       "Medieval Skull",
-      "Metabot",
       "Motor Assassin",
       "Purple Dwarven Helm",
       "Purple Viking Helm",
@@ -802,5 +801,8 @@ frwc64.warriors._exceptions = {
     "Street Hoodlum Light": [
       6825, 15365, 15431, 
     ],
+  },
+  "Metabot": {
+    "Street Hoodlum Light": [12531, 15875],
   },
 }
