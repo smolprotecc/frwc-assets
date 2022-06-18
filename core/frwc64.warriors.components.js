@@ -638,6 +638,7 @@ frwc64.warriors._variations = {
       "Forgotten Man",
       "Forgotten Man Blonde",
       "Forgotten Man Brown",
+      "Happy Viking",
       "Indigo Mendicant",
       "Jungle Commando",
       "Kempo Male",
@@ -671,10 +672,12 @@ frwc64.warriors._headmap = {
     "Akkadian Light": [
       11452, // Commando Fatigues
       1793, // Gallus Gear
+      10041, 14515, // Street Hoodlum
     ],
     "Akkadian Dark": [
       5710, // Commando Fatigues
       8445, 10105, // Gallus Gear
+      5238, // Street Hoodlum
     ],
   },
   "Archipelagian": {
@@ -787,9 +790,12 @@ frwc64.warriors._exceptions = {
     "Gallus Gear Light": [
       3472, 3898, 13027, 14314, //
     ],
+    "Street Hoodlum Light": [
+      1169, 5189, 6956, 12480, 12524, 15205, 
+    ],
   },
   "Guardian Helm": {
-    "Street Hoodlum": [
+    "Street Hoodlum Light": [
       6825, 15365, 15431, 
     ],
   },
