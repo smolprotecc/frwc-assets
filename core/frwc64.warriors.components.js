@@ -620,6 +620,7 @@ frwc64.warriors._variations = {
       "Kempo Male",
       "Legionnaire Helmet",
       "Motor Assassin",
+      "Purple Dwarven Helm",
       "Purple Viking Helm",
       "Red Bearded Berserker",
       "Red Ronin",
