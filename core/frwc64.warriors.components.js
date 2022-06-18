@@ -582,10 +582,13 @@ frwc64.warriors._variations = {
       "Earth Guard",
       "Foot Soldier Helm",
       "Furgnome Marauder",
+      "Grappler Giant",
       "Green Knight Head",
       "Mountain Warrior",
       "Polar Man",
+      "Praetorian",
       "Rocket Helm",
+      "Zimbala",
     ],
    },
    "Nord Armor": {
@@ -676,6 +679,11 @@ frwc64.warriors._headmap = {
   "Lycan Warrior": {
     "Lycan Warrior Light": [
        1977, // Commando Fatigues  
+    ],
+  },
+  "Praetorian": {
+    "Praetorian Light": [
+       4718, 8671, // Commando Fatigues
     ],
   },
   "Valkyrie": {
