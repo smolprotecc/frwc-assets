@@ -33,7 +33,7 @@ frwc64.warriors.functions = {
     let reference = frwc64.warriors._components
     let variations = frwc64.warriors._variations
     let mapping = frwc64.warriors._headmap
-    let exceptions = frwc64.warriors_exceptions
+    let exceptions = frwc64.warriors._exceptions
    
     // We let the head influence the body
     let body = components[0]
