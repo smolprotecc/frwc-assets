@@ -591,6 +591,7 @@ frwc64.warriors._variations = {
       "Furgnome Mercenary",
       "Grappler Giant",
       "Green Knight Helm",
+      "Lycan Warrior",
       "Meriotic Warrior",
       "Mountain Warrior",
       "Polar Man",
