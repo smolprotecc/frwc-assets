@@ -620,6 +620,7 @@ frwc64.warriors._variations = {
       "Jungle Commando",
       "Kempo Male",
       "Legionnaire Helmet",
+      "Metabot",
       "Motor Assassin",
       "Purple Dwarven Helm",
       "Purple Viking Helm",
