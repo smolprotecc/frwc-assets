@@ -114,7 +114,7 @@ frwc64.warriors.functions = {
       for (var b in m) {
         if (m[b].indexOf(id) != -1) {
           _body = b
-          components[1] = b
+          components[0] = b
           break
         }
       }
