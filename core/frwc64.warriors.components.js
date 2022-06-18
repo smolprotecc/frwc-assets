@@ -579,7 +579,7 @@ frwc64.warriors._components = {
 frwc64.warriors._variations = {
    "Commando Fatigues": {
     "Commando Fatigues Dark": [
-      "Akkadian",
+      "Akkadian Dark",
       "Chad Bro",
       "Cyber Marauder",
       "Earth Guard",
@@ -641,6 +641,14 @@ frwc64.warriors._variations = {
 }
 
 frwc64.warriors._headmap = {
+  "Akkadian": { // default is Tanned
+    "Akkadian Light": [
+      11452, // Commando Fatigues
+    ],
+    "Akkadian Dark": [
+      5710, // Commando Fatigues
+    ],
+  },
   "Archipelagian": {
     "Archipelagian Light": [
        655, 808, 860, 996, 1095, 1338, 2461, 3429, 3512, 4110, 
