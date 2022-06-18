@@ -739,7 +739,7 @@ frwc64.warriors._headmap = {
   },
   "Kempo": {
     "Kempo Male": [
-      3928, 14562, // Gallus Gear; strict rule not used because of sequencing
+      // 3928, 14562, // Gallus Gear; strict rule not used because of sequencing
     ],
   },
   "Lady of the Mountain": {
