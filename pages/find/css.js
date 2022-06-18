@@ -18,7 +18,7 @@ body {
   top       : 2%;
   left      : 3%;
   width     : calc(100% - 2*3%);
-  height    : calc(100% - 2*2% - 73px);
+  height    : calc(100% - 2*2% - 63px);
   overflow-y: scroll;
 }
 #content {
