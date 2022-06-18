@@ -117,6 +117,10 @@ body {
   text-align      : center;
   cursor          : pointer;
   line-height     : 44px;
+  filter          : opacity(0.36);
+}
+#show-more:hover {
+  filter          : opacity(1);
 }
 .mute {
   filter: opacity(0.67);
