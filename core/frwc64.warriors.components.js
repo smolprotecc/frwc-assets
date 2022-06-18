@@ -580,8 +580,10 @@ frwc64.warriors._variations = {
    "Commando Fatigues": {
     "Commando Fatigues Dark": [
       "Earth Guard",
+      "Foot Soldier Helm",
       "Furgnome Marauder",
       "Green Knight Head",
+      "Mountain Warrior",
       "Polar Man",
       "Rocket Helm",
     ],
@@ -658,11 +660,6 @@ frwc64.warriors._headmap = {
       1239, 1355, 2752, 2881, 3626, 3923, 4153, 4197, 4327, 4956, 5760, 6577, 6695, 6712, 7026, 13210, 14671, // Green Road Spandex
     ],
   },
-  "Kempo": {
-    "Kempo Male": [
-      5230, 6205, 10181, 10975, 12445, 13652, // Commando Fatigues
-    ],
-  },
   "Lady of the Mountain": {
     "Lady of the Mountain Dark": [4340, 8566, 10586, 11998, 12164, 15968],
   },
@@ -674,6 +671,11 @@ frwc64.warriors._headmap = {
     "Lady of the Oasis Green": [
        3880, 4176, 4631,
        8702, // Violet Camo
+    ],
+  },
+  "Lycan Warrior": {
+    "Lycan Warrior Light": [
+       1977, // Commando Fatigues  
     ],
   },
   "Valkyrie": {
