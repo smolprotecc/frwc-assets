@@ -66,7 +66,7 @@ frwc64.warriors.functions = {
         {key: 'Forgotten Lady Brown', bodies:['Street Punk with Teal Camo']}  
       ],
       'Kempo': [
-        {key: 'Kempo Male', bodies:['Commando Fatigues', 'Gallus Gear']}  
+        {key: 'Kempo Male', bodies:['Commando Fatigues', 'Gallus Gear', 'Street Hoodlum']}  
       ],
       'Lady of the Mountain': [
         {key: 'Lady of the Mountain Dark', bodies:['Battle Bikini', 'Classic Gold Barbarian Bikini']}  
