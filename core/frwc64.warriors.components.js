@@ -628,6 +628,7 @@ frwc64.warriors._variations = {
    "Street Hoodlum": {
     "Street Hoodlum Light": [
       "Action Hero",
+      "Action Man",
       "Akkadian Light",
       "Barbarian", 
       "Blue Knight Helm",
@@ -644,6 +645,7 @@ frwc64.warriors._variations = {
       "Kempo Male",
       "Legionnaire Helmet",
       "Lycan Warrior Light",
+      "Medieval Skull",
       "Metabot",
       "Motor Assassin",
       "Purple Dwarven Helm",
