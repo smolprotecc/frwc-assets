@@ -625,7 +625,6 @@ frwc64.warriors._variations = {
       "Valkyrie Blonde", "Woodlander",
     ],
    },
-  
    "Street Hoodlum": {
     "Street Hoodlum Light": [
       "Action Hero",
@@ -653,6 +652,7 @@ frwc64.warriors._variations = {
       "Red Ronin",
       "Scout",
       "Shaolin",
+      "South Sider",
       "Thrall Ruffian",
       "Visor Knight",
     ],
