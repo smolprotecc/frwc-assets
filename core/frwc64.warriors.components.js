@@ -626,7 +626,7 @@ frwc64.warriors._variations = {
    "Green Road Spandex": {
     "Green Road Spandex Red": [
        'Flower of the Wheel',
-       'Forgotten Lady Brown',
+       'Forgotten Lady Tanned',
        'Lady of the Oasis Purple',
        'Moorish Girl',
        'She Wolf',
@@ -663,7 +663,7 @@ frwc64.warriors._headmap = {
        8563, // The only Corsair Dark with a Nord Armor body
     ],
   },
-  "Forgotten Lady": {
+  "Forgotten Lady": { // Default is Brunette
     "Forgotten Lady Blonde": [
       3360, 7099, 10238, 
       107, 617, 848, 1918, 1968, 6369, 11974, 12014, 14464, // Green Road Spandex
@@ -671,8 +671,23 @@ frwc64.warriors._headmap = {
       5821, 15274, // Classic Leather Barbarian Bikini
       2265, 5978, // Nord Armor
     ],
-    "Forgotten Lady Brown": [
+    "Forgotten Lady Tanned": [
       1239, 1355, 2752, 2881, 3626, 3923, 4153, 4197, 4327, 4956, 5760, 6577, 6695, 6712, 7026, 13210, 14671, // Green Road Spandex
+    ],
+  },
+
+  "Forgotten Man": { // Default is Black
+    "Forgotten Man Blonde": [
+      
+    ],
+    "Forgotten Man Brown": [
+      9381, // Commando Fatigues
+    ],
+    "Forgotten Man Dark": [
+      422, 4764, 8075, 11527, // Commando Fatigues
+    ],
+    "Forgotten Man Tanned": [
+      
     ],
   },
   "Jungle Commando": {
