@@ -75,6 +75,12 @@ frwc64.warriors.functions = {
         components[1] = 'Forgotten Lady Brown'
       }
     }
+    if (_head === 'Kempo') {
+      let kempo_male = ['Commando Fatigues']
+      if (kempo_male.indexOf(_body) != -1) {
+        components[1] = 'Kempo Male' 
+      }
+    }
     if (_head === 'Lady of the Mountain') {
       let mountain_dark = ['Battle Bikini','Classic Gold Barbarian Bikini']
       if (mountain_dark.indexOf(_body) != -1) {
