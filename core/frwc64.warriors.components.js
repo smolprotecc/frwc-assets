@@ -577,6 +577,15 @@ frwc64.warriors._components = {
 }
 
 frwc64.warriors._variations = {
+   "Commando Fatigues": {
+    "Commando Fatigues Dark": [
+      "Earth Guard",
+      "Furgnome Marauder",
+      "Green Knight Head",
+      "Polar Man",
+      "Rocket Helm",
+    ],
+   },
    "Nord Armor": {
     "Nord Armor Light": [
       "Archipelagian Light",
@@ -624,6 +633,11 @@ frwc64.warriors._headmap = {
        12148, 12226, 12725, 12923, 13019, 13202, 13552, 13957, 
        14926, 14942, 15900,
        // 2430, 5512, 7564, 8761, // Included into strict ruleset: Red Battle Bikini
+    ],
+  },
+  "Basic Bro": {
+    "Basic Bro Light": [
+       765, // Commando Fatigues
     ],
   },
   "Corsair": {
