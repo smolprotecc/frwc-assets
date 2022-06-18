@@ -583,6 +583,7 @@ frwc64.warriors._variations = {
       "Chad Bro",
       "Cyber Marauder",
       "Earth Guard",
+      "Ether Horn Helm",
       "Foot Soldier Helm",
       "Frankish Helm",
       "Furgnome Marauder",
