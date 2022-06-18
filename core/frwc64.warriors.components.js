@@ -638,7 +638,6 @@ frwc64.warriors._variations = {
       "Forgotten Man",
       "Forgotten Man Blonde",
       "Forgotten Man Brown",
-      "Guardian Helm",
       "Indigo Mendicant",
       "Jungle Commando",
       "Kempo Male",
@@ -787,6 +786,11 @@ frwc64.warriors._exceptions = {
   "Blue Dwarven Helm": {
     "Gallus Gear Light": [
       3472, 3898, 13027, 14314, //
+    ],
+  },
+  "Guardian Helm": {
+    "Street Hoodlum": [
+      6825, 15365, 15431, 
     ],
   },
 }
