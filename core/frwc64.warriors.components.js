@@ -609,6 +609,7 @@ frwc64.warriors._variations = {
       "Action Hero",
       "Akkadian Light",
       "Barbarian", 
+      "Blue Knight Helm",
       "Brigand",
       "Brownlander",
       "Cool Guy",
