@@ -686,11 +686,6 @@ frwc64.warriors._headmap = {
        765, 2758, 8325, 15548, // Commando Fatigues
     ],
   },
-  "Blonde Bearded Berserker": {
-    "Blonde Bearded Berserker Dark": [
-      2749, 14554, // Gallus Gear
-    ],
-  },
   "Chad Bro": {
     "Chad Bro Light": [
       6356, // Commando Fatigues
