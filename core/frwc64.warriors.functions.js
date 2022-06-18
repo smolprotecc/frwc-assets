@@ -76,7 +76,7 @@ frwc64.warriors.functions = {
       }
     }
     if (_head === 'Kempo') {
-      let kempo_male = ['Commando Fatigues']
+      let kempo_male = ['Commando Fatigues','Gallus Gear']
       if (kempo_male.indexOf(_body) != -1) {
         components[1] = 'Kempo Male' 
       }
