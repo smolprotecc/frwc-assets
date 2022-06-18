@@ -604,6 +604,18 @@ frwc64.warriors._variations = {
       "Zimbala",
     ],
    },
+   "Gallus Gear": {
+    "Gallus Gear Light": [
+      "Akkadian Light",
+      "Barbarian", 
+      "Forgotten Man",
+      "Forgotten Man Blonde",
+      "Forgotten Man Brown",
+      "Indigo Mendicant",
+      "Legionnaire Helment",
+      "Scout",
+    ],
+   },
    "Nord Armor": {
     "Nord Armor Light": [
       "Archipelagian Light",
@@ -646,6 +658,7 @@ frwc64.warriors._headmap = {
   "Akkadian": { // default is Tanned
     "Akkadian Light": [
       11452, // Commando Fatigues
+      1793, // Gallus Gear
     ],
     "Akkadian Dark": [
       5710, // Commando Fatigues
@@ -709,6 +722,7 @@ frwc64.warriors._headmap = {
   "Jungle Commando": {
     "Jungle Commando Dark": [
       6679, // Commando Fatigues
+      2495, 3798, 4583, 5103, 11803, 12988, 15098, 15807, // Gallus Gear
     ],
   },
   "Lady of the Mountain": {
