@@ -779,3 +779,11 @@ frwc64.warriors._headmap = {
     ],
   }
 }
+
+frwc64.warriors._exceptions = {
+  "Blue Dwarven Helm": {
+    "Gallus Gear Light": [
+      3472, 3898, 13027, 14314, //
+    ],
+  },
+}
