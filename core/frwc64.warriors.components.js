@@ -658,6 +658,7 @@ frwc64.warriors._variations = {
       "South Sider",
       "Thrall Ruffian",
       "Visor Knight",
+      "Wrestler Giant",
     ],
    },
    "Green Road Spandex": {
