@@ -644,6 +644,11 @@ frwc64.warriors._headmap = {
       1239, 1355, 2752, 2881, 3626, 3923, 4153, 4197, 4327, 4956, 5760, 6577, 6695, 6712, 7026, 13210, 14671, // Green Road Spandex
     ],
   },
+  "Kempo": {
+    "Kempo Male": [
+      5230, 6205, 10181, 10975, 12445, 13652, // Commando Fatigues
+    ],
+  },
   "Lady of the Mountain": {
     "Lady of the Mountain Dark": [4340, 8566, 10586, 11998, 12164, 15968],
   },
