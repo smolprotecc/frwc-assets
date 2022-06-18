@@ -54,53 +54,43 @@ frwc64.warriors.functions = {
     }
     
     // run some strictly preserved inverse body=>head rules based on the collection
-    if (_head === 'Forgotten Lady') {
-      let lady_brown = ['Street Punk with Teal Camo']
-      if (lady_brown.indexOf(_body) != -1) {
-        components[1] = 'Forgotten Lady Brown'
+    let rules = {
+      'Archipelagian': [
+        {key: 'Archipelagian Light', bodies:['Red Battle Bikini']}  
+      ],
+      'Corsair': [
+        {key: 'Corsair Dark', bodies:['Battle Bikini','Classic Gold Barbarian Bikini','Purple Valkyrie Armor','Yellow Road Spandex','Zuli Suit']}  
+      ],
+      'Forgotten Lady': [
+        {key: 'Forgotten Lady Brown', bodies:['Street Punk with Teal Camo']}  
+      ],
+      'Kempo': [
+        {key: 'Kempo Male', bodies:['Commando Fatigues', 'Gallus Gear']}  
+      ],
+      'Lady of the Mountain': [
+        {key: 'Lady of the Mountain Dark', bodies:['Battle Bikini', 'Classic Gold Barbarian Bikini']}  
+      ],
+      'Lady of the Oasis': [
+        {key: 'Lady of the Oasis Purple', bodies:['Street Punk with Teal Camo']},
+        {key: 'Lady of the Oasis Green',  bodies:['Armor of Water','Classic Leather Barbarian Bikini','Red Battle Bikini']} 
+      ],
+      'Valkyrie': [
+        {key: 'Valkyrie Blonde', bodies:['Classic Leather Barbarian Bikini','Red Battle Bikini']}  
+      ]
+    }
+    
+    if (rules[_head]) {
+      let g = rules[_head]
+      for (var i = 0; i < g.length; i++) {
+        let rule = g[i]
+        let bodies = rule.bodies
+        if (bodies.indexOf(_body) != -1) {
+          components[1] = rule.key 
+          _head = rule.key
+          break
+        }
       }
     }
-    if (_head === 'Kempo') {
-      let kempo_male = ['Commando Fatigues','Gallus Gear']
-      if (kempo_male.indexOf(_body) != -1) {
-        components[1] = 'Kempo Male' 
-      }
-    }
-    if (_head === 'Lady of the Mountain') {
-      let mountain_dark = ['Battle Bikini','Classic Gold Barbarian Bikini']
-      if (mountain_dark.indexOf(_body) != -1) {
-        components[1] = 'Lady of the Mountain Dark'
-      }
-    }
-    if (_head === 'Lady of the Oasis') {
-      let oasis_purple = ['Street Punk with Teal Camo']
-      if (oasis_purple.indexOf(_body) != -1) {
-        components[1] = 'Lady of the Oasis Purple'
-      }
-      let oasis_green = ['Armor of Water','Classic Leather Barbarian Bikini','Red Battle Bikini']
-      if (oasis_green.indexOf(_body) != -1) {
-        components[1] = 'Lady of the Oasis Green'
-      }
-    }
-    if (_head === 'Valkyrie') {
-      let valkyrie_blonde = ['Classic Leather Barbarian Bikini','Red Battle Bikini']
-      if (valkyrie_blonde.indexOf(_body) != -1) {
-        components[1] = 'Valkyrie Blonde'
-      }
-    }
-    if (_head === 'Archipelagian') {
-      let archipelgian_light = ['Red Battle Bikini']
-      if (archipelgian_light.indexOf(_body) != -1) {
-        components[1] = 'Archipelagian Light'
-      }
-    }
-    if (_head === 'Corsair') {
-      let corsair_dark = ['Battle Bikini','Classic Gold Barbarian Bikini','Purple Valkyrie Armor','Yellow Road Spandex','Zuli Suit']
-      if (corsair_dark.indexOf(_body) != -1) {
-        components[1] = 'Corsair Dark'
-      }
-    }
-    _head = components[1]
     
     // change the body based on the head
     let r;
