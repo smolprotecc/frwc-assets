@@ -579,16 +579,21 @@ frwc64.warriors._components = {
 frwc64.warriors._variations = {
    "Commando Fatigues": {
     "Commando Fatigues Dark": [
+      "Akkadian",
+      "Chad Bro",
+      "Cyber Marauder",
       "Earth Guard",
       "Foot Soldier Helm",
       "Frankish Helm",
       "Furgnome Marauder",
       "Grappler Giant",
       "Green Knight Head",
+      "Meriotic Warrior",
       "Mountain Warrior",
       "Polar Man",
       "Praetorian",
       "Rocket Helm",
+      "Stunt Man",
       "Zimbala",
     ],
    },
@@ -644,6 +649,11 @@ frwc64.warriors._headmap = {
   "Basic Bro": {
     "Basic Bro Light": [
        765, // Commando Fatigues
+    ],
+  },
+  "Chad Bro": {
+    "Chad Bro Light": [
+      6356, // Commando Fatigues
     ],
   },
   "Corsair": {
