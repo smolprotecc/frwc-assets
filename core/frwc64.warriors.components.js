@@ -652,7 +652,7 @@ frwc64.warriors._headmap = {
   },
   "Basic Bro": {
     "Basic Bro Light": [
-       765, // Commando Fatigues
+       765, 2758, 8325, 15548, // Commando Fatigues
     ],
   },
   "Chad Bro": {
