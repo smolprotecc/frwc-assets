@@ -598,6 +598,7 @@ frwc64.warriors._variations = {
       "Praetorian",
       "Rocket Helm",
       "Stunt Man",
+      "Warrior Monk",
       "Wild Furgnome",
       "Zimbala",
     ],
