@@ -760,7 +760,8 @@ frwc64.warriors._headmap = {
   },
   "Lycan Warrior": {
     "Lycan Warrior Light": [
-       1977, // Commando Fatigues  
+       1977, // Commando Fatigues 
+       1603, 5029, 11826, // Gallus Gear
     ],
   },
   "Praetorian": {
