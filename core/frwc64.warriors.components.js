@@ -581,6 +581,7 @@ frwc64.warriors._variations = {
     "Commando Fatigues Dark": [
       "Earth Guard",
       "Foot Soldier Helm",
+      "Frankish Helm",
       "Furgnome Marauder",
       "Grappler Giant",
       "Green Knight Head",
