@@ -633,6 +633,7 @@ frwc64.warriors._variations = {
       "Barbarian", 
       "Blue Knight Helm",
       "Brigand",
+      "Bruiser",
       "Brownlander",
       "Cool Guy",
       "Forgotten Man",
@@ -692,7 +693,6 @@ frwc64.warriors._headmap = {
        765, 2758, 8325, 15548, // Commando Fatigues
     ],
   },
-
   "Bruiser": {
     "Bruiser Dark": [
        735, 1609, 2010, 2896, 4074, 5682, 5840, 9296, 10432, 10725, 12664, 13261, 14494, 15151 // Street Hoodlum
