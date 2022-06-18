@@ -606,14 +606,20 @@ frwc64.warriors._variations = {
    },
    "Gallus Gear": {
     "Gallus Gear Light": [
+      "Action Hero",
       "Akkadian Light",
       "Barbarian", 
+      "Brigand",
+      "Brownlander",
       "Forgotten Man",
       "Forgotten Man Blonde",
       "Forgotten Man Brown",
       "Indigo Mendicant",
       "Jungle Commando",
-      "Legionnaire Helment",
+      "Kempo Male",
+      "Legionnaire Helmet",
+      "Purple Viking Helm",
+      "Red Ronin",
       "Scout",
     ],
    },
@@ -678,6 +684,11 @@ frwc64.warriors._headmap = {
   "Basic Bro": {
     "Basic Bro Light": [
        765, 2758, 8325, 15548, // Commando Fatigues
+    ],
+  },
+  "Blonde Bearded Berserker": {
+    "Blonde Bearded Berserker Dark": [
+      2749, 14554, // Gallus Gear
     ],
   },
   "Chad Bro": {
