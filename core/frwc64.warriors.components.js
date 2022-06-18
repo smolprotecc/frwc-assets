@@ -621,6 +621,7 @@ frwc64.warriors._variations = {
       "Legionnaire Helmet",
       "Motor Assassin",
       "Purple Viking Helm",
+      "Red Bearded Berserker",
       "Red Ronin",
       "Scout",
       "Shaolin",
@@ -714,7 +715,6 @@ frwc64.warriors._headmap = {
       1239, 1355, 2752, 2881, 3626, 3923, 4153, 4197, 4327, 4956, 5760, 6577, 6695, 6712, 7026, 13210, 14671, // Green Road Spandex
     ],
   },
-
   "Forgotten Man": { // Default is Black
     "Forgotten Man Blonde": [
       7249, 7551, 8531, 13364, 15743, // Gallus Gear
@@ -735,6 +735,11 @@ frwc64.warriors._headmap = {
     "Jungle Commando Dark": [
       6679, // Commando Fatigues
       2495, 3798, 4583, 5103, 11803, 12988, 15098, 15807, // Gallus Gear
+    ],
+  },
+  "Kempo": {
+    "Kempo Male": [
+      3928, 14562, // Gallus Gear; strict rule not used because of sequencing
     ],
   },
   "Lady of the Mountain": {
