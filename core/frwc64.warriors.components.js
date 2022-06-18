@@ -678,6 +678,7 @@ frwc64.warriors._headmap = {
     ],
     "Akkadian Dark": [
       5710, // Commando Fatigues
+      8445, 10105, // Gallus Gear
     ],
   },
   "Archipelagian": {
