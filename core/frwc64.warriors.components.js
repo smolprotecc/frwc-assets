@@ -585,6 +585,7 @@ frwc64.warriors._variations = {
       "Earth Guard",
       "Ether Horn Helm",
       "Foot Soldier Helm",
+      "Forgotten Man Dark",
       "Frankish Helm",
       "Furgnome Marauder",
       "Grappler Giant",
