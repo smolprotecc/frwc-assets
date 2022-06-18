@@ -589,7 +589,7 @@ frwc64.warriors._variations = {
       "Frankish Helm",
       "Furgnome Marauder",
       "Grappler Giant",
-      "Green Knight Head",
+      "Green Knight Helm",
       "Meriotic Warrior",
       "Mountain Warrior",
       "Polar Man",
