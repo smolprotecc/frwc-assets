@@ -692,13 +692,15 @@ frwc64.warriors._headmap = {
 
   "Forgotten Man": { // Default is Black
     "Forgotten Man Blonde": [
-      
+      7249, 7551, 8531, 13364, 15743, // Gallus Gear
     ],
     "Forgotten Man Brown": [
       9381, // Commando Fatigues
+      10147, // Gallus Gear
     ],
     "Forgotten Man Dark": [
       422, 4764, 8075, 11527, // Commando Fatigues
+      9141, 9498, 11958, 12485, 12926, 15692, // Gallus Gear
     ],
     "Forgotten Man Tanned": [
       
