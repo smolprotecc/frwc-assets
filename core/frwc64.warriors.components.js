@@ -651,6 +651,7 @@ frwc64.warriors._variations = {
       "Red Bearded Berserker",
       "Red Ronin",
       "Scout",
+      "Sea Guard",
       "Shaolin",
       "South Sider",
       "Thrall Ruffian",
