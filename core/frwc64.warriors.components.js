@@ -616,6 +616,7 @@ frwc64.warriors._variations = {
       "Forgotten Man",
       "Forgotten Man Blonde",
       "Forgotten Man Brown",
+      "Guardian Helm",
       "Indigo Mendicant",
       "Jungle Commando",
       "Kempo Male",
