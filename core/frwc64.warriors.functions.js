@@ -53,21 +53,6 @@ frwc64.warriors.functions = {
       }
     }
     
-    // change the body based on the head
-    let r;
-    if (variations[_body]) {
-      let m = variations[_body]
-      for (var b in m) {
-        if (m[b].indexOf(_head) != -1) {
-          r = b
-          break
-        }
-      }
-    }
-    if (r) {
-      components[0] = r
-    }
-    
     // run some strictly preserved inverse body=>head rules based on the collection
     if (_head === 'Forgotten Lady') {
       let lady_brown = ['Street Punk with Teal Camo']
@@ -114,6 +99,22 @@ frwc64.warriors.functions = {
       if (corsair_dark.indexOf(_body) != -1) {
         components[1] = 'Corsair Dark'
       }
+    }
+    _head = components[1]
+    
+    // change the body based on the head
+    let r;
+    if (variations[_body]) {
+      let m = variations[_body]
+      for (var b in m) {
+        if (m[b].indexOf(_head) != -1) {
+          r = b
+          break
+        }
+      }
+    }
+    if (r) {
+      components[0] = r
     }
     
     return components
