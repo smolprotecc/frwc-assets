@@ -110,7 +110,6 @@ body {
   font-family     : sans-serif;
   font-size       : 11pt;
   color           : rgba(211,211,211,0.95);
-  backdrop-filter : blur(13px);
   z-index         : 50;
   border-radius   : 5px;
   background-color: rgba(255,255,255, 0.04);
@@ -118,9 +117,11 @@ body {
   cursor          : pointer;
   line-height     : 44px;
   filter          : opacity(0.36);
+  backdrop-filter : blur(13px);
 }
 #show-more:hover {
   filter          : opacity(1);
+  backdrop-filter : blur(13px);
 }
 .mute {
   filter: opacity(0.67);
