@@ -116,12 +116,11 @@ body {
   text-align      : center;
   cursor          : pointer;
   line-height     : 44px;
-  filter          : opacity(0.36);
+  /* filter          : opacity(0.36); */
   backdrop-filter : blur(13px);
 }
 #show-more:hover {
-  filter          : opacity(1);
-  backdrop-filter : blur(13px);
+  /* filter          : opacity(1); */
 }
 .mute {
   filter: opacity(0.67);
