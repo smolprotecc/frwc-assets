@@ -730,16 +730,19 @@ frwc64.warriors._headmap = {
     "Forgotten Man Blonde": [
       7249, 7551, 8531, 13364, 15743, // Gallus Gear
       6445, // Street Hoodlum
+      1253, 9057, 10203, 12745, // Glory Knight
     ],
     "Forgotten Man Brown": [
       9381, // Commando Fatigues
       10147, // Gallus Gear
       6259, 9640, 13597, // Street Hoodlum
+      3933, 12632, 15183, // Glory Knight
     ],
     "Forgotten Man Dark": [
       422, 4764, 8075, 11527, // Commando Fatigues
       9141, 9498, 11958, 12485, 12926, 15692, // Gallus Gear
       356, 6807, // Street Hoodlum
+      172, 178, 299, 438, 2643, 10325, 14094, 15646, // Glory Knight
     ],
     "Forgotten Man Tanned": [
       
