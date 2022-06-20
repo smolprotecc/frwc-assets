@@ -761,6 +761,7 @@ frwc64.warriors._headmap = {
     "Jungle Commando Dark": [
       6679, // Commando Fatigues
       2495, 3798, 4583, 5103, 11803, 12988, 15098, 15807, // Gallus Gear
+      232, 2323, 8043, 8145, 11805, 11848, 14521, // Glory Knight
     ],
   },
   "Kempo": {
