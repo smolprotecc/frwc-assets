@@ -619,7 +619,7 @@ frwc64.warriors._variations = {
    "Glory Knight": {
     "Glory Knight Light": [
       "Action Hero", "Akkadian Light", "Barbarian", "Blue Knight Helm", "Brigand", "Brownlander", "Cool Guy",
-      "Forgotten Man", "Forgotten Man Blonde", "Forgotten Man Brown", "Guardian Helm", "Indigo Mendicant", "Jungle Commando",
+      "Forgotten Man", "Forgotten Man Blonde", "Forgotten Man Brown", "Gold Dwarven Helm", "Guardian Helm", "Indigo Mendicant", "Jungle Commando",
       "Kempo Male", "Legionnaire Helmet", "Lycan Warrior Light", "Metabot", "Motor Assassin",
       "Purple Dwarven Helm", "Purple Viking Helm", "Red Bearded Berserker", "Red Ronin", "Scout", "Shaolin",
       "Thrall Ruffian", "Visor Knight",
