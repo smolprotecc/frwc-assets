@@ -66,19 +66,51 @@ document.addEventListener("DOMContentLoaded", function(event) {
   let output = document.querySelector('#output')
 
   console.log(input)
-  
+
   input.addEventListener('keyup', (e) => {
     if (e.key === 'Enter') {
       e.preventDefault()
       input.value += '<br/>'
     }
   })
-  
+
   input.addEventListener('input', (e) => {
     let v = input.value
     v = v.replace(/\s/g,'           ')
     v = v.replace(/\r/g,'').replace(/\n/g,'<br>\n')
     output.innerHTML = v
+  })
+
+  let offsetX;
+  let offsetY;
+
+  let p = {
+    _x: 0,
+    _y: 0,
+    _ox: 0,
+    _oy: 0,
+  }
+
+  output.addEventListener('dragstart', (e) => {
+    const rect = e.target.getBoundingClientRect();
+    p._x = e.clientX
+    p._y = e.clientY
+    p._ox = rect.x - e.clientX
+    p._oy = rect.y - e.clientY
+    p._w = rect.width
+    p._h = rect.height
+  })
+
+  output.addEventListener('dragend', (e) => {
+    e.stopPropagation()
+    output.style.left = (e.clientX + p._ox) + 'px';
+    output.style.top = (e.clientY + p._oy) + 'px';
+    return false
+  })
+
+  document.addEventListener('mousemove', (e) => {
+    // console.log(e.clientX)
+    // console.log(e.clientY)
   })
 })
 
