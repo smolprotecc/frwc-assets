@@ -1,0 +1,68 @@
+<style>
+body {
+  border: 0px;
+  margin: 0px;
+}
+body > div {
+  position: relative;
+  width   : 400px;
+  height  : 33px;
+}
+div input {
+  position: absolute;
+  right   : 0%;
+  
+}
+#calculate {
+  color   : rgba( 144, 188, 144, 1 );
+  cursor  : pointer;
+}
+</style>
+<body>
+  <div id='souls'   >Number of souls   : <input></input></div>
+  <div id='wizards' >Number of wizards : <input></input></div>
+  <div id='warriors'>Number of warriors: <input></input></div>
+  <div id='partners'>Number of partners: <input></input></div>
+  <div id='calculate'> Click to Calculate </div>
+  <div id='expected'>Expected Value: <div id='value'></div></div>
+</body>
+<script>
+let input_soul    = document.querySelector('#souls input')
+let input_wizard  = document.querySelector('#wizards input')
+let input_warrior = document.querySelector('#warriors input')
+let input_partner = document.querySelector('#partners input')
+
+document.addEventListener("DOMContentLoaded", function(event) {
+
+  input_soul.select()
+
+  let calculate = document.querySelector('#calculate')
+
+  calculate.addEventListener('click', calculator)
+
+  document.querySelector('body').addEventListener('keyup', (e) => {
+    if (e.key == 'Enter') {
+      calculator()
+    }
+  })
+  
+})
+
+calculator = (e) => {
+    let souls    = parseInt(input_soul.value)
+    let wizards  = parseInt(input_wizard.value)
+    let warriors = parseInt(input_warrior.value)
+    let partners = parseInt(input_partner.value)
+
+    // treats
+    let n = 0
+    n = souls * 2 + wizards * 0.8 + warriors * 0.5 + partners * 0.5
+
+    // tricks
+    let m = 0
+    m = souls * 0 + wizards * 0.2 + warriors * 0.5 + partners * 0.5
+
+    document.querySelector('#value').innerHTML = n + ' treats & ' + m + ' tricks'
+  }
+
+</script>
