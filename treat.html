@@ -54,6 +54,11 @@ calculator = (e) => {
     let warriors = parseInt(input_warrior.value)
     let partners = parseInt(input_partner.value)
 
+    souls    = isNaN(souls)    ? 0 : souls
+    wizards  = isNaN(wizards)  ? 0 : wizards
+    warriors = isNaN(warriors) ? 0 : warriors
+    partners = isNaN(partners) ? 0 : partners
+
     // treats
     let n = 0
     n = souls * 2 + wizards * 0.8 + warriors * 0.5 + partners * 0.5
